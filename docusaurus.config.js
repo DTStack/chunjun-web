@@ -9,7 +9,7 @@ const config = {
   title: 'ChunJun',
   tagline: 'Data Integration Tool',
   url: 'https://dtstack.github.io/chunjun-web/',
-  baseUrl: '/',
+  baseUrl: '/chunjun-web/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
