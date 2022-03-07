@@ -26,6 +26,23 @@ const sidebars = {
     },
   ],
    */
+  // docs: [
+  //   'introduction',
+  //   {
+  //     type: 'category',
+  //     label: 'Connectors',
+  //     link: {
+  //       type: 'generated-index',
+  //     },
+  //     collapsed: false,
+  //     items: [
+  //       'installation',
+  //       'configuration',
+  //       'playground',
+  //       'typescript-support',
+  //     ],
+  //   },
+  // ]
 };
 
 module.exports = sidebars;

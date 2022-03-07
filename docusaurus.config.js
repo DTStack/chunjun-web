@@ -6,7 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'ChunJun',
+  title: 'ChunJun 纯钧',
   tagline: 'Data Integration Tool',
   url: 'https://dtstack.github.io/chunjun-web/',
   baseUrl: '/chunjun-web/',
@@ -38,11 +38,21 @@ const config = {
     ],
   ],
 
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'zh-cn'],
+    localeConfigs: {
+      "zh-cn": {
+        htmlLang: '中文',
+      },
+    },
+  },
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'ChunJun',
+        title: 'ChunJun 纯钧',
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
@@ -55,17 +65,21 @@ const config = {
             label: 'Docs',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
+          // {
+          //   type: 'doc',
+          //   docId: 'community',
+          //   position: 'left',
+          //   label: 'Community',
+          // },
           {
-            type: 'doc',
-            docId: 'intro',
-            position: 'left',
-            label: 'Community',
+            type: 'localeDropdown',
+            position: 'right',
           },
           {
             href: 'https://github.com/DTStack/chunjun',
             label: 'GitHub',
             position: 'right',
-          },
+          }
         ],
       },
       footer: {
@@ -75,7 +89,7 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
+                label: 'Introduction',
                 to: '/docs/intro',
               },
             ],
@@ -84,16 +98,16 @@ const config = {
             title: 'Community',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'Issue Tracker',
+                href: 'https://github.com/DTStack/chunjun/issues',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Pull Requests',
+                href: 'https://github.com/DTStack/chunjun/pulls',
               },
               {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
+                label: 'Discussions',
+                href: 'https://github.com/DTStack/chunjun/discussions',
               },
             ],
           },
@@ -106,7 +120,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/DTStack/chunjun',
               },
             ],
           },
