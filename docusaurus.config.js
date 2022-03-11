@@ -65,12 +65,11 @@ const config = {
             label: 'Docs',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
-          // {
-          //   type: 'doc',
-          //   docId: 'community',
-          //   position: 'left',
-          //   label: 'Community',
-          // },
+          {
+            to: 'https://github.com/DTStack/chunjun/releases',
+            position: 'left',
+            label: 'Download',
+          },
           {
             type: 'localeDropdown',
             position: 'right',
