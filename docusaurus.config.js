@@ -54,7 +54,7 @@ const config = {
       navbar: {
         title: 'ChunJun 纯钧',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'ChunJun Logo',
           src: 'img/logo.svg',
         },
         items: [
