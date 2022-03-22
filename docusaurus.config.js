@@ -65,6 +65,7 @@ const config = {
             label: 'Docs',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
+          {to: '/roadmap', label: 'Roadmap', position: 'left'},
           {
             to: 'https://github.com/DTStack/chunjun/releases',
             position: 'left',
