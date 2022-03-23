@@ -6,7 +6,7 @@ sidebar_position: 1
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 # Introduction
 
-*[ChunJun 1.12 New Features](change-log.md)*
+*[ChunJun 1.12 New Features](chunjunDocs/change-log.md)*
 
 - Most plugins support concurrent reading and writing of data, which can greatly improve the speed of reading and writing;
 
@@ -24,16 +24,16 @@ The following databases are currently supported:
 
 |                        | Database Type  | Source                          | Sink                          | Lookup
 |:----------------------:|:--------------:|:-------------------------------:|:-------------------------------:|:-------------------------------:|
-|                        | MongoDB        | [doc](connectors/mongodb/mongodb-source.md) | [doc](connectors/mongodb/mongodb-sink.md) |[doc](connectors/mongodb/mongodb-lookup.md) |
+|                        | MongoDB        | [doc](chunjunDocs/connectors/mongodb/mongodb-source.md) | [doc](chunjunDocs/connectors/mongodb/mongodb-sink.md) |[doc](chunjunDocs/connectors/mongodb/mongodb-lookup.md) |
 
 
 # Quick Start
 
-Please click [Quick Start](quickstart.md)
+Please click [Quick Start](chunjunDocs/quickstart.md)
 
 # How to contribute ChunJun
 
-Please click [Contribution](contributing.md)
+Please click [Contribution](chunjunDocs/contributing.md)
 
 # License
 

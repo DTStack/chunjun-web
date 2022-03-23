@@ -60,7 +60,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'chunjunDocs/intro',
             position: 'left',
             label: 'Docs',
           },
@@ -70,6 +70,12 @@ const config = {
             to: 'https://github.com/DTStack/chunjun/releases',
             position: 'left',
             label: 'Download',
+          },
+          {
+            type: 'docSidebar',
+            position: 'left',
+            sidebarId: 'roadmap',
+            label: 'Roadmap',
           },
           {
             type: 'localeDropdown',
