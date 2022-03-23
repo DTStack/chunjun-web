@@ -329,7 +329,7 @@ bin/flinkx \
 $FLINK_HOME/bin/kubernetes-session.sh -Dkubernetes.cluster-id=flink-session-test -Dclassloader.resolve-order=parent-first -Dkubernetes.container.image=${image_name}
 ```
 注意：需要提前构建flinkx镜像
-[flinkx镜像构建说明](docker.md)
+[flinkx镜像构建说明](chunjunDocs/docker.md)
 
 ### Kubernetes Application模式运行任务
 
@@ -349,7 +349,7 @@ bin/flinkx \
     -confProp "{\"kubernetes.config.file\":\"${kubernetes_config_path}\",\"kubernetes.container.image\":\"${image_name}\",\"kubernetes.namespace\":\"${namespace}\"}"
 ```
 注意：需要提前构建flinkx镜像
-[flinkx镜像构建说明](docker.md)
+[flinkx镜像构建说明](chunjunDocs/docker.md)
 
 ## 参数说明
 
