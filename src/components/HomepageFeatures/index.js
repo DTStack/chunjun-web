@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 const FeatureList = [
   {
     title: 'Abundant Connectors',
-    Svg: require('@site/static/img/logo.svg').default,
+    Svg: require('@site/static/img/logo-light.svg').default,
     description: (
       <>
         TODO
@@ -14,7 +14,7 @@ const FeatureList = [
   },
   {
     title: '纯钧——中国十大名剑之一',
-    Svg: require('@site/static/img/logo.svg').default,
+    Svg: require('@site/static/img/logo-dark.svg').default,
     description: (
       <>
         越王勾践剑——纯钧
@@ -23,7 +23,7 @@ const FeatureList = [
   },
   {
     title: 'Powered by Flink',
-    Svg: require('@site/static/img/logo.svg').default,
+    Svg: require('@site/static/img/logo2d.svg').default,
     description: (
       <>
         TODO
@@ -32,7 +32,7 @@ const FeatureList = [
   },
   {
     title: 'Massive Data Integration',
-    Svg: require('@site/static/img/logo.svg').default,
+    Svg: require('@site/static/img/logo2l.svg').default,
     description: (
       <>
         TODO
@@ -41,7 +41,7 @@ const FeatureList = [
   },
   {
     title: 'Easy to use',
-    Svg: require('@site/static/img/logo.svg').default,
+    Svg: require('@site/static/img/logo-dark.svg').default,
     description: (
       <>
         TODO

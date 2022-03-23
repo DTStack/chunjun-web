@@ -55,7 +55,7 @@ const config = {
         title: 'ChunJun 纯钧',
         logo: {
           alt: 'ChunJun Logo',
-          src: 'img/logo.svg',
+          src: 'img/logo-dark.svg',
         },
         items: [
           {
