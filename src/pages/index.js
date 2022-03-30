@@ -12,14 +12,14 @@ function HomepageHeader() {
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/intro">
-            ChunJun Tutorial - 5min ⏱️
-          </Link>
-        </div>
+          <span className="indexCtasGitHubButtonWrapper_AOht">
+              <iframe className="indexCtasGitHubButton_sMIS"
+                                                                      src="https://ghbtns.com/github-btn.html?user=DTStack&amp;repo=chunjun&amp;type=star&amp;count=true&amp;size=large"
+                                                                      width="160" height="30"
+                                                                      title="GitHub Stars"></iframe>
+          </span>
+          <p></p>
+          <p className="hero__subtitle">Chunjun是一个基于Flink的批流统一的数据同步工具</p>
       </div>
     </header>
   );

@@ -12,7 +12,7 @@ const config = {
   baseUrl: '/chunjun-web/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logo-dark.svg',
   organizationName: 'DTStack', // Usually your GitHub org/user name.
   projectName: 'chunjun-web', // Usually your repo name.
   presets: [
@@ -39,7 +39,7 @@ const config = {
   ],
 
   i18n: {
-    defaultLocale: 'en',
+    defaultLocale: 'zh-cn',
     locales: ['en', 'zh-cn'],
     localeConfigs: {
       "zh-cn": {
@@ -94,8 +94,8 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Introduction',
-                to: '/docs/intro',
+                label: '快速上手',
+                to: '/docs/chunjunDocs/quickstart',
               },
             ],
           },
