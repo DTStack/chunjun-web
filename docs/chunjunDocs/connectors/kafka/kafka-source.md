@@ -27,11 +27,11 @@ There are four versions of the kafka plugin, and the plugin names are slightly d
 - **mode**
     - description:Kafka consumer startup mode.Currently, only the 'kafkareader' plugin is supported
     - optional:
-        - group-offsets:Start consumption from the offset submitted by the consumption group specified in ZK / Kafka brokers
-        - earliest-offset:Start with the earliest offset (if possible)
-        - latest-offset:Start with the latest offset (if possible)
-        - timestamp:The timestamp of each partition starts at the specified time
-        - specific-offsets:Start with a specific offset specified for each partition
+    - group-offsets:Start consumption from the offset submitted by the consumption group specified in ZK / Kafka brokers
+    - earliest-offset:Start with the earliest offset (if possible)
+    - latest-offset:Start with the latest offset (if possible)
+    - timestamp:The timestamp of each partition starts at the specified time
+    - specific-offsets:Start with a specific offset specified for each partition
     - required:optional
     - type:String
     - defaults:group-offsets
@@ -58,27 +58,27 @@ There are four versions of the kafka plugin, and the plugin names are slightly d
     - defaults:UTF-8
 - **codec**
     - description:Codec type, supporting json and text
-        - text:
-          Store the message string obtained by Kafka into a map whose key is message. For example, the message in Kafka is: {"key": "key", "message": "value"},
-          Then the data format sent to the downstream is:
+    - text:
+      Store the message string obtained by Kafka into a map whose key is message. For example, the message in Kafka is: {"key": "key", "message": "value"},
+      Then the data format sent to the downstream is:
 `
 [
     {
-        "message":"{\"key\": \"key\", \"value\": \"value\"}"
+    "message":"{\"key\": \"key\", \"value\": \"value\"}"
     }
 ]
 `
 
 - json:Parse the message string obtained by Kafka in json format
   - If the string is in json format
-    - When it contains the message field, the data format sent to the downstream is:
+  - When it contains the message field, the data format sent to the downstream is:
     `[
     {
         "key":"key",
         "message":"value"
     }
 ]`
-    - When the message field is not included, add a key value pair whose key is message and value is the original message string. The data format sent to the downstream is:
+  - When the message field is not included, add a key value pair whose key is message and value is the original message string. The data format sent to the downstream is:
 
     `
     [
@@ -90,7 +90,7 @@ There are four versions of the kafka plugin, and the plugin names are slightly d
 ]
 `
 
-   - If the changed string is not in JSON format, it will be processed according to the text type
+  - If the changed string is not in JSON format, it will be processed according to the text type
 - required:optional
 - type:String
 - defaults:text
@@ -115,15 +115,15 @@ There are four versions of the kafka plugin, and the plugin names are slightly d
     - type:List
     - defaults:none
     - Note: the specific information and attribute description of the field need to be specified:
-        - name:name of column
-        - type:type of column.It can be different from the type in the database. The program will make a type conversion
-        - format:If the field is a time string, you can specify the format of the time and convert the type to the date format to return
-        - example:
+    - name:name of column
+    - type:type of column.It can be different from the type in the database. The program will make a type conversion
+    - format:If the field is a time string, you can specify the format of the time and convert the type to the date format to return
+    - example:
 `
 "column": [{
-      "name": "col",
-      "type": "datetime",
-      "format": "yyyy-MM-dd hh:mm:ss"
+    "name": "col",
+    "type": "datetime",
+    "format": "yyyy-MM-dd hh:mm:ss"
   }]
 `
 ### 4.2、SQL
