@@ -165,18 +165,10 @@ SQL only support INSERT mode. in the future, we will support upsert mode if you 
     
     
 ## 5. Type
-| support | int |
+| SUPPORTED | DATA TYPE |
 | --- | --- |
-|  | long |
-|  | double |
-|  | decimal |
-|  | objectId |
-|  | string |
-|  | bindata |
-|  | date |
-|  | timestamp |
-|  | bool |
-| no support | array |
+| YES | long double decimal objectId string bindata date timestamp bool |
+| NO | array |
 
 
 ## 6. Example

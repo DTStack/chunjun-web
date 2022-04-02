@@ -81,14 +81,14 @@ Elasticsearch 7.x
    - 描述：需要读取的字段
    - 注意：不支持*格式
    - 格式：
-  
-```json
-"column": [{
-  "name": "col", -- 字段名称
-  "type": "string", -- 字段类型，当name没有指定时，则返回常量列，值为value指定
-  "value": "value" -- 常量列的值
-}]
-```
+
+  ```
+    "column": [{
+      "name": "col", -- 字段名称
+      "type": "text", -- 字段类型，当name没有指定时，则返回常量列，值为value指定
+      "value": "value" -- 常量列的值
+    }]
+   ```
 
 - **connectTimeout**
     - 描述：ES Client最大连接超时时间。
@@ -145,23 +145,23 @@ Elasticsearch 7.x
   - 必须：否
   - 参数类型：Map
   - 示例：
-```json
-"sslConfig": {
-  "useLocalFile":false,
-  "fileName":"ca.crt",
-  "filePath":"/Users/edy/Downloads",
-  "keyStorePass":"",
-  "type":"ca",
-  "sftpConf": {
-    "path":"/data/sftp/ssl",
-    "password":"dtstack",
-    "port":"22",
-    "auth":"1",
-    "host":"127.0.0.1",
-    "username":"root"
-  }
-}
-```
+    ```
+    "sslConfig": {
+      "useLocalFile":false,
+      "fileName":"ca.crt",
+      "filePath":"/Users/edy/Downloads",
+      "keyStorePass":"",
+      "type":"ca",
+      "sftpConf": {
+        "path":"/data/sftp/ssl",
+        "password":"dtstack",
+        "port":"22",
+        "auth":"1",
+        "host":"127.0.0.1",
+        "username":"root"
+      }
+    }
+    ```
 
 ## 2、SQL
 

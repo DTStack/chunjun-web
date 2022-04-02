@@ -234,26 +234,10 @@ MySQL 5.x
 
 ## 5. Type
 
-| support or unsupported | type |
+| SUPPORTED | DATA TYPE |
 | --- | --- |
-| support | BOOLEAN |
-| support | TINYINT |
-| support | SMALLINT |
-| support | INT |
-| support | BIGINT |
-| support | FLOAT |
-| support | DOUBLE |
-| support | DECIMAL |
-| support | STRING |
-| support | VARCHAR |
-| support | CHAR |
-| support | TIMESTAMP |
-| support | DATE |
-| support | BINARY |
-| unsupported | ARRAY |
-| unsupported | MAP |
-| unsupported | STRUCT |
-| unsupported | UNION |
+| YES |BOOLEAN TINYINT SMALLINT INT BIGINT FLOAT DOUBLE DECIMAL STRING VARCHAR CHAR TIMESTAMP  DATE BINARY  |
+| NO | ARRAY MAP STRUCT  UNION |
 
 ## 6. Example
 

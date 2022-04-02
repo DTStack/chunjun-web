@@ -58,13 +58,13 @@ Elasticsearch 7.x
    - Description：Columns to be synchronized
    - note：'*' is not supported.
    - format:
-```json
-  "column": [{
-"name": "col", -- Column name, which can be found in a multi-level format
-"type": "string", -- Column type, when name is not specified, returns a constant column with the value specified by value
-"value": "value" -- Constant column value
-}]
-```
+    ```
+      "column": [{
+        "name": "col", -- Column name, which can be found in a multi-level format
+        "type": "string", -- Column type, when name is not specified, returns a constant column with the value specified by value
+        "value": "value" -- Constant column value
+      }]
+    ```
 
 - **connectTimeout**
     - Description：Elasticsearch client max connect timeout.
@@ -112,23 +112,23 @@ Elasticsearch 7.x
    - Required：optional
    - Type：Map
    - Default：none
-```json
-"sslConfig": {
-  "useLocalFile":false,
-  "fileName":"ca.crt",
-  "filePath":"/Users/edy/Downloads",
-  "keyStorePass":"",
-  "type":"ca",
-  "sftpConf": {
-    "path":"/data/sftp/ssl",
-    "password":"dtstack",
-    "port":"22",
-    "auth":"1",
-    "host":"127.0.0.1",
-    "username":"root"
-  }
-}
-```  
+    ```
+    "sslConfig": {
+      "useLocalFile":false,
+      "fileName":"ca.crt",
+      "filePath":"/Users/edy/Downloads",
+      "keyStorePass":"",
+      "type":"ca",
+      "sftpConf": {
+        "path":"/data/sftp/ssl",
+        "password":"dtstack",
+        "port":"22",
+        "auth":"1",
+        "host":"127.0.0.1",
+        "username":"root"
+      }
+    }
+    ``` 
 
 ### 4.2、SQL
 

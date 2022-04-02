@@ -90,18 +90,10 @@ MongoDB 3.4及以上
 #### 2、SQL计算
 暂不支持
 ## 五、数据类型
-| 支持 | int |
+| 是否支持 | 类型名称 |
 | --- | --- |
-|  | long |
-|  | double |
-|  | decimal |
-|  | objectId |
-|  | string |
-|  | bindata |
-|  | date |
-|  | timestamp |
-|  | bool |
-| 暂不支持 | array |
+| 支持 | long  double  decimal objectId string bindata date timestamp bool |
+| 不支持 | array |
 
 ## 六、脚本示例
 见项目内`flinkx-examples`文件夹。

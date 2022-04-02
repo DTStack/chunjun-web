@@ -86,8 +86,14 @@ MongoDB 3.4及以上
     - 描述：维表并行度
     - 必选：否
     - 默认值：无
-## 
-## 五、脚本示例
+  
+## 五、数据类型
+| 是否支持 | 类型名称 |
+| --- | --- |
+| 支持 | long  double  decimal objectId string bindata date timestamp bool |
+| 不支持 | array |
+
+## 六、脚本示例
 见项目内`flinkx-examples`文件夹。
 
 
