@@ -1,10 +1,10 @@
 # hive Lookup
 
-## 一、介绍
+## 一、Introduction
 
-Hive维表，使用原生Flink实现<br />
-具体参数及使用方式请参考：[Flink官方文档](https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/)
+Hive dimensional tables, implemented using native Flink<br />
+For specific parameters and usage, please refer to：[Flink Official Documents](https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/)
 
-## 二、脚本示例
+## 二、Sample scripts
 
-见项目内`flinkx-examples`文件夹。
+See the `flinkx-examples` folder within the project.
