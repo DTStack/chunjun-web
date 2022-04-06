@@ -97,10 +97,10 @@ Oracle 9 及以上
 
 ## 五、数据类型
 
-| 是否支持 |                           类型名称                           |
-| :------: | :----------------------------------------------------------: |
-|   支持   | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
-| 暂不支持 |        BFILE、XMLTYPE、Collections、BLOB、CLOB、NCLOB        |
+| 是否支持  |                           类型名称                           |
+|:-----:| :----------------------------------------------------------: |
+|  支持   | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
+|  不支持  |        BFILE、XMLTYPE、Collections、BLOB、CLOB、NCLOB        |
 
 
 

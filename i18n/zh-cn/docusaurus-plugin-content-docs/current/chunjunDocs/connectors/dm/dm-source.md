@@ -1,20 +1,18 @@
-# Oracle Source
+# DM Source
 
 ## 一、介绍
 
-支持从oracle离线读取
+支持从DM离线读取
 
 ## 二、支持版本
 
-Oracle 9 及以上
-
+DM7、DM8
 
 ## 三、插件名称
 
-| Sync | oraclesource、oraclereader |
-| ---- | -------------------------- |
-| SQL  | oracle-x                   |
-
+| Sync | dmsource、dmreader |
+| ---- |-------------------|
+| SQL  |             |
 
 ## 四、参数说明
 
@@ -32,17 +30,16 @@ Oracle 9 及以上
 
       ```text
       "connection": [{
-       "jdbcUrl": ["jdbc:oracle:thin:@0.0.0.1:1521:orcl"],
+       "jdbcUrl": ["jdbc:dm://localhost:5236"],
        "table": ["table"],
        "schema":"public"
       }]
       ```
-
        <br />
 
 - **jdbcUrl**
 
-    - 描述：针对关系型数据库的jdbc连接字符串,jdbcUrl参考文档：[Oracle官方文档](http://www.oracle.com/technetwork/database/enterprise-edition/documentation/index.html)
+    - 描述：针对关系型数据库的jdbc连接字符串,[达梦官方文档](http://www.dameng.com/down.aspx?TypeId=12&FId=t14:12:14)
     - 必选：是
     - 参数类型：string
     - 默认值：用户名
@@ -82,16 +79,17 @@ Oracle 9 及以上
 
 - **fetchSize**
 
-    - 描述：一次性从数据库中读取多少条数据，ORACLE默认fetchSize大小为10。当fetchSize设置过小时导致频繁读取数据会影响查询速度，以及数据库压力。当fetchSize设置过大时在数据量很大时可能会造成OOM，设置这个参数可以控制每次读取fetchSize条数据。
-      注意：此参数的值不可设置过大，否则会读取超时，导致任务失败。
-    - 必选：否
+    - 描述：一次性从数据库中读取多少条数据，DM默认fetchSize大小为10。当fetchSize设置过小时导致频繁读取数据会影响查询速度，以及数据库压力。当fetchSize设置过大时在数据量很大时可能会造成OOM，设置这个参数可以控制每次读取fetchSize条数据。
+    - 注意：此参数的值不可设置过大，否则会读取超时，导致任务失败。
+    - 必选：否z
     - 参数类型：int
     - 默认值：1024
       <br />
 
 - **where**
 
-    - 描述：筛选条件，reader插件根据指定的column、table、where条件拼接SQL，并根据这个SQL进行数据抽取。在实际业务场景中，往往会选择当天的数据进行同步，可以将where条件指定为gmt_create > time。
+    - 描述：筛选条件，reader插件根据指定的column、table、where条件拼接SQL，并根据这个SQL进行数据抽取。在实际业务场景中，往往会选择当天的数据进行同步，可以将where条件指定为gmt_create >
+      time。
     - 注意：不可以将where条件指定为limit 10，limit不是SQL的合法where子句。
     - 必选：否
     - 参数类型：String
@@ -220,130 +218,12 @@ Oracle 9 及以上
     - 默认值：2
       <br />
 
-### 2、SQL
-
-- **connector**
-    - 描述：oracle-x
-    - 必选：是
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **url**
-    - 描述：jdbc:oracle:thin:@0.0.0.1:1521:orcl
-    - 必选：是
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **table-name**
-    - 描述：表名
-    - 必选：是
-    - 参数类型：String
-    - 默认值：无：
-      <br />
-
-- **username**
-    - 描述：username
-    - 必选：是
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **password**
-    - 描述：password
-    - 必选：是
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **scan.polling-interval**
-    - 描述：间隔轮训时间。非必填(不填为离线任务)，无默认
-    - 必选：否
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **scan.parallelism**
-    - 描述：并行度
-    - 必选：否
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **scan.fetch-size**
-    - 描述：每次从数据库中fetch大小，单位：条。
-    - 必选：否
-    - 参数类型：String
-    - 默认值：1024
-      <br />
-
-- **scan.query-timeout**
-    - 描述：数据库连接超时时间，单位：秒。
-    - 必选：否
-    - 参数类型：String
-    - 默认值：1
-      <br />
-
-- **scan.partition.column**
-    - 描述：多并行度读取的切分字段，多并行度下必需要设置
-    - 必选：否
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **scan.partition.strategy**
-    - 描述：数据分片策略
-    - 必选：否
-    - 参数类型：String
-    - 默认值：range
-      <br />
-
-- **scan.increment.column**
-    - 描述：增量字段名称
-    - 必选：否
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **scan.increment.column-type**
-    - 描述：增量字段类型
-    - 必选：否
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **scan.start-location**
-    - 描述：增量字段开始位置,如果不指定则先同步所有，然后在增量
-    - 必选：否
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **scan.restore.columnname**
-    - 描述：开启了cp，任务从sp/cp续跑字段名称。如果续跑，则会覆盖scan.start-location开始位置，从续跑点开始
-    - 必选：否
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **scan.restore.columntype**
-    - 描述：开启了cp，任务从sp/cp续跑字段类型
-    - 必选：否
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
 ## 五、数据类型
 
-|     是否支持      |                           类型名称                           |
-|:-------------:| :----------------------------------------------------------: |
-|      支持       | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
-|      不支持      |                 BFILE、XMLTYPE、Collections                  |
-|  仅在 Sync 中支持  |                      BLOB、CLOB、NCLOB                       |
-
-
-注意：由于 flink DecimalType 的 PRECISION(1~38) 与 SCALE(0~PRECISION) 限制，oracle 的数值类型的数据在转换时可能会丢失精度
+| 是否支持 | 数据类型                                                     |
+| -------- | ------------------------------------------------------------ |
+| 支持     | CHAR、CHARACTER、VARCHAR、VARCHAR2、CLOB、TEXT、LONG、LONGVARCHAR、ENUM、SET、JSON、DECIMAL、NUMBERIC、DEC、NUMER、INT、INTEGER、TINYINT、BYTE、BYTES、SMALLINT、BIGINT、BINARY、VARBINARY、BLOB、TINYBLOB、MEDIUMBLOB、LONGBLOB、GEOMETER、IMAGE、REAL、FLOAT、DOUBLE、DOUBLE PRECISION、BIT、YEAR、DATE、TIME、TIMESTAMP、DATETIME |
+| 不支持   | PLS_INTEGER、LONGVARBINARY、BFILE、TIME WITH TIME ZONE、TIMESTAMP WITH TIME ZONE、TIME WITH LOCAL TIME ZONE、INTERVAL YEAR、INTERVAL YEAR、INTERVAL MONTH、INTERVAL DAY、INTERVAL HOUR、INTERVAL MINUTE、INTERVAL SECONDE、INTERVAL YEAR TO MONTH、INTERVAL DAY TO HOUR、INTERVAL YEAR TO MINUTE、INTERVAL DAY TO SECONDE、INTERVAL HOUR TO MINUTE、INTERVAL HOUR TO SECOND、INTERVAL MINUTE TO SECONDE、BOOL、BOOLEAN、%TYPE%、%ROWTYPE、记录类型、数组类型、集合类型 |
 
 ## 六、脚本示例
 

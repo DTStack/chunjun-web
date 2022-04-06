@@ -1,19 +1,19 @@
-# Oracle Sink
+# DM Sink
 
 ## 一、介绍
 
-oracle sink
+DM sink
 
 ## 二、支持版本
 
-Oracle 9 及以上
+DM7、DM8
 
 
 ## 三、插件名称
 
-| Sync | oraclesink、oraclewriter |
-| ---- | ------------------------ |
-| SQL  | oracle-x                 |
+| Sync | dmsink、dmwriter |
+| ---- |-----------------|
+| SQL  |                 |
 
 
 ## 四、参数说明
@@ -32,7 +32,7 @@ Oracle 9 及以上
 
       ```text
       "connection": [{
-       "jdbcUrl": ["jdbc:oracle:thin:@0.0.0.1:1521:orcl"],
+       "jdbcUrl": ["jdbc:dm://localhost:5236"],
        "table": ["table"],
        "schema":"public"
       }]
@@ -42,7 +42,7 @@ Oracle 9 及以上
 
 - **jdbcUrl**
 
-    - 描述：针对关系型数据库的jdbc连接字符串,jdbcUrl参考文档：[Oracle官方文档](http://www.oracle.com/technetwork/database/enterprise-edition/documentation/index.html)
+    - 描述：针对关系型数据库的jdbc连接字符串,[达梦官方文档](http://www.dameng.com/down.aspx?TypeId=12&FId=t14:12:14)
     - 必选：是
     - 参数类型：string
     - 默认值：无
@@ -153,72 +153,8 @@ Oracle 9 及以上
     - 默认值：at-least-once
       <br />
 
-### 2、SQL
+- **compatibleMode**
 
-- **connector**
-    - 描述：oracle-x
-    - 必选：是
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **url**
-    - 描述：jdbc:oracle:thin:@0.0.0.1:1521:orcl
-    - 必选：是
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **table-name**
-    - 描述：表名
-    - 必选：是
-    - 参数类型：String
-    - 默认值：无：
-      <br />
-
-- **username**
-    - 描述：username
-    - 必选：是
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **password**
-    - 描述：password
-    - 必选：是
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **sink.buffer-flush.max-rows**
-    - 描述：批量写数据条数，单位：条
-    - 必选：否
-    - 参数类型：String
-    - 默认值：1024
-      <br />
-
-- **sink.buffer-flush.interval**
-    - 描述：批量写时间间隔，单位：毫秒
-    - 必选：否
-    - 参数类型：String
-    - 默认值：10000
-      <br />
-
-- **sink.all-replace**
-    - 描述：是否全部替换数据库中的数据(如果数据库中原值不为null,新值为null,如果为true则会替换为null)
-    - 必选：否
-    - 参数类型：String
-    - 默认值：false
-      <br />
-
-- **sink.parallelism**
-    - 描述：写入结果的并行度
-    - 必选：否
-    - 参数类型：String
-    - 默认值：无
-      <br />
-
-- **sink.semantic**
     - 描述：sink端是否支持二阶段提交
     - 注意：
         - 如果此参数为空，默认不开启二阶段提交，即sink端不支持exactly_once语义；
@@ -229,17 +165,15 @@ Oracle 9 及以上
     - 默认值：at-least-once
       <br />
 
+
 ## 五、数据类型
 
 
-|     是否支持      |                           类型名称                           |
-|:-------------:| :----------------------------------------------------------: |
-|      支持       | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
-|      不支持      |                 BFILE、XMLTYPE、Collections                  |
-|  仅在 Sync 中支持  |                      BLOB、CLOB、NCLOB                       |
+| 是否支持 | 数据类型                                                     |
+| -------- | ------------------------------------------------------------ |
+| 支持     | CHAR、CHARACTER、VARCHAR、VARCHAR2、CLOB、TEXT、LONG、LONGVARCHAR、ENUM、SET、JSON、DECIMAL、NUMBERIC、DEC、NUMER、INT、INTEGER、TINYINT、BYTE、BYTES、SMALLINT、BIGINT、BINARY、VARBINARY、BLOB、TINYBLOB、MEDIUMBLOB、LONGBLOB、GEOMETER、IMAGE、REAL、FLOAT、DOUBLE、DOUBLE PRECISION、BIT、YEAR、DATE、TIME、TIMESTAMP、DATETIME |
+| 不支持   | PLS_INTEGER、LONGVARBINARY、BFILE、TIME WITH TIME ZONE、TIMESTAMP WITH TIME ZONE、TIME WITH LOCAL TIME ZONE、INTERVAL YEAR、INTERVAL YEAR、INTERVAL MONTH、INTERVAL DAY、INTERVAL HOUR、INTERVAL MINUTE、INTERVAL SECONDE、INTERVAL YEAR TO MONTH、INTERVAL DAY TO HOUR、INTERVAL YEAR TO MINUTE、INTERVAL DAY TO SECONDE、INTERVAL HOUR TO MINUTE、INTERVAL HOUR TO SECOND、INTERVAL MINUTE TO SECONDE、BOOL、BOOLEAN、%TYPE%、%ROWTYPE、记录类型、数组类型、集合类型 |
 
-
-注意：由于 flink DecimalType 的 PRECISION(1~38) 与 SCALE(0~PRECISION) 限制，oracle 的数值类型的数据在转换时可能会丢失精度
 
 ## 六、脚本示例
 
