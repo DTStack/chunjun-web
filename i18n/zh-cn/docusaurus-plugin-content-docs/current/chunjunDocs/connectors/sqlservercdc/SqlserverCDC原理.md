@@ -44,7 +44,7 @@ EXEC sys.sp_cdc_enable_db;
 
 数据库下新增了名为cdc的schema，其实也新增了cdc用户。cdc下新增了以下四张表：
 <br/>
-**1、captured_columns**
+* 1、captured_columns
 为在捕获实例中跟踪的每一列返回一行。 默认情况下，将捕获源表中的所有列。 但是，如果为变更数据捕获启用了源表，则可以通过指定列列表将列包括在捕获范围内或排除在捕获范围之外。 当没有任何业务表开启了CDC时，该表为空。
 
 | 列名称 | 数据类型 | 说明 |
@@ -56,7 +56,7 @@ EXEC sys.sp_cdc_enable_db;
 | column_ordinal | int | 更改表中的列序号（从 1 开始）。 将排除更改表中的元数据列。 序号 1 将分配给捕获到的第一个列。 |
 | is_computed | bit | 表示捕获到的列是源表中计算所得的列。 |
 
-**2、change_tables**
+* 2、change_tables
 为数据库中的每个更改表返回一行。 对源表启用变更数据捕获时，将创建一个更改表。 当没有任何业务表开启了CDC时，该表为空。
 
 | 列名称 | 数据类型 | 说明 |
@@ -75,7 +75,7 @@ EXEC sys.sp_cdc_enable_db;
 | create_date | datetime | 启用源表的日期。 |
 | partition_switch | bit | 指示是否可以对启用了变更数据捕获的表执行 ALTER TABLE 的 SWITCH PARTITION 命令。 0 指示分区切换被阻止。 未分区表始终返回 1。 |
 
-**3、ddl_history**
+* 3、ddl_history
 为对启用了变更数据捕获的表所做的每一项数据定义语言 (DDL) 更改返回一行。 可以使用此表来确定源表发生 DDL 更改的时间以及更改的内容。 此表中不包含未发生 DDL 更改的源表的任何条目。
 当没有任何开启了CDC的业务表的表结构发生变更时，该表为空。
 
@@ -88,7 +88,7 @@ EXEC sys.sp_cdc_enable_db;
 | ddl_lsn | binary(10) | 与 DDL 修改的提交相关联的日志序列号 (LSN)。 |
 | ddl_time | datetime | 对源表所做的 DDL 更改的日期和时间。 |
 
-**4、index_columns**
+* 4、index_columns
 为与更改表关联的每个索引列返回一行。 变更数据捕获使用这些索引列来唯一标识源表中的行。 默认情况下，将包括源表的主键列。 但是，如果在对源表启用变更数据捕获时指定了源表的唯一索引，则将改用该索引中的列。
 如果启用净更改跟踪，则该源表需要主键或唯一索引。 当没有任何开启了CDC的业务表存在存在索引列时，该表为空。
 
@@ -99,7 +99,7 @@ EXEC sys.sp_cdc_enable_db;
 | index_ordinal | tinyint | 索引中的列序号（从 1 开始）。 |
 | column_id | int | 源表中的列 ID。 |
 
-**5、lsn_time_mapping**
+* 5、lsn_time_mapping
 为每个在更改表中存在行的事务返回一行。 该表用于在日志序列号 (LSN) 提交值和提交事务的时间之间建立映射。 没有对应的更改表项的项也可以记录下来， 以便表在变更活动少或者无变更活动期间将 LSN 处理的完成过程记录下来。
 
 | 列名称 | 数据类型 | 说明 |
@@ -112,7 +112,7 @@ EXEC sys.sp_cdc_enable_db;
 cdc下新增以下函数：
 <br/>
 
-**1、fn_cdc_get_all_changes_**
+* 1、fn_cdc_get_all_changes_
 为在指定日志序列号 (LSN) 范围内应用到源表的每项更改返回一行。 如果源行在该间隔内有多项更改，则每项更改都会表示在返回的结果集中。 除了返回更改数据外，四个元数据列还提供了将更改应用到另一个数据源所需的信息。
 行筛选选项可控制元数据列的内容以及结果集中返回的行。 当指定“all”行筛选选项时，针对每项更改将只有一行来标识该更改。 当指定“all update
 old”选项时，更新操作会表示为两行：一行包含更新之前已捕获列的值，另一行包含更新之后已捕获列的值。此枚举函数是在对源表启用变更数据捕获时创建的。 函数名称是派生的，并使用 **cdc.fn_cdc_get_all_changes_**_
@@ -126,7 +126,7 @@ capture_instance_ 格式，其中 _capture_instance_ 是在源表启用变更数
 | __$update_mask | varbinary(128) | 位掩码，为捕获实例标识的每个已捕获列均对应于一个位。 当 __ $ operation = 1 或2时，该值将所有已定义的位设置为1。 当 __ $ operation = 3 或4时，只有与更改的列相对应的位设置为1。 |
 | \<captured source table columns> | 多种多样 | 函数返回的其余列是在创建捕获实例时标识的已捕获列。 如果已捕获列的列表中未指定任何列，则将返回源表中的所有列。 |
 
-**2、fn_cdc_get_net_changes_**
+* 2、fn_cdc_get_net_changes_
 为 (LSN) 范围内的指定日志序列号内的每个源行返回一个净更改行，返回格式跟上面一样。
 
 ### 3、业务表CDC开启前后对比
@@ -147,7 +147,6 @@ sp_cdc_enable_table
 
 -- 是用于控制更改数据访问的数据库角色的名称
 [ @role_name = ] 'role_name'
-。
 
 -- 是用于命名变更数据捕获对象的捕获实例的名称，这个名称在后面的存储过程和函数中需要经常用到。
 [,[ @capture_instance = ] 'capture_instance' ]

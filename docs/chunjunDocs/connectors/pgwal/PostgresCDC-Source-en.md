@@ -57,10 +57,9 @@ Postgres 10.0+
 
 - **tableList**
     - Description：List of tables to be parsed
-    - Notice：After specifying this parameter, the filter parameter will be invalid, the table and filter are empty,
-      listen to all tables under the schema in jdbcUrl
+    - Notice：After specifying this parameter, the filter parameter will be invalid, the table and filter are empty,listen to all tables under the schema in jdbcUrl
     - Required：no
-    - Parameter type：list<string>
+    - Parameter type：list\<string\>
     - Default value：none
 
 
@@ -83,7 +82,6 @@ Postgres 10.0+
     - Required：no
     - Parameter type：boolean
     - Default value：false
-
 
 - **statusInterval**
     - Description：Heartbeat interval

@@ -25,14 +25,14 @@ capture process will process the transaction log and write entries to the CDC ta
 
 Before turning on.
 
-<div align=center>
-<img src="static/img/SqlserverCDC/Sqlserver7.png">
+<div align="center">
+<img src="static/img/SqlserverCDC/Sqlserver7.png" />
 </div>
 <br/>
 After opening.
 EXEC sys.sp_cdc_enable_db;
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver8.png" />
 </div>
 <br/>
@@ -148,7 +148,7 @@ for the capture instance when change data capture is enabled for the source tabl
 | __$seqval                        | binary(10)     | Sequence of values used to sort the row changes within a transaction.                                                                                                                                                                                                                                                                                                                                                                                                               |
 | __$operation                     | int            | Identifies the Data Manipulation Language (DML) operation required to apply the changed data row to the target data source. Can be one of the following values.<br/>1 = Delete<br/>2 = Insert<br/>3 = Update (the captured column value is the value before the update operation is performed). This value is applied only if the row filter option "all update old" is specified.<br/>4 = update (the captured column value is the value after the update operation is performed). |
 | __$update_mask                   | varbinary(128) | A bit mask that corresponds to one bit for each captured column that identifies the capture instance. When\__\$operation = 1 or 2, this value sets all defined bits to 1. When __$ operation = 3 or 4, only the bit corresponding to the changed column is set to 1.                                                                                                                                                                                                                |
-| \<captured source table columns> | various        | The remaining columns returned by the function are the captured columns identified at the time the capture instance was created. If no columns are specified in the list of captured columns, all columns in the source table are returned.                                                                                                                                                                                                                                         |
+| \<captured source table columns\> | various        | The remaining columns returned by the function are the captured columns identified at the time the capture instance was created. If no columns are specified in the list of captured columns, all columns in the source table are returned.                                                                                                                                                                                                                                         |
 
 **2. fn_cdc_get_net_changes_**
 Returns a net changes row for each source row within the specified log sequence number in the (LSN) range, in the same
@@ -196,7 +196,7 @@ sp_cdc_enable_table
 
 When turned on.
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver9.png" />
 </div>
 <br/>
@@ -217,19 +217,19 @@ in the AdventureWorks sample database, the derived change table name will be cdc
 | __$seqval                        | binary(10)      | Sequential value used to sort row changes within a transaction.                                                                                                                                                                                                                                                                                                          |
 | __$operation                     | int             | Identifies the Data Manipulation Language (DML) operation associated with the corresponding change. Can be one of the following values.<br/>1 = Delete<br/>2 = Insert<br/>3 = Update (old value) column data with the row value before the update statement was executed.<br/>4 = Update (new value) column data with row values after the update statement is executed. |
 | __$update_mask                   | varbinary(128)  | Bitmask based on the column serial number of the change table, used to identify those columns that have changed.                                                                                                                                                                                                                                                         |
-| \<captured source table columns> | Many and varied | The remaining columns in the change table are those that were identified as captured columns in the source table when the capture instance was created. If no columns are specified in the list of captured columns, all columns in the source table will be included in this table.                                                                                     |
+| \<captured source table columns\> | Many and varied | The remaining columns in the change table are those that were identified as captured columns in the source table when the capture instance was created. If no columns are specified in the list of captured columns, all columns in the source table will be included in this table.                                                                                     |
 | __ $ command_id                  | int             | Tracks the order of operations in a transaction.                                                                                                                                                                                                                                                                                                                         |
 
 **2. captured_columns:**
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver10.png" />
 </div>
 <br/>
 
 **3. change_tables:**
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver11.png" />
 </div>
 
@@ -243,7 +243,7 @@ For insert and delete type of data changes, for each row change will add a row i
 \${schema}\_${table}\_CT table. For insert, id, user_id, and name are the value values after insert; for delete, id,
 user_id, and name are the value values before delete.
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver12.png" />
 </div>
 
@@ -255,7 +255,7 @@ a. Primary key updated At this time, the SqlServer database practice is within t
 deleted first, and then re-inserted. Execute the following SQL, log table as shown in the figure. UPDATE [dbo]. [kudu]
 SET [id] = 2, [user_id] = '2', [name] = 'b' WHERE [id] = 1;
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver13.png" />
 </div>
 <br/>
@@ -264,14 +264,14 @@ At this point, what the SqlServer database does is to update the field informati
 Execute the following SQL with the log table as shown in the figure.
 UPDATE [dbo]. [kudu] SET [user_id] = '3', [name] = 'c' WHERE [id] = 2;
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver14.png" />
 </div>
 <br/>
 
 #### 3. Flowchart
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver15.png" />
 </div>
 <br/>

@@ -7,7 +7,7 @@ Note: SqlServer has supported CDC (Change Data Capture) since version 2008, this
 SQL: `SELECT @@VERSION`
 Result.
 
-<div align=center>
+<div align="center">
   <img src="static/img/SqlserverCDC/Sqlserver1.png" />
 </div>
 
@@ -16,7 +16,7 @@ Result.
 SQL: `exec sp_helpsrvrolemember 'sysadmin'`
 Result.
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver2.png" />
 </div>
 
@@ -25,7 +25,7 @@ Result.
 SQL: `select is_cdc_enabled, name from sys.databases where name = 'tudou'`
 Result.
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver3.png" />
 </div>
 <br/>
@@ -45,7 +45,7 @@ GO
 
 Repeat step 3 to make sure the database is enabled for CDC (Change Data Capture).
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver4.png" />
 </div>
 
@@ -54,9 +54,9 @@ Repeat step 3 to make sure the database is enabled for CDC (Change Data Capture)
 SQL: `select name,is_tracked_by_cdc from sys.tables where name = 'test';`
 Result.
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver5.png" />
-</div
+</div>
 0: not enabled; 1: enabled
 
 #### 6. Enable CDC (Change Data Capture) for tables    
@@ -77,7 +77,7 @@ change function for the capture instance, 0: no; 1: yes
 
 Repeat step 5 to confirm that the table has CDC (Change Data Capture) enabled.
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver6.png" />
 </div>
 
@@ -89,28 +89,28 @@ At this point, the table `test` starts the CDC (Change Data Capture) function co
 EXEC master.dbo.xp_servicecontrol N'QUERYSTATE', N'SQLSERVERAGENT'
 ```
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver16.png" />
-<img src="static/img/SqlserverCDC/Sqlserver16.png">
+<img src="static/img/SqlserverCDC/Sqlserver16.png" />
 </div>
 If the above status is displayed, you need to start the corresponding agent.
 
 **Windows environment operation to enable CDC agent**
 Click on the following location to enable the agent
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver17.png" />
 </div>
 
 **Restart the database**
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver18.png" />
 </div>
 
 **Check the agent status again to confirm the status change to running**
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver19.png" />
 </div>
 

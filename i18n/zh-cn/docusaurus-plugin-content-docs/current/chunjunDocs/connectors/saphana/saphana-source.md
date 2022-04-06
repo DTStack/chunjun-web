@@ -113,23 +113,30 @@ SAP HANA 2.0及以上
 - **column**
     - 描述：需要读取的字段。
     - 格式：支持3种格式
-      <br />1.读取全部字段，如果字段数量很多，可以使用下面的写法：
-      ```bash
-      "column":["*"]
-      ```
-      2.只指定字段名称：
-      ```
-      "column":["id","name"]
-      ```
-      3.指定具体信息：
-      ```json
-      "column": [{
-          "name": "col",
-          "type": "datetime",
-          "format": "yyyy-MM-dd hh:mm:ss",
-          "value": "value"
-      }]
-      ```
+          <br />1.读取全部字段，如果字段数量很多，可以使用下面的写法：
+    
+          ```bash
+          "column":["*"]
+          ```
+    
+          2.只指定字段名称：
+    
+          ```
+          "column":["id","name"]
+          ```
+    
+          3.指定具体信息：
+    
+          ```json
+          "column": [{
+              "name": "col",
+              "type": "datetime",
+              "format": "yyyy-MM-dd hh:mm:ss",
+              "value": "value"
+          }]
+          ```
+      
+      
     - 属性说明:
         - name：字段名称
         - type：字段类型，可以和数据库里的字段类型不一样，程序会做一次类型转换

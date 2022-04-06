@@ -111,7 +111,7 @@ Binlog为什么需要这些权限：
     - 描述：需要解析的数据表。
     - 注意：指定此参数后filter参数将无效,table和filter都为空，监听jdbcUrl里的schema下所有表
     - 必选：否
-    - 字段类型：list<string>
+    - 字段类型：list\<string\>
     - 默认值：无
 
 

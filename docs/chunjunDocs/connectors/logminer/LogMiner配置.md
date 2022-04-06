@@ -16,7 +16,7 @@ select *
 from v$version;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner1.png" />
 </div>
 本章Oracle的版本如上图所示。
@@ -29,7 +29,7 @@ archive
 log list;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner2.png" />
 </div>
 图中显示`No Archive Mode`表示未开启日志归档。
@@ -54,7 +54,7 @@ ls -l
 chown -R 下图中的用户名:下图中的组名 /data/oracle/
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner3.png" />
 </div>
 
@@ -97,7 +97,7 @@ database open;
 ```
 
 再次查询数据库归档模式，`Archive Mode`表示已开启归档模式，`Archive destination`表示归档日志储存路径。
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner4.png" />
 </div>
 
@@ -110,7 +110,7 @@ SELECT *
 FROM v$log;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner5.png" />
 </div>
 
@@ -123,7 +123,7 @@ SELECT *
 FROM v$logfile;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner6.png" />
 </div>
 
@@ -168,11 +168,11 @@ SELECT *
 FROM v$logfile;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner7.png" />
 </div>
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner8.png" />
 </div>
 
@@ -234,7 +234,7 @@ user roma_logminer quota unlimited on users;
  FROM USER_ROLE_PRIVS;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner9.png" />
 </div>
 
@@ -243,7 +243,7 @@ SELECT *
 FROM SESSION_PRIVS;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner10.png" />
 </div>
 
@@ -259,7 +259,7 @@ select *
 from v$version;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner11.png" />
 </div>
 本章Oracle的版本如上图所示。
@@ -272,7 +272,7 @@ archive
 log list;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner12.png" />
 </div>
 图中显示`No Archive Mode`表示未开启日志归档。
@@ -321,7 +321,7 @@ database open;
 ```
 
 再次查询数据库归档模式，`Archive Mode`表示已开启归档模式，`Archive destination`表示归档日志储存路径。
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner13.png" />
 </div>
 
@@ -383,7 +383,7 @@ user roma_logminer quota unlimited on users;
  FROM USER_ROLE_PRIVS;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner14.png" />
 </div>
 
@@ -392,7 +392,7 @@ SELECT *
 FROM SESSION_PRIVS;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner15.png" />
 </div>
 
@@ -408,7 +408,7 @@ select BANNER
 from v$version;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner16.png" />
 </div>
 本章Oracle的版本如上图所示。
@@ -421,7 +421,7 @@ archive
 log list;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner17.png" />
 </div>
 图中显示`No Archive Mode`表示未开启日志归档。
@@ -470,7 +470,7 @@ database open;
 ```
 
 再次查询数据库归档模式，`Archive Mode`表示已开启归档模式，`Archive destination`表示归档日志储存路径。
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner18.png" />
 </div>
 
@@ -513,7 +513,7 @@ user roma_logminer quota unlimited on users;
  FROM USER_ROLE_PRIVS;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner19.png" />
 </div>
 
@@ -522,7 +522,7 @@ SELECT *
 FROM SESSION_PRIVS;
 ```
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner20.png" />
 </div>
 

@@ -85,7 +85,7 @@ influxDB 1.x
     - 参数类型：string
     - 默认值：MSGPACK
     - 可选值：MSGPACK/JSON
-        - 区别：</br>
+        - 区别：<br/>
           ⅰ. JSON 无法区分浮点数和整数<br/>
           ⅱ. JSON 不支持大于 2^53 的整数<br/>
           ⅲ. JSON 具有有限的性能特征<br/>

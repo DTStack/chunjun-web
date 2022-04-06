@@ -200,7 +200,7 @@ WHERE
 
 查询出来的数据示例：
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner23.png" />
 </div>
 
@@ -248,7 +248,7 @@ ORDER BY
     first_change#
 ```
 查询出来的数据示例：
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner21.png" />
 </div>
 注意：
@@ -327,7 +327,7 @@ WHERE
 
 Flinkx就是在一个循环里 执行上述sql语句查询数据。 查询日志文件，加载到logminer，开启logminer，读取数据，更新当前最新SCN号，当数据读取完毕，代表本次加载的日志文件加载完了，通过SCN号寻找后续日志文件，重复上述操作
 
-<div align=center>
+<div align="center">
   <img src="../../images/LogMiner/LogMiner22.png" />
 </div>
 
