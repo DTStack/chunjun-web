@@ -1,368 +1,180 @@
 ---
-title: QuickStart
-sidebar_position: 2
+title: QuickStart sidebar_position: 2
 ---
-## 下载代码
 
-1.使用git工具把项目clone到本地
+# 快速入门
 
-```
-git clone https://github.com/DTStack/flinkx.git
-cd flinkx
-```
+本文讨论如何在不同场景下使用纯均进行同步/SQL计算任务。本文中以 Stream -> Stream 为例子说明，如需构建其他数据源任务，请根据插件文档具体修改。
 
-## 编译插件
-在flinkx home目录下执行
+# 准备开始
 
-```bash
-mvn clean package -DskipTests 
-```
-或者执行
-```bash
-sh build/build.sh
-```
+操作系统：无限制
 
-## 常见问题
+系统版本：无限制
 
-### 1.编译找不到DB2、达梦、gbase、ojdbc8等驱动包
+环境工具：JDK 1.8，Git，maven
 
-解决办法：在$FLINKX_HOME/jars目录下有这些驱动包，可以手动安装，也可以使用插件提供的脚本安装：
+（环境默认已经配置JAVA_HOME，maven）
 
-```bash
-## windows平台
-./$FLINKX_HOME/bin/install_jars.bat
+# 获取插件
 
-## unix平台
-./$FLINKX_HOME/bin/install_jars.sh
-```
+纯均提供了已经编译好的插件压缩包（[chunjun-dist.tar](https://github.com/DTStack/chunjun/releases)），里面包含目前所有的脚本案例，任务提交脚本，插件包等内容，使得用户可以直接下载，根据需要配置任务，开箱即用。
 
-## 运行任务
-NOTE:项目中的flinkx-examples模块下提供了大量 
+另外，可以下载源码（[github地址](https://github.com/DTStack/chunjun)），自行编译源码，提交任务。
 
-#### 数据同步任务
+## 压缩包
 
-首先准备要运行的任务json，这里以stream插件为例(**`flinkx-examples`文件夹下有大量案例**)：
+纯均提供的压缩包（chunjun-dist.tar）里包含四部分内容：bin（包含任务提交脚本），flinkx-dist（纯均任务插件包），flinkx-example（纯均任务脚本模版），lib（任务提交客户端），用户可以通过bin里的提交脚本，使用已经编译好的插件jar包直接提交任务，无需关心插件编译过程，适合调研使用。
 
-```json
-{
-  "job": {
-    "content": [
-      {
-        "reader": {
-          "parameter": {
-            "column": [
-              {
-                "name": "id",
-                "type": "id"
-              },
-              {
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "name": "content",
-                "type": "string"
-              }
-            ],
-            "sliceRecordCount": ["30"],
-            "permitsPerSecond": 1
-          },
-          "table": {
-            "tableName": "sourceTable"
-          },
-          "name": "streamreader"
-        },
-        "writer": {
-          "parameter": {
-            "column": [
-              {
-                "name": "id",
-                "type": "id"
-              },
-              {
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "name": "content",
-                "type": "timestamp"
-              }
-            ],
-            "print": true
-          },
-          "table": {
-            "tableName": "sinkTable"
-          },
-          "name": "streamwriter"
-        },
-        "transformer": {
-          "transformSql": "select id,name, NOW() from sourceTable where CHAR_LENGTH(name) < 50 and CHAR_LENGTH(content) < 50"
-        }
-      }
-    ],
-    "setting": {
-      "errorLimit": {
-        "record": 100
-      },
-      "speed": {
-        "bytes": 0,
-        "channel": 1,
-        "readerChannel": 1,
-        "writerChannel": 1
-      }
-    }
-  }
-}
-```
-#### flinksql任务
+## 源码编译
 
-或者准备要运行的flinksql任务，这里以stream插件为例(**`flinkx-examples`文件夹下有大量案例**)：
+### 1.安装依赖
 
-```sql
-CREATE TABLE source
-(
-    id        INT,
-    name      STRING,
-    money     DECIMAL(32, 2),
-    dateone   timestamp,
-    age       bigint,
-    datethree timestamp,
-    datesix   timestamp(6),
-    datenigth timestamp(9),
-    dtdate    date,
-    dttime    time
-) WITH (
-      'connector' = 'stream-x',
-      'number-of-rows' = '10', -- 输入条数，默认无限
-      'rows-per-second' = '1' -- 每秒输入条数，默认不限制
-      );
+纯均主要使用Java语言编写，通过maven打包编译。从仓库中通过git下载源码之后，首先进入bin目录，根据系统执行不同的install_jars脚本，linux/mac 系统使用 install_jars.sh，windows
+系统使用install_jars.bat，把纯均项目中部分依赖安装到本地仓库中，避免编译源码过程中，出现依赖找不到问题。
 
-CREATE TABLE sink
-(
-    id        INT,
-    name      STRING,
-    money     DECIMAL(32, 2),
-    dateone   timestamp,
-    age       bigint,
-    datethree timestamp,
-    datesix   timestamp(6),
-    datenigth timestamp(9),
-    dtdate    date,
-    dttime    time
-) WITH (
-      'connector' = 'stream-x',
-      'print' = 'true'
-      );
+### 2.编译源码
 
-insert into sink
-select *
-from source;
-```
+在纯均项目根目录下，执行mvn 编译命令 ``` mvn clean package -Dmaven.test.skip```，在根目录下生成目录 **flinkx-dist**（插件包路径）
 
-### Local模式运行任务
+### 3.可能出现的问题
 
-命令模板：
+* 编译过程中出现依赖不存在问题
 
-```bash
-bin/flinkx \
-	-mode local \
-	-jobType sync \
-	-job flinkx-examples/json/stream/stream.json \
-	-flinkxDistDir flinkx-dist
-```
+​ 先执行bin目录下install_jars脚本，如果还存在依赖问题，检查配置的maven环境是否可用，是否修改了项目pom文件。
 
-可以在flink-conf.yaml配置文件里配置端口：
+* 编译过程中出现 Failed to execute goal com.diffplug.spotless:spotless-maven-plugin:2.4.2:check (spotless-check) 报错
 
-```bash
-## web服务端口，不指定的话会随机生成一个
-rest.bind-port: 8888
-```
+​ 在编译路径下，执行``` mvn spotless:apply```，对项目代码进行格式化。
 
-使用下面的命令运行任务：
+# 任务提交
 
-```bash
-bin/flinkx \
-	-mode local \
-	-jobType sync \
-	-job flinkx-examples/json/stream/stream.json \
-	-flinkxDistDir flinkx-dist
-```
-
-任务运行后可以通过8888端口访问flink界面查看任务运行情况：
-
-![q1](/img/quickstart/quick_1.png)
-
-### Standalone模式运行
-NOTE:将flinkx-dist目录拷贝到$FLINK_HOME/lib下，并修改$FLINK_HOME/conf/flink-conf.yml中的classloader为classloader.resolve-order: parent-first
-
-命令模板：
-
-```bash
-bin/flinkx \
-	-mode standalone \
-	-jobType sync \
-	-job flinkx-examples/json/stream/stream.json \
-	-flinkxDistDir flinkx-dist \
-	-flinkConfDir $FLINK_HOME/conf \
-	-confProp "{\"flink.checkpoint.interval\":60000}"
-```
-
-首先启动flink集群：
-
-```bash
-# flink集群默认端口是8081
-$FLINK_HOME/bin/start-cluster.sh
-```
-
-通过8081端口检查集群是否启动成功
-
-![q2](/img/quickstart/quick_2.png)
-
-把任务提交到集群上运行：
-
-```bash
-./bin/flinkx \
-	-mode standalone \
-	-jobType sync \
-	-flinkxDistDir flinkx-dist \
-	-job flinkx-examples/json/stream/stream.json \
-	-flinkConfDir $FLINK_HOME/conf
-```
-
-在集群上查看任务运行情况
-
-![q1](/img/quickstart/quick_1.png)
-
-### 以Yarn Session模式运行任务
-NOTE:可以先在现在flinkx-clients模块YarnSessionClientUtil类中启动一个session，然后修改$FLINK_HOME/conf/flink-conf.yml中的classloader为classloader.resolve-order: parent-first
-
-命令示例：
-
-```bash
-bin/flinkx \
-	-mode yarn-session \
-	-jobType sync \
-	-job flinkx-examples/json/stream/stream.json \
-	-flinkxDistDir flinkx-dist \
-	-flinkConfDir $FLINK_HOME/conf \
-	-hadoopConfDir $HADOOP_HOME/etc/hadoop \
-	-confProp "{\"flink.checkpoint.interval\":60000}"
-```
-
-首先确保yarn集群是可用的，然后手动启动一个yarn session：
-
-```bash
-$FLINK_HOME/bin/yarn-session.sh -n 1 -s 1 -jm 1024 -tm 1024
-```
-
-![q4](/img/quickstart/quick_4.png)
-![q2](/img/quickstart/quick_2.png)
-
-把任务提交到这个yarn session上：
-
-```bash
-bin/flinkx \
-	-mode yarn-session \
-	-jobType sync \
-	-job flinkx-examples/json/stream/stream.json \
-	-flinkConfDir $FLINK_HOME/conf \
-	-flinkxDistDir flinkx-dist \
-	-hadoopConfDir $HADOOP_HOME/etc/hadoop
-```
-
-然后在flink界面查看任务运行情况：
-
-![q1](/img/quickstart/quick_1.png)
-
-### 以Yarn Perjob模式运行任务
-
-命令示例：
-
-```bash
-bin/flinkx \
-	-mode yarn-per-job \
-	-jobType sync \
-	-job flinkx-examples/json/stream/stream.json \
-	-flinkxDistDir flinkx-dist \
-	-flinkConfDir $FLINK_HOME/conf \
-	-hadoopConfDir $HADOOP_HOME/etc/hadoop \
-	-flinkLibDir $FLINK_HOME/lib \
-	-confProp "{\"flink.checkpoint.interval\":60000,\"yarn.application.queue\":\"default\"}" \ 
-```
-
-首先确保yarn集群是可用的，启动一个Yarn Application运行任务:
-
-```bash
-bin/flinkx \
-	-mode yarn-per-job \
-	-jobType sync \
-	-job flinkx-examples/json/stream/stream.json \
-	-flinkxDistDir flinkx-dist \
-	-hadoopConfDir $HADOOP_HOME/etc/hadoop \
-	-flinkLibDir $FLINK_HOME/lib \
-```
-
-然后在集群上查看任务运行情况
-
-![q7](/img/quickstart/quick_7.png)
-![q1](/img/quickstart/quick_1.png)
-
-### Kubernetes Session模式运行任务
-
-命令示例：
-
-```
-bin/flinkx \
-    -mode kubernetes-session \
-    -jobType sync \
-    -job flinkx-examples/json/stream/stream.json \
-    -jobName kubernetes-job \
-    -jobType sync \
-    -flinkxDistDir flinkx-dist \
-    -flinkLibDir $FLINK_HOME/lib \
-    -flinkConfDir $FLINK_HOME/conf \
-    -confProp "{\"kubernetes.config.file\":\"${kubernetes_config_path}\",\"kubernetes.cluster-id\":\"${cluster_id}\",\"kubernetes.namespace\":\"${namespace}\"}"
-```
-
-需要提前手动在kubernetes上启动kubernetes session
-```
-$FLINK_HOME/bin/kubernetes-session.sh -Dkubernetes.cluster-id=flink-session-test -Dclassloader.resolve-order=parent-first -Dkubernetes.container.image=${image_name}
-```
-注意：需要提前构建flinkx镜像
-[flinkx镜像构建说明](chunjunDocs/docker.md)
-
-### Kubernetes Application模式运行任务
-
-命令示例：
-```
-bin/flinkx \
-    -mode kubernetes-application \
-    -jobType sync \
-    -job flinkx-examples/json/stream/stream.json \
-    -jobName kubernetes-job \
-    -jobType sync \
-    -flinkxDistDir flinkx-dist \
-    -remotePluginPath /opt/flinkx-dist \
-    -pluginLoadMode classpath \
-    -flinkLibDir $FLINK_HOME/lib \
-    -flinkConfDir $FLINK_HOME/conf \
-    -confProp "{\"kubernetes.config.file\":\"${kubernetes_config_path}\",\"kubernetes.container.image\":\"${image_name}\",\"kubernetes.namespace\":\"${namespace}\"}"
-```
-注意：需要提前构建flinkx镜像
-[flinkx镜像构建说明](chunjunDocs/docker.md)
+纯均支持多种模式提交任务，在生产环境中，常用的模式有yarn-session和 yarn-pre-job 模式。
 
 ## 参数说明
 
-| 名称                 | 说明                                                     | 可选值                                                                                                                                                                                                                                         | 是否必填 | 默认值                     |
-| ------------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | ----------------------- |
-| **mode**          | 执行模式，也就是flink集群的工作模式      | 1.**local**: 本地模式<br />2.**standalone**: 独立部署模式的flink集群<br />3.**yarn-session**: yarn-session模式的flink集群，需要提前在yarn上启动一个flink session，使用默认名称"Flink session cluster"<br />4.**yarn-per-job**: yarn模式的flink集群，单独为当前任务启动一个flink session，使用默认名称"Flink per-job cluster"<br />5.**kubernetes-session**: kubernetes session模式提交任务，需要提前在kubernetes上启动flink session <br />6.**kubernetes-application**: kubernetes run application模式提交任务 | 否    | local                   |
-| **jobType**        | 任务类型                 | 1.**sync**:数据同步任务<br />    2.**sql**:flinksql任务                                                                                                                                                                                                                                      | 是    | 无                       |
-| **job**            | 同步、flinksql任务描述文件的存放路径；该描述文件中使用json、sql存放任务信息                  | 无                                                                                                                                                                                                                                           | 是    | 无                       |
-| **jobName**          | 任务名称                                                   | 无                                                                                                                                                                                                                                           | 否    | Flink Job               |
-| **flinkxDistDir**     | 插件根目录地址，也就是打包后产生的flinkx-dist目录。                         | 无                                                                                                                                                                                                                                           | 否    | $FLINKX_HOME/flinkx-dist    |
-| **flinkConfDir**      | flink配置文件所在的目录（单机模式下不需要）                               | $FLINK_HOME/conf                                                                                                                                                                                                                            | 否    | $FLINK_HOME/conf        |
-| **flinkLibDir**    | flink lib所在的目录（单机模式下不需要），如/opt/dtstack/flink-1.10.1/lib | $FLINK_HOME/lib                                                                                                                                                                                                                             | 否    | $FLINK_HOME/lib         |
-| **hadoopConfDir**       | Hadoop配置文件（包括hdfs和yarn）所在的目录                           | $HADOOP_HOME/etc/hadoop                                                                                                                                                                                                                     | 否    | $HADOOP_HOME/etc/hadoop |
-| **pluginLoadMode** | yarn session模式插件加载方式                                   | 1.**classpath**：提交任务时不上传插件包，需要在yarn-node节点flinkx-dist目录下部署插件包，但任务启动速度较快，session模式建议使用<br />2.**shipfile**：提交任务时上传flinkx-dist目录下部署插件包的插件包，yarn-node节点不需要部署插件包，任务启动速度取决于插件包的大小及网络环境，yarnPer模式建议使用                                                                           | 否    | shipfile                |
-| **confProp**       | flink官方所有配置参数                                           |                                                                                                                                                           | 否    | 无                       |
-| **p**              | 自定义入参，用于替换脚本中的占位符，如脚本中存在占位符${pt1},${pt2}，则该参数可配置为pt1=20200101,pt2=20200102|                                                                                                                                                                                                                                             | 否    | 无                       |
+mode：任务提交的类型，非必填项，类型有：local（默认值），standalone，yarn-session，yarn-per-job，kubernetes-session，kubernetes-application，对应源码中枚举类 **
+ClusterMode**；
+
+jobType：纯均任务类型，必填项，同步任务为：sync，SQL计算任务为：sql；
+
+job：纯均任务脚本地址，必填项；
+
+flinkxDistDir：纯均插件包地址；
+
+confProp：纯均任务配置参数，Flink相关配置也是在这里配置；
+
+flinkConfDir：flink-conf.yaml 地址，在非local模式时，需要配置；
+
+## Local
+
+Local 模式不依赖Flink环境和Hadoop环境，在本地环境启动一个JVM进程执行纯均任务。
+
+### 提交步骤
+
+进入到chunjun-dist 目录，执行命令
+
+``` sh ./bin/flinkx -mode local -jobType sync -job ./flinkx-examples/json/stream/stream.json -flinkxDistDir ./flinkx-dist```
+
+即可执行一个简单的 **stream -> stream** 同步任务，任务结果可以在日志文件**nohup.out**中查看；
+
+## Standalone
+
+Standalone模式依赖Flink Standalone环境，不依赖Hadoop环境。
+
+### 提交步骤
+
+#### 1. 启动Flink Standalone环境
+
+启动flink standalone 环境之前，需要将纯均的插件包部署到flink lib 目录下，启动flink standalone 集群，可以观察到flink standalone 集群加载的classpath 中含有纯均插件包。
+
+#### 2. 提交任务
+
+进入到本地chunjun-dist目录，执行命令
+
+```shell
+sh ./bin/flinkx -mode standalone -jobType sync -job $CHUNJUN_DIST/flinkx-examples/json/stream/stream.json -flinkxDistDir $CHUNJUN_DIST/flinkx-dist -flinkConfDir $FLINK_HOME/conf
+```
+
+提交成功之后，可以在flink web ui 上观察任务情况；
+
+### 存在问题
+
+1. 提交相同任务报错：Caused by: java.lang.IllegalStateException: Trying to access closed classloader. Please check if you store
+   classloaders directly or indirectly in static fields. If the stacktrace suggests that the leak occurs in a third
+   party library and cannot be fixed immediately, you can disable this check with the configuration '
+   classloader.check-leaked-classloader'.
+
+详细报错信息如下：
+
+``` java
+Caused by: java.lang.IllegalStateException: Trying to access closed classloader. Please check if you store classloaders directly or indirectly in static fields. If the stacktrace suggests that the leak occurs in a third party library and cannot be fixed immediately, you can disable this check with the configuration 'classloader.check-leaked-classloader'.
+	at org.apache.flink.runtime.execution.librarycache.FlinkUserCodeClassLoaders$SafetyNetWrapperClassLoader.ensureInner(FlinkUserCodeClassLoaders.java:164)
+	at org.apache.flink.runtime.execution.librarycache.FlinkUserCodeClassLoaders$SafetyNetWrapperClassLoader.loadClass(FlinkUserCodeClassLoaders.java:178)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:405)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:351)
+	at com.dtstack.flinkx.util.DataSyncFactoryUtil.lambda$discoverDirty$3(DataSyncFactoryUtil.java:125)
+	at com.dtstack.flinkx.classloader.ClassLoaderSupplierCallBack.callbackAndReset(ClassLoaderSupplierCallBack.java:33)
+	at com.dtstack.flinkx.classloader.ClassLoaderManager.newInstance(ClassLoaderManager.java:56)
+	at com.dtstack.flinkx.util.DataSyncFactoryUtil.discoverDirty(DataSyncFactoryUtil.java:122)
+	... 14 more
+```
+
+方案：这个问题我们内部已经修复了，但是现在还在走内部测试流程；临时解决方案是重启集群；
+
+2. Flink standalone 集群加载flinkx-dist里jar包之后，集群无法启动，日志报错：Exception in thread "main" java.lang.NoSuchFieldError:
+   EMPTY_BYTE_ARRAY.
+
+详细报错信息如下：
+
+```java
+Exception in thread"main"java.lang.NoSuchFieldError:EMPTY_BYTE_ARRAY
+        at org.apache.logging.log4j.core.config.ConfigurationSource.<clinit>(ConfigurationSource.java:56)
+        at org.apache.logging.log4j.core.config.NullConfiguration.<init>(NullConfiguration.java:32)
+        at org.apache.logging.log4j.core.LoggerContext.<clinit>(LoggerContext.java:85)
+        at java.lang.Class.forName0(Native Method)
+        at java.lang.Class.forName(Class.java:264)
+        at org.apache.log4j.LogManager.<clinit>(LogManager.java:72)
+        at org.slf4j.impl.Log4jLoggerFactory.getLogger(Log4jLoggerFactory.java:73)
+        at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:285)
+        at org.slf4j.LoggerFactory.getLogger(LoggerFactory.java:305)
+        at org.apache.flink.runtime.entrypoint.ClusterEntrypoint.<clinit>(ClusterEntrypoint.java:107)
+```
+
+这个报错是因为log4j 版本不统一导致的，因为flinkx-dist 中部分插件引用的还是旧版本的log4j依赖，导致集群启动过程中，出现了类冲突问题；
+
+方案：临时方案是将flink lib 中 log4j 相关的jar包名字前加上字符‘a‘，使得flink standalone jvm 优先加载。
+
+## Yarn Session
+
+YarnSession 模式依赖Flink 和 Hadoop 环境，需要在任务提交之前启动相应的yarn session；
+
+### 提交步骤
+
+#### 1. 启动yarn session环境
+
+启动yarn session 之前，需要将chunjun-dist配置在HADOOP_CLASSPATH环境变量下，启动yarn session，可以观察到yarn session 中加载了纯均插件包。
+
+#### 2. 提交任务
+
+通过yarn web ui 查看session 对应的application $SESSION_APPLICATION_ID，进入到本地chunjun-dist目录，执行命令
+
+```shell
+sh ./bin/flinkx -mode yarn -jobName chunjun_session -jobType sync -job $CHUNJUN_DIST/flinkx-examples/json/stream/stream.json -hadoopConfDir $HADOOP_CONF_DIR -flinkxDistDir $CHUNJUN_DIST/flinkx-dist -confProp {\"yarn.application.id\":\"$SESSION_APPLICATION_ID\"}
+```
+
+yarn.application.id 也可以在 flink-conf.yaml 中设置；提交成功之后，可以通过 yarn web ui 上观察任务情况；
+
+## Yarn Pre-Job
+
+Yarn Pre-Job 模式依赖Flink 和 Hadoop 环境，在任务提交前确认资源是否充足；
+
+### 提交步骤
+
+Yarn Pre-Job 提交任务配置正确即可提交。进入本地chunjun-dist目录，执行命令提交任务。
+
+```shell
+sh ./bin/flinkx -mode yarn-per-job -jobType sync -job $CHUNJUN_DIST/flinkx-examples/json/stream/stream.json -flinkxDistDir $CHUNJUN_DIST/flinkx-dist -flinkConfDir $FLINK_CONF_DIR -hadoopConfDir $HADOOP_CONF_DIR -flinkLibDir $FLINK_HOME/lib -jobName chunjun-pre-job
+```
+
+提交成功之后，可以通过 yarn web ui 上观察任务情况；
