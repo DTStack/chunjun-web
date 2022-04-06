@@ -51,7 +51,7 @@ Oracle 9 and above
     <br />
 
 - **username**
-  - Description: user name 
+  - Description: username 
   - Required:required
   - Type:String
   - Default:none
@@ -205,11 +205,11 @@ Oracle 9 and above
 <br />
 
 ## 5、Supported data type
-|   Whether to support   |                           类型名称                           |
-| :--------------------: | :----------------------------------------------------------: |
-|        support         | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
-|      unsupported       |                 BFILE、XMLTYPE、Collections                  |
-| Supported only in Sync |                      BLOB、CLOB、NCLOB                       |
+|       supported        |                                                                                                        data type                                                                                                         |
+|:----------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|          yes           | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
+|           no           |                                                                                                BFILE、XMLTYPE、Collections                                                                                                 |
+| Supported only in Sync |                                                                                                     BLOB、CLOB、NCLOB                                                                                                      |
 
 Attention:Oracle numeric data may lose precision during conversion due to the limit of  flink DecimalType's PRECISION(1~38) and  SCALE(0~PRECISION)
 
