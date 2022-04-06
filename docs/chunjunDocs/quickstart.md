@@ -1,5 +1,6 @@
 ---
-title: QuickStart sidebar_position: 2
+title: QuickStart 
+sidebar_position: 2
 ---
 
 # 快速入门

@@ -1,14 +1,14 @@
-# SqlServer CDC Real-Time Collection Principles
+# SqlServer CDC  Principles
 
 # I. Basics
 
 SqlServer official support for CDC from SqlServer 2008 version, the document link is as follows.
-[https://docs.microsoft.com/zh-cn/sql/relational-databases/track-changes/about-change-data-capture-sql-server?view=sql-server-ver15](https://docs.microsoft.com/zh-cn/sql/relational-databases/track-changes/about-change-data-capture-sql-server?view=sql-server-ver15)
+[about-change-data-capture-sql-server](https://docs.microsoft.com/zh-cn/sql/relational-databases/track-changes/about-change-data-capture-sql-server?view=sql-server-ver15)
 
 # II. Configuration
 
 The configuration document link is as follows.
-[SqlServerConfigurationCDC](./other/SqlserverCDC configuration.md)
+[SqlServerConfigurationCDC](SqlserverCDC-configuration.md)
 
 # Three, the principle
 
@@ -19,7 +19,7 @@ tasks, as well as unattended tasks such as database transactional replication. T
 installation, you need to start it manually or change it to automatic movement, otherwise the automation tasks of sql
 will not be executed, also pay attention to the service startup account. Simply put, this service is started before the
 capture process will process the transaction log and write entries to the CDC table.
-[https://docs.microsoft.com/zh-cn/sql/ssms/agent/sql-server-agent?view=sql-server-ver15](https://docs.microsoft.com/zh-cn/sql/ssms/agent/sql-server-agent?view=sql-server-ver15)
+[sql-server-agent](https://docs.microsoft.com/zh-cn/sql/ssms/agent/sql-server-agent?view=sql-server-ver15)
 
 ### 2. Comparison of database CDC before and after turning it on
 
@@ -200,7 +200,7 @@ When turned on.
 <img src="static/img/SqlserverCDC/Sqlserver9.png" />
 </div>
 <br/>
-At this point, a new table named dbo_kudu_CT is added under cdc, and for any business table with CDC turned on, a table of format \${schema}\_${table}\_CT will be created under its corresponding cdc schema.
+At this point, a new table named dbo_kudu_CT is added under cdc, and for any business table with CDC turned on, a table of format $schema_$table_CT will be created under its corresponding cdc schema.
 
 **1. dbo_kudu_CT:**
 The change table created when change data capture is enabled for the source table. This table returns one row for each

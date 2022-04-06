@@ -113,7 +113,7 @@ replication relationship
     - Note: After specifying this parameter, the filter parameter will be invalid, the table and filter are empty,
       listen to all tables under the schema in jdbcUrl
     - Required: No
-    - Field type: list<string>
+    - Field type: list\<string\>
     - Default value: none
 
 

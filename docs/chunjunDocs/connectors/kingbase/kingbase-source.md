@@ -65,7 +65,7 @@ KingBase v8
       <br />
 
 - **fetchSize**
-    - Description：how many pieces of data are read from the database at one time. By default, all results are read into memory at one time, which may cause OOM when the amount of data is large. Setting this parameter can control the fetchSize pieces of data read each time, instead of the default to read all the data at one time; enabling fetchSize needs to meet: the database version must be higher than 5.0 and the connection parameter useCursorFetch=true.</br>
+    - Description：how many pieces of data are read from the database at one time. By default, all results are read into memory at one time, which may cause OOM when the amount of data is large. Setting this parameter can control the fetchSize pieces of data read each time, instead of the default to read all the data at one time; enabling fetchSize needs to meet: the database version must be higher than 5.0 and the connection parameter useCursorFetch=true.<br/>
     Attention:The value of this parameter cannot be set too large, otherwise it will read timeout and cause the task to fail.
     - Required:optional
     - Type:int
@@ -112,24 +112,26 @@ KingBase v8
 
 - **column**
     - Description:Fields to read.
-    - Format:Three formats are supported
-      <br />1.Read all fields. If there are many fields, you can use the following writing method:
-      ```json
-      "column":["*"]
-      ```
-      2.Specify only field names:
-      ```json
-      "column":["id","name"]
-      ```
-      3.Specify specific information:
-      ```json
-      "column": [{
-          "name": "col",
-          "type": "datetime",
-          "format": "yyyy-MM-dd hh:mm:ss",
-          "value": "value"
-      }]
-      ```
+     - format: Support 3 formats 1.Read all fields, if there are a lot of fields, you can use the following wording:
+      
+            ```bash
+            "column":["*"]
+            ```
+            2.Specify only the field name:
+      
+            ```
+            "column":["id","name"]
+            ```
+            3.Specify specific information:
+      
+            ```json
+            "column": [{
+                "name": "col",
+                "type": "datetime",
+                "format": "yyyy-MM-dd hh:mm:ss",
+                "value": "value"
+            }]
+            ```
   - Attribute description:
   - name:Field name
   - type:Field type,It can be different from the field type in the database. The program will make a type conversion

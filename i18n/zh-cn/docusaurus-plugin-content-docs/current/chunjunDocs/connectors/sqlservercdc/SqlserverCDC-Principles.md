@@ -1,34 +1,34 @@
 # SqlServer CDC实时采集原理
 
-# 一、基础
+## 一、基础
 
 SqlServer官方从SqlServer 2008版本开始支持CDC，文档连接如下：
-[https://docs.microsoft.com/zh-cn/sql/relational-databases/track-changes/about-change-data-capture-sql-server?view=sql-server-ver15](https://docs.microsoft.com/zh-cn/sql/relational-databases/track-changes/about-change-data-capture-sql-server?view=sql-server-ver15)
+[about-change-data-capture-sql-server](https://docs.microsoft.com/zh-cn/sql/relational-databases/track-changes/about-change-data-capture-sql-server?view=sql-server-ver15)
 
-# 二、配置
+## 二、配置
 
 配置文档链接如下：
-[SqlServer配置CDC](../other/SqlserverCDC配置.md)
+[SqlServer配置CDC](SqlserverCDC-configuration.md)
 
-# 三、原理
+## 三、原理
 
 ### 1、SQL Server Agent
 
 SQL Server Agent代理服务，是sql
 server的一个标准服务，作用是代理执行所有sql的自动化任务，以及数据库事务性复制等无人值守任务。这个服务在默认安装情况下是停止状态，需要手动启动，或改为自动运动，否则sql的自动化任务都不会执行的，还要注意服务的启动帐户。
 简单的说就是启动了这个服务，捕获进程才会处理事务日志并将条目写入CDC表。
-[https://docs.microsoft.com/zh-cn/sql/ssms/agent/sql-server-agent?view=sql-server-ver15](https://docs.microsoft.com/zh-cn/sql/ssms/agent/sql-server-agent?view=sql-server-ver15)
+[sql-server-agent](https://docs.microsoft.com/zh-cn/sql/ssms/agent/sql-server-agent?view=sql-server-ver15)
 
 ### 2、数据库CDC开启前后对比
 
 开启前：
-<div align=center>
-<img src="static/img/SqlserverCDC/Sqlserver7.png" />
+<div align="center">
+<img src={require('/img/SqlserverCDC/Sqlserver7.png').default} />
 </div>
 <br/>
 开启后：
 EXEC sys.sp_cdc_enable_db;
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver8.png" />
 </div>
 <br/>
@@ -124,7 +124,7 @@ capture_instance_ 格式，其中 _capture_instance_ 是在源表启用变更数
 | __$seqval | binary(10) | 用于对某事务内的行更改进行排序的序列值。 |
 | __$operation | int | 标识将更改数据行应用到目标数据源所需的数据操作语言 (DML) 操作。 可以是以下值之一：<br/>1 = 删除 <br/> 2 = 插入 <br/> 3 = 更新（捕获的列值是执行更新操作前的值）。 仅当指定了行筛选选项“all update old”时才应用此值。<br/> 4 = 更新（捕获的列值是执行更新操作后的值）。 |
 | __$update_mask | varbinary(128) | 位掩码，为捕获实例标识的每个已捕获列均对应于一个位。 当 __ $ operation = 1 或2时，该值将所有已定义的位设置为1。 当 __ $ operation = 3 或4时，只有与更改的列相对应的位设置为1。 |
-| \<captured source table columns> | 多种多样 | 函数返回的其余列是在创建捕获实例时标识的已捕获列。 如果已捕获列的列表中未指定任何列，则将返回源表中的所有列。 |
+| \<captured source table columns\> | 多种多样 | 函数返回的其余列是在创建捕获实例时标识的已捕获列。 如果已捕获列的列表中未指定任何列，则将返回源表中的所有列。 |
 
 * 2、fn_cdc_get_net_changes_
 为 (LSN) 范围内的指定日志序列号内的每个源行返回一个净更改行，返回格式跟上面一样。
@@ -171,11 +171,11 @@ sp_cdc_enable_table
 
 开启后：
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver9.png" />
 </div>
 <br/>
-此时，cdc下新增了一张名为dbo_kudu_CT的表，对于任意开启CDC的业务表而言，都会在其对应的cdc schema下创建一张格式为${schema}_${table}_CT的表。
+此时，cdc下新增了一张名为dbo_kudu_CT的表，对于任意开启CDC的业务表而言，都会在其对应的cdc schema下创建一张格式为$schema_$table}_CT的表。
 
 **1、dbo_kudu_CT：**
 对源表启用变更数据捕获时创建的更改表。 该表为对源表执行的每个插入和删除操作返回一行，为对源表执行的每个更新操作返回两行。 如果在启用源表时未指定更改表的名称，则会使用一个派生的名称。 名称的格式为
@@ -189,18 +189,18 @@ cdc。capture_instance _CT 其中 capture_instance 是源表的架构名称和�
 | __$seqval | binary(10) | 用于对事务内的行更改进行排序的序列值。 |
 | __$operation | int | 标识与相应更改关联的数据操作语言 (DML) 操作。 可以是以下值之一：<br/>1 = 删除<br/>2 = 插入<br/>3 = 更新（旧值）列数据中具有执行更新语句之前的行值。<br/>4 = 更新（新值）列数据中具有执行更新语句之后的行值。 |
 | __$update_mask | varbinary(128) | 基于更改表的列序号的位掩码，用于标识那些发生更改的列。 |
-| \<captured source table columns> | 多种多样 | 更改表中的其余列是在创建捕获实例时源表中标识为已捕获列的那些列。 如果已捕获列的列表中未指定任何列，则源表中的所有列将包括在此表中。 |
+| \<captured source table columns\> | 多种多样 | 更改表中的其余列是在创建捕获实例时源表中标识为已捕获列的那些列。 如果已捕获列的列表中未指定任何列，则源表中的所有列将包括在此表中。 |
 | __ $ command_id | int | 跟踪事务中的操作顺序。 |
 
 **2、captured_columns：**
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver10.png" />
 </div>
 <br/>
 
 **3、change_tables：**
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver11.png" />
 </div>
 <br/>
@@ -211,7 +211,7 @@ cdc。capture_instance _CT 其中 capture_instance 是源表的架构名称和�
 
 对于insert和delete类型的数据变更，对于每一行变更都会在对应的${schema}_${table}_
 CT表中增加一行记录。对于insert，id，user_id，name记录的是insert之后的value值；对于delete，id，user_id，name记录的是delete之前的value值；
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver12.png" />
 </div>
 <br/>
@@ -220,7 +220,7 @@ CT表中增加一行记录。对于insert，id，user_id，name记录的是inser
 
 a、更新了主键 此时，SqlServer数据库的做法是在同一事物内，先将原来的记录删除，然后再重新插入。 执行如下SQL，日志表如图所示： UPDATE [dbo].[kudu] SET [id] = 2, [user_id] = '
 2', [name] = 'b' WHERE [id] = 1;
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver13.png" />
 </div>
 <br/>
@@ -229,14 +229,14 @@ b、未更新主键
 执行如下SQL，日志表如图所示：
 UPDATE [dbo].[kudu] SET [user_id] = '3', [name] = 'c' WHERE [id] = 2;
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver14.png" />
 </div>
 <br/>
 
 #### 3、流程图
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver15.png" />
 </div>
 <br/>

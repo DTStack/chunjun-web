@@ -113,25 +113,27 @@ Offline reading from DB2 is supported.Support for DB2 real-time interval polling
 
 - **column**
   - Description:Fields to read.
-  - Format:Three formats are supported
-    <br />
-    - 1.Read all fields. If there are many fields, you can use the following writing method:
-     ```json
-     "column":["*"]
-     ```
-    - 2.Specify only field names:
-    ```json
-    "column":["id","name"]
-    ```
-    - 3.Specify specific information:
-    ```json
-    "column": [{
-        "name": "col",
-        "type": "datetime",
-        "format": "yyyy-MM-dd hh:mm:ss",
-        "value": "value"
-    }]
-    ```
+   - format: Support 3 formats 1.Read all fields, if there are a lot of fields, you can use the following wording:
+  
+        ```bash
+        "column":["*"]
+        ```
+        2.Specify only the field name:
+  
+        ```
+        "column":["id","name"]
+        ```
+        3.Specify specific information:
+  
+        ```json
+        "column": [{
+            "name": "col",
+            "type": "datetime",
+            "format": "yyyy-MM-dd hh:mm:ss",
+            "value": "value"
+        }]
+        ```
+     
   - Attribute description:
     - name:Field name
     - type:Field type,It can be different from the field type in the database. The program will make a type conversion

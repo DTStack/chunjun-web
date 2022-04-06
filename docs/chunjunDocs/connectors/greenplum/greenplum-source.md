@@ -65,7 +65,7 @@ Greenplum 5 and above
       <br />
 
 - **fetchSize**
-    - Description：how many pieces of data are read from the database at one time. By default, all results are read into memory at one time, which may cause OOM when the amount of data is large. Setting this parameter can control the fetchSize pieces of data read each time, instead of the default to read all the data at one time; enabling fetchSize needs to meet: the database version must be higher than 5.0 and the connection parameter useCursorFetch=true.</br>
+    - Description：how many pieces of data are read from the database at one time. By default, all results are read into memory at one time, which may cause OOM when the amount of data is large. Setting this parameter can control the fetchSize pieces of data read each time, instead of the default to read all the data at one time; enabling fetchSize needs to meet: the database version must be higher than 5.0 and the connection parameter useCursorFetch=true.<br/>
     Attention:The value of this parameter cannot be set too large, otherwise it will read timeout and cause the task to fail.
     - Required:optional
     - Type:int

@@ -6,7 +6,7 @@
 
 SQL：`SELECT @@VERSION`
 结果：
-<div align=center>
+<div align="center">
   <img src="static/img/SqlserverCDC/Sqlserver1.png" />
 </div>
 
@@ -14,7 +14,7 @@ SQL：`SELECT @@VERSION`
 
 SQL：`exec sp_helpsrvrolemember 'sysadmin'`
 结果：
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver2.png" />
 </div>
 
@@ -22,7 +22,7 @@ SQL：`exec sp_helpsrvrolemember 'sysadmin'`
 
 SQL：`select is_cdc_enabled, name from  sys.databases where name = 'tudou'`
 结果：
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver3.png" />
 </div>
 <br/>
@@ -42,7 +42,7 @@ GO
 
 重复第三步操作，确认数据库已经启用CDC(变更数据捕获)功能。
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver4.png"/>
 </div>
 
@@ -50,7 +50,7 @@ GO
 
 SQL：`select name,is_tracked_by_cdc from sys.tables where name = 'test';`
 结果：
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver5.png" />
 </div>
 0：未启用；1：启用
@@ -71,7 +71,7 @@ source_schema：表所在的schema名称 source_name：表名 role_name：访问
 supports_net_changes：是否为捕获实例生成一个净更改函数，0：否；1：是
 
 重复第五步操作，确认表已经启用CDC(变更数据捕获)功能。
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver6.png" />
 </div>
 
@@ -83,24 +83,24 @@ supports_net_changes：是否为捕获实例生成一个净更改函数，0：�
 EXEC master.dbo.xp_servicecontrol N'QUERYSTATE', N'SQLSERVERAGENT'
 ```
 
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver16.png" />
 </div>
 如显示上图状态，需要启动对应的agent.
 
 **Windows 环境操作开启 CDC agent**
 点击 下图位置代理开启
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver17.png" />
 </div>
 
 **重新启动数据库**
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver18.png" />
 </div>
 
 **再次查询agent 状态，确认状态变更为running**
-<div align=center>
+<div align="center">
 <img src="static/img/SqlserverCDC/Sqlserver19.png" />
 </div>
 

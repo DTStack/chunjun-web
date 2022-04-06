@@ -10,11 +10,11 @@ SqlServer 2012、2014、2016、2017、2019单机版
 
 ## 三、数据库配置
 
-[SqlserverCDC配置](SqlserverCDC配置.md)
+[SqlserverCDC配置](SqlserverCDC-configuration.md)
 
 ## 四、SqlserverCDC原理
 
-[SqlserverCDC原理](SqlserverCDC原理.md)
+[SqlserverCDC原理](SqlserverCDC-Principles.md)
 
 ## 五、插件名称
 
