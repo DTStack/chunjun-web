@@ -174,7 +174,7 @@ Elasticsearch 7.x
    - Description：Password used to connect to Elasticsearch instance. If username is configured, this option must be configured with non-empty string as well.
    - Required：optional
    - Type：String
-   - Default：无
+   - Default：none
   
 
 - **sink.bulk-flush.max-actions**
