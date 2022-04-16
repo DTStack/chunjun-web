@@ -145,6 +145,13 @@ KingBase v8
   - Default:none
       <br />
 
+- **schema**
+  - Description:Database schema
+  - Required:optional
+  - Type:string
+  - Default:none
+    <br />
+
 - **table-name**
   - Description: table name
   - Required:required

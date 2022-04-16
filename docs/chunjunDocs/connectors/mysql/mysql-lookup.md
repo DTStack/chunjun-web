@@ -30,6 +30,12 @@ MySQL 5.x
     - Type：String
     - Default：(none)
 
+- **schema**
+  - Description: database schema name
+  - Required: Optional
+  - Type: String
+  - Default: (none)
+
 
 - **table-name**
     - Description：The name of table

@@ -168,6 +168,13 @@ Oracle 9 及以上
     - 参数类型：String
     - 默认值：无
       <br />
+  
+- **schema**
+    - 描述：数据库schema名
+    - 必选：否
+    - 参数类型：String
+    - 默认值：用户名：
+      <br />
 
 - **table-name**
     - 描述：表名

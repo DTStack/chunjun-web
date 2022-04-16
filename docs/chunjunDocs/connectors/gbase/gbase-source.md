@@ -193,9 +193,16 @@ GBase8a(8.6.2.43)
 
 - **url**
     - Description：jdbc:gbase://localhost:9042/test
-  - Required:required
-  - Type:String
-  - Default:none
+    - Required:required
+    - Type:String
+    - Default:none
+        <br />
+
+- **schema**
+    - Description:Database schema
+    - Required:optional
+    - Type:string
+    - Default:none
       <br />
 
 - **table-name**

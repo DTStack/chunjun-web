@@ -193,9 +193,16 @@ Greenplum 5 and above
 
 - **url**
     - Description：jdbc:pivotal:greenplum://localhost:5432;DatabaseName=postgres
-  - Required:required
-  - Type:String
-  - Default:none
+    - Required:required
+    - Type:String
+    - Default:none
+        <br />
+
+- **schema**
+    - Description:Database schema
+    - Required:optional
+    - Type:string
+    - Default:none
       <br />
 
 - **table-name**

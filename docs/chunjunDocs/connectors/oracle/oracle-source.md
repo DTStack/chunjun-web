@@ -199,6 +199,13 @@ Oracle 9 and above
   - Default:none
     <br />
 
+- **schema**
+  - Description:Database schema
+  - Required:optional
+  - Type:string
+  - Default:oracle user name
+    <br />
+
 - **table-name**
   - Description:table name
   - Required:required

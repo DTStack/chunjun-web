@@ -30,6 +30,13 @@ ClickHouse 19.x and above
    - Default：none
    <br />
 
+- **schema**
+    - Description:Database schema
+    - Required:optional
+    - Type:string
+    - Default：none
+      <br />
+
 - **table-name**
    - Description：table name
    - Required：required

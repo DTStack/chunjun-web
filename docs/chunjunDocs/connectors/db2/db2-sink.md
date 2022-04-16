@@ -143,6 +143,13 @@ DB2 Sink
   - Default：none
 <br />
 
+- **schema**
+  - Description:Database schema
+  - Required:optional
+  - Type:string
+  - Default: none
+    <br />
+
 - **table-name**
   - Description: table name
   - Required:required

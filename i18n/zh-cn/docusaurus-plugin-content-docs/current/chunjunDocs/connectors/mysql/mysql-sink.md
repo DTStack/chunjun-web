@@ -1,15 +1,16 @@
-# DB2 Sink
+# Mysql Sink
 
 ## 一、介绍
-db2 sink
+mysql sink
 
 ## 二、支持版本
+mysql5.x
 
 
 ## 三、插件名称
-| Sync | db2sink、db2writer |
+| Sync | mysqlsink、mysqlwriter |
 | --- | --- |
-| SQL | db2-x |
+| SQL | mysql-x |
 
 
 ## 四、参数说明
@@ -21,7 +22,7 @@ db2 sink
   - 默认值：无
     ```text
     "connection": [{
-     "jdbcUrl": ["jdbc:db2://hostname:port/test"],
+     "jdbcUrl": ["jdbc:mysql://0.0.0.1:3306/database?useSSL=false"],
      "table": ["table"],
      "schema":"public"
     }]
@@ -29,7 +30,7 @@ db2 sink
  <br />
     
 - **jdbcUrl**
-  - 描述：针对关系型数据库的jdbc连接字符串
+  - 描述：针对关系型数据库的jdbc连接字符串,jdbcUrl参考文档：[MySQL官方文档](http://dev.mysql.com/doc/connector-j/en/connector-j-reference-configuration-properties.html)
   - 必选：是
   - 参数类型：string
   - 默认值：无
@@ -64,13 +65,13 @@ db2 sink
 <br />
 
 - **column**
-  - 描述：目的表需要写入数据的字段,字段之间用英文逗号分隔。例如: "column": ["id","name","age"] 
+  - 描述：目的表需要写入数据的字段。例如: "column": [{"name":"id",type:"varchar"}] 
   - 必选：是
   - 参数类型：List
   - 默认值：无
 <br />
 
-- **fullcolumn**
+- **fullColumn**
   - 描述：目的表中的所有字段，字段之间用英文逗号分隔。例如: "column": ["id","name","age","hobby"]，如果不配置，将在系统表中获取 
   - 必选：否
   - 参数类型：List
@@ -91,7 +92,7 @@ db2 sink
   - 默认值：无
 <br />
 
-- **writeMode**
+- **mode**
   - 描述：控制写入数据到目标表采用 insert into 或者 replace into 或者 ON DUPLICATE KEY UPDATE 语句 
   - 必选：是
   - 所有选项：insert/replace/update
@@ -103,7 +104,7 @@ db2 sink
   - 描述：一次性批量提交的记录数大小，该值可以极大减少FlinkX与数据库的网络交互次数，并提升整体吞吐量。但是该值设置过大可能会造成FlinkX运行进程OOM情况
   - 必选：否
   - 参数类型：int
-  - 默认值：1024
+  - 默认值：1
 <br />
 
 - **updateKey**
@@ -112,8 +113,8 @@ db2 sink
     - 如果此参数为空，并且写入模式为update和replace时，应用会自动获取数据库中的唯一索引；
     - 如果数据表没有唯一索引，但是写入模式配置为update和replace，应用会以insert的方式写入数据； 
   - 必选：否
-  - 参数类型：Map<String,List>
-    - 示例："updateKey": {"key": ["id"]}
+  - 参数类型：List<String>
+    - 示例："updateKey": ["id"]
   - 默认值：无
 <br />
 
@@ -130,14 +131,14 @@ db2 sink
 
 ### 2、SQL
 - **connector**
-  - 描述：db2-x
+  - 描述：mysql-x
   - 必选：是
   - 参数类型：String 
   - 默认值：无
 <br />
 
 - **url**
-  - 描述：jdbc:db2://hostname:port/test
+  - 描述：jdbc:mysql://localhost:3306/test
   - 必选：是
   - 参数类型：String 
   - 默认值：无
@@ -211,11 +212,11 @@ db2 sink
 <br />
 
 ## 五、数据类型
-| 是否支持 | 类型名称|
-| --- | --- |
-| 支持 | INT,BIGINT,SMALLINT,DOUBLE,DECFLOAT,DECIMAL,VARCHAR,CHAR,CLOB,DECIMAL,TIMESTAMP,DATETIME,DATE,TIME,BYTES|
-| 不支持 |  |
 
+|     是否支持      |                           类型名称                           |
+|:-------------:| :----------------------------------------------------------: |
+|      支持       | BOOLEAN、TINYINT、SMALLINT、INT、BIGINT、FLOAT、DOUBLE、DECIMAL、STRING、VARCHAR、CHAR、TIMESTAMP、DATE、BINARY |
+|      不支持      |                 ARRAY、MAP、STRUCT、UNION                  |
 
 ## 六、脚本示例
 见项目内`flinkx-examples`文件夹。

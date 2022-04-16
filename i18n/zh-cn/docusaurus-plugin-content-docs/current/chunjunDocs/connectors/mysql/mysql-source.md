@@ -1,16 +1,16 @@
-# DB2 Source
+# Mysql Source
 
 ## 一、介绍
-支持从db2离线读取，支持db2实时间隔轮询读取
+支持从mysql离线读取，支持mysql实时间隔轮询读取
 
 ## 二、支持版本
-
+mysql5.x
 
 
 ## 三、插件名称
-| Sync | db2source、db2reader |
+| Sync | mysqlsource、mysqlreader |
 | --- | --- |
-| SQL | db2-x |
+| SQL | mysql-x |
 
 
 ## 四、参数说明
@@ -20,9 +20,9 @@
   - 必选：是
   - 参数类型：List
   - 默认值：无
-    ```json
+    ```text
     "connection": [{
-     "jdbcUrl": ["jdbc:db2://hostname:port/test"],
+     "jdbcUrl": ["jdbc:mysql://0.0.0.1:3306/database?useSSL=false"],
      "table": ["table"],
      "schema":"public"
     }]
@@ -30,7 +30,7 @@
  <br />
     
 - **jdbcUrl**
-  - 描述：针对关系型数据库的jdbc连接字符串
+  - 描述：针对关系型数据库的jdbc连接字符串,jdbcUrl参考文档：[MySQL官方文档](http://dev.mysql.com/doc/connector-j/en/connector-j-reference-configuration-properties.html)
   - 必选：是
   - 参数类型：string
   - 默认值：无
@@ -113,25 +113,24 @@
 
 - **column**
   - 描述：需要读取的字段。
-  - 格式：支持3种格式 
-    - 1.读取全部字段，如果字段数量很多，可以使用下面的写法：
-      ```json
-      "column":["*"]
-      ```
-    - 2.只指定字段名称：
-      ```json
-      "column":["id","name"]
-      ```
-    - 3.指定具体信息:
-  
-      ```json
-        "column": [{
-            "name": "col",
-            "type": "datetime",
-            "format": "yyyy-MM-dd hh:mm:ss",
-            "value": "value"
-        }]
-      ```
+  - 格式：支持3种格式
+    <br />1.读取全部字段，如果字段数量很多，可以使用下面的写法：
+    ```bash
+    "column":["*"]
+    ```
+    2.只指定字段名称：
+    ```
+    "column":["id","name"]
+    ```
+    3.指定具体信息：
+    ```json
+    "column": [{
+        "name": "col",
+        "type": "datetime",
+        "format": "yyyy-MM-dd hh:mm:ss",
+        "value": "value"
+    }]
+    ```
   - 属性说明:
     - name：字段名称
     - type：字段类型，可以和数据库里的字段类型不一样，程序会做一次类型转换
@@ -151,14 +150,14 @@
 - **pollingInterval**
   - 描述：轮询间隔时间，从数据库中拉取数据的间隔时间，默认为5000毫秒。
   - 必选：否 
-  - 参数类型：Long 
+  - 参数类型：long 
   - 默认值：5000 
 <br />
 
 - **increColumn**
   - 描述：增量字段，可以是对应的增量字段名，也可以是纯数字，表示增量字段在column中的顺序位置（从0开始）
   - 必选：否 
-  - 参数类型：String或Int 
+  - 参数类型：String或int 
   - 默认值：无 
 <br />
 
@@ -179,20 +178,20 @@
 - **requestAccumulatorInterval**
   - 描述：发送查询累加器请求的间隔时间。
   - 必选：否 
-  - 参数类型：Int 
+  - 参数类型：int 
   - 默认值：2 
 <br />
 
 ### 2、SQL
 - **connector**
-  - 描述：连接类型
+  - 描述：mysql-x
   - 必选：是
   - 参数类型：String 
-  - 默认值：db2-x
+  - 默认值：无
 <br />
 
 - **url**
-  - 描述：jdbc:db2://hostname:port/test
+  - 描述：jdbc:mysql://localhost:3306/test
   - 必选：是
   - 参数类型：String 
   - 默认值：无
@@ -255,7 +254,7 @@
 <br />
 
 - **scan.partition.column**
-  - 描述：多并行度读取的切分字段，多并行度下必需要设置
+  - 描述：多并行度读取的切分字段
   - 必选：否
   - 参数类型：String 
   - 默认值：无
@@ -304,10 +303,12 @@
 <br />
 
 ## 五、数据类型
-| 是否支持 | 类型名称|
-| --- | --- |
-| 支持 | BOOLEAN、TINYINT、SMALLINT、INT、BIGINT、FLOAT、DOUBLE、DECIMAL、STRING、VARCHAR、CHAR、TIMESTAMP、DATE、BINARY |
-| 不支持 | ARRAY、MAP、STRUCT、UNION |
+
+
+|     是否支持      |                           类型名称                           |
+|:-------------:| :----------------------------------------------------------: |
+|      支持       | BOOLEAN、TINYINT、SMALLINT、INT、BIGINT、FLOAT、DOUBLE、DECIMAL、STRING、VARCHAR、CHAR、TIMESTAMP、DATE、BINARY |
+|      不支持      |                 ARRAY、MAP、STRUCT、UNION                  |
 
 
 ## 六、脚本示例

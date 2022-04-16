@@ -246,6 +246,12 @@ Microsoft SQL Server 2012及以上<br />​<br />
 
 ​<br />
 
+- **schema**
+  - 描述：数据库schema名
+  - 必选：否
+  - 字段类型：String
+  - 默认值：无
+
 - **table-name**
    - 描述：表名
    - 必选：是

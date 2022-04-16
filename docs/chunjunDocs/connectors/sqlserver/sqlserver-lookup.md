@@ -30,6 +30,13 @@ Microsoft SQL Server 2012 and above
 
 <br />
 
+- **schema**
+  - Description:Database schema
+  - Required:optional
+  - Type:string
+  - Default:none
+    <br />
+
 - **table-name**
    - Description：table name
    - Required：required

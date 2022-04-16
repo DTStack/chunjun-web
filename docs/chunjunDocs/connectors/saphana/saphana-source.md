@@ -39,7 +39,7 @@ SAP HANA 2.0 and above
     - Description:Database schema
     - Required:optional
     - Type:string
-    - Default:saphana user name
+    - Default:none
       <br />
 
 - **table**
@@ -195,6 +195,13 @@ SAP HANA 2.0 and above
     - Description:jdbc:sap://localhost:39015
     - Required:required
     - Type:String
+    - Default:none
+      <br />
+
+- **schema**
+    - Description:Database schema
+    - Required:optional
+    - Type:string
     - Default:none
       <br />
 

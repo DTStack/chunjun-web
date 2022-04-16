@@ -193,9 +193,16 @@ KingBase v8
 
 - **url**
     - Description：jdbc:kingbase8://localhost:54321/MOWEN
-  - Required:required
-  - Type:String
-  - Default:none
+    - Required:required
+    - Type:String
+    - Default:none
+        <br />
+
+- **schema**
+    - Description:Database schema
+    - Required:optional
+    - Type:string
+    - Default:none
       <br />
 
 - **table-name**

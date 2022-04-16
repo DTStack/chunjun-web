@@ -140,10 +140,17 @@ PostgreSql 9.4 and above
 
 - **url**
     - Description：jdbc:postgresql://localhost:5432/test
-  - Required:required
-  - Type:String
+    - Required:required
+    - Type:String
+    - Default:none
+        <br />
+
+- **schema**
+  - Description:Database schema
+  - Required:optional
+  - Type:string
   - Default:none
-      <br />
+    <br />
 
 - **table-name**
   - Description: table name

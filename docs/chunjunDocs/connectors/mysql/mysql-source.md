@@ -41,10 +41,10 @@ MySQL 5.x
 
 
 - **schema**
-    - Definition: schema name of database
-    - Required: false
-    - Type: string
-    - Default: null
+    - Description: database schema name
+    - Required: Optional
+    - Type: String
+    - Default: (none)
 
 
 - **table**
@@ -225,6 +225,12 @@ MySQL 5.x
     - Required: true
     - Type: String
     - Default: null
+
+- **schema**
+    - Description: database schema name
+    - Required: Optional
+    - Type: String
+    - Default: (none)
 
 
 - **table-name**

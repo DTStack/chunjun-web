@@ -177,7 +177,14 @@ Microsoft SQL Server 2012及以上
    - 字段类型：String
    - 默认值：无
 
-​<br />
+<br />
+
+- **schema**
+  - 描述：数据库schema名
+  - 必选：否
+  - 参数类型：string
+  - 默认值：无
+    <br />
 
 - **table-name**
    - 描述：表名

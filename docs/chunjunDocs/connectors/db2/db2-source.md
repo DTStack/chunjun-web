@@ -200,6 +200,13 @@ Offline reading from DB2 is supported.Support for DB2 real-time interval polling
   - Default：none
 <br />
 
+- **schema**
+  - Description:Database schema
+  - Required:optional
+  - Type:string
+  - Default: none
+    <br />
+
 - **table-name**
   - Description：table-name
   - Required：required

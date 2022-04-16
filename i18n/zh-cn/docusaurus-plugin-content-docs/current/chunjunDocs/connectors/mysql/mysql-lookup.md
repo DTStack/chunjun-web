@@ -1,28 +1,28 @@
-# DB2 Lookup
+# Mysql Lookup
 
 ## 一、介绍
-db2维表，支持全量和异步方式<br />
-全量缓存:将维表数据全部加载到内存中，建议数据量不大使用。<br />
+mysql维表，支持全量和异步方式<br />
+全量缓存:将维表数据全部加载到内存中，建议数据量大不使用。<br />
 异步缓存:使用异步方式查询数据，并将查询到的数据使用lru缓存到内存中，建议数据量大使用。
 
 ## 二、支持版本
-
+mysql5.x
 
 
 ## 三、插件名称
-| SQL | db2-x |
+| SQL | mysql-x |
 | --- | --- |
 
 ## 四、参数说明
 - **connector**
-  - 描述：db2-x
+  - 描述：mysql-x
   - 必选：是
   - 参数类型：String
   - 默认值：无
 <br />
 
 - **url**
-  - 描述：jdbc:db2://hostname:port/test
+  - 描述：jdbc:mysql://localhost:3306/test
   - 必选：是
   - 参数类型：String
   - 默认值：无
@@ -99,10 +99,9 @@ db2维表，支持全量和异步方式<br />
 <br />
 
 ## 五、数据类型
-| 是否支持 | 类型名称|
+| 支持 | BOOLEAN、TINYINT、SMALLINT、INT、BIGINT、FLOAT、DOUBLE、DECIMAL、STRING、VARCHAR、CHAR、TIMESTAMP、DATE、BINARY |
 | --- | --- |
-| 支持 | INT,BIGINT,SMALLINT,DOUBLE,DECFLOAT,DECIMAL,VARCHAR,CHAR,CLOB,DECIMAL,TIMESTAMP,DATETIME,DATE,TIME,BYTES|
-| 不支持 |  |
+| 暂不支持 | ARRAY、MAP、STRUCT、UNION |
 
 
 ## 六、脚本示例

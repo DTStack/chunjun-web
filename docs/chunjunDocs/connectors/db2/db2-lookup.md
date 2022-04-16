@@ -28,6 +28,13 @@ Asynchronous caching: Query data using asynchronous means, and cache the queried
   - Default：none
 <br />
 
+- **schema**
+  - Description:Database schema
+  - Required:optional
+  - Type:string
+  - Default: none
+    <br />
+
 - **table-name**
   - Description：table name
   - Required：required

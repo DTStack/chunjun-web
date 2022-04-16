@@ -170,6 +170,12 @@ MySQL 5.x
     - Type: String
     - Default: (none)
 
+- **schema**
+  - Description: database schema name
+  - Required: Optional
+  - Type: String
+  - Default: (none)
+
 
 - **table-name**
     - Definition: the name of table
