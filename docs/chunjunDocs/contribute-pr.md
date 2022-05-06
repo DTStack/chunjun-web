@@ -1,17 +1,17 @@
-# 如何提交一个优秀的pr
-在github上提交pr是参与chunjun项目开源的一个重要途径，小伙伴们在使用中的一些功能上feature或者bug都可以向社区提交pr贡献代码，也可以根据已有的issue提供自己的解决方案。
+# How to submit a good PR
+Submitting pr on github is an important way to participate in the open source of the chunjun project. Small partners can submit pr contribution code to the community for some features or bugs in use, or provide their own solutions according to existing issues.
 
-## 第一步：fork chunjun到自己的github仓库
+## Step 1: Fork chunjun to your own github repository
 ![image](../../static/img/pr/pr1.png)
 
-点击fork后就可以在自己仓库中看到以你名字命名的chunjun项目了：
+After clicking fork, you can see the chunjun project named after you in your repository:
 
 ![image](../../static/img/pr/pr2.png)
 
-## 第二步：clone chunjun到本地IDE
+## Step 2: clone chunjun to the local IDE
 ![image](../../static/img/pr/pr3.png)
 
-## 第三步：将DTStack/chunjun设置为本地仓库的远程分支upstream
+## Step 3: Set DTStack/chunjun as the remote branch upstream of the local repository
 ```shell
 $ cd chunjun
 # add upstream
@@ -23,20 +23,20 @@ origin  https://github.com/your_name/chunjun.git (push)
 upstream    https://github.com/DTStack/chunjun.git (fetch)
 upstream    https://github.com/DTStack/chunjun.git (push)
 ```
-## 第四步：提交代码
-**切换分支**
+## Step 4: Submit the code
+**switch branch**
 ```shell
 $ git checkout -b branch_name
 ```
-**本地修改代码后，提交commit**
+**After modifying the code locally, submit a commit**
 - commit_message格式：
 [commit_type] [module] message
 - commit_type:
-    - feat：表示是一个新功能（feature)
-    - hotfix：hotfix，修补bug
-    - docs：改动、增加文档
-    - opt：修改代码风格及opt imports这些，不改动原有执行的代码
-    - test：增加测试
+    - feat：Indicates a new feature（feature)
+    - hotfix：hotfix，fix bug
+    - docs：Changes and additions to documents
+    - opt：Modify the code style and opt imports without changing the original executed code
+    - test：add test
 - eg:[hotfix-12345][mysql] Fix mysql time type loses precision.
 
 ```shell
@@ -44,46 +44,46 @@ $ git checkout -b branch_name
 $ mvn spotless:apply
 $ git commit -a -m "<you_commit_message>"
 ```
-**rebase远程分支**
+**rebase remote branch**
 
-这一步很重要，因为我们仓库中的chunjun代码很有可能已经落后于社区，所以我们 push commit前需要rebase，保证我们的commit是基于社区最新的代码，很多小伙伴没有这一步导致提交的pr当中包含了其他人的commit
+This step is very important, because the chunjun code in our warehouse is likely to have lagged behind the community, so we need to rebase before push commit to ensure that our commit is based on the latest code of the community, many small partners do not have this step, resulting in the submitted pr Include other people's commits
 ```shell
 $ git fetch upstream
 $ git rebase upstream/branch_name
 ```
 
-*rebase后有可能出现代码冲突，一般是由于多人编辑同一个文件引起的，只需要根据提示打开冲突文件对冲突部分进行修改，将提示的冲突文件的冲突都解决后，执行
+*There may be code conflicts after rebase, which is usually caused by multiple people editing the same file. You only need to open the conflict file according to the prompts to modify the conflicting parts, and after all the conflicts in the conflicting files that are prompted are resolved, execute:
 ```shell
 $ git add .
 $ git rebase --continue
 ```
-依此往复，直至屏幕出现类似rebase successful字样即可
+Repeat this until something like rebase successful appears on the screen.
 
-*rebase之后代码可能无法正常推送，需要```git push -f``` 强制推送，强制推送是一个有风险的操作，操作前请仔细检查以避免出现无关代码被强制覆盖的问题
+*After the rebase, the code may not be pushed normally. You need to force push with ```git push -f```. Forced push is a risky operation. Please check carefully before operation to avoid the problem of forcibly overwriting irrelevant code.
 
-**push到github仓库**
+**push to github repository**
 ```shell
 $ git push origin branch_name
 ```
-## 第五步：提交pr
-以我修复kafka写入过程中出现空指针问题为例，经过步骤四我已经把代码提交至我的仓库master分支
+## Step 5: Submit PR
+Refer to the example of fixing the null pointer problem during the writing process of kafka. After step 4, I have submitted the code to the master branch of my warehouse
 
 ![image](../../static/img/pr/pr4.png)
 
-进入chunjun仓库页面，点击Pull Request
+Go to the chunjun warehouse page and click Pull Request
 
 ![image](../../static/img/pr/pr5.png)
 
 ![image](../../static/img/pr/pr6.png)
 
-选择head仓库和base仓库以及相应的分支
+Select the head repository and base repository and the corresponding branch
 
 ![image](../../static/img/pr/pr7.png)
 
-填写pr信息，pr信息应该尽量概括清楚问题的前因后果，如果存在对应issue要附加issue地址，保证问题是可追溯的
+Fill in the pr information. The pr information should summarize the cause and effect of the problem as clearly as possible. If there is a corresponding issue, an issue address should be attached to ensure that the problem is traceable
 
 ![image](../../static/img/pr/pr8.png)
 
 ![image](../../static/img/pr/pr9.png)
 
-pr提交成功后需要一段时间代码review，您可以耐心等待一下我们review后合入，或者直接联系我们。
+After the pr submission is successful, it will take a while for the code to review. You can wait patiently for us to review and then merge, or contact us directly.
