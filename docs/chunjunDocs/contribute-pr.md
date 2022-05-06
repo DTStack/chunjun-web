@@ -16,7 +16,7 @@ After clicking fork, you can see the chunjun project named after you in your rep
 $ cd chunjun
 # add upstream
 $ git remote add upstream https://github.com/DTStack/chunjun.git
-# 查看远程仓库设置
+# view your remote repository settings
 $ git remote -v
 origin  https://github.com/your_name/chunjun.git (fetch)
 origin  https://github.com/your_name/chunjun.git (push)
@@ -29,7 +29,7 @@ upstream    https://github.com/DTStack/chunjun.git (push)
 $ git checkout -b branch_name
 ```
 **After modifying the code locally, submit a commit**
-- commit_message格式：
+- commit_message format：
 [commit_type] [module] message
 - commit_type:
     - feat：Indicates a new feature（feature)
@@ -40,7 +40,7 @@ $ git checkout -b branch_name
 - eg:[hotfix-12345][mysql] Fix mysql time type loses precision.
 
 ```shell
-# 提交commit前先进行代码格式化
+# code formatting before submitting a commit
 $ mvn spotless:apply
 $ git commit -a -m "<you_commit_message>"
 ```
