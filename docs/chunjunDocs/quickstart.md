@@ -1,112 +1,111 @@
 ---
-title: QuickStart 
+title: QuickStart
 sidebar_position: 2
 ---
 
-# 快速入门
+# Quick start
 
-本文讨论如何在不同场景下使用纯均进行同步/SQL计算任务。本文中以 Stream -> Stream 为例子说明，如需构建其他数据源任务，请根据插件文档具体修改。
+This article discusses how to perform synchronization / SQL computing tasks using ChunJun in different scenarios.This article takes Stream -> Stream as an example, If you need to build other data source tasks, please modify them according to the plug-in document.
 
-# 准备开始
+# Preparation
 
-操作系统：无限制
+os:unlimited
 
-系统版本：无限制
+system version:unlimited
 
-环境工具：JDK 1.8，Git，maven
+Environment tools:JDK 1.8,Git,maven
 
-（环境默认已经配置JAVA_HOME，maven）
+(The environment has been configured with JAVA_HOME and maven by default)
 
-# 获取插件
+# Get the plugin
 
-纯均提供了已经编译好的插件压缩包（[chunjun-dist.tar](https://github.com/DTStack/chunjun/releases)），里面包含目前所有的脚本案例，任务提交脚本，插件包等内容，使得用户可以直接下载，根据需要配置任务，开箱即用。
+ChunJun provides already compiled plug-in compressed packages([chunjun-dist.tar](https://github.com/DTStack/chunjun/releases)),This compressed package contains all the current script cases, task submission scripts, plug-in packages, etc., so that users can download directly, configure tasks as needed, and use them out of the box.
 
-另外，可以下载源码（[github地址](https://github.com/DTStack/chunjun)），自行编译源码，提交任务。
+In addition, you can download the source code([address of github](https://github.com/DTStack/chunjun)),You can also compile the source code yourself and submit tasks.
 
-## 压缩包
+## Archive
 
-纯均提供的压缩包（chunjun-dist.tar）里包含四部分内容：bin（包含任务提交脚本），flinkx-dist（纯均任务插件包），flinkx-example（纯均任务脚本模版），lib（任务提交客户端），用户可以通过bin里的提交脚本，使用已经编译好的插件jar包直接提交任务，无需关心插件编译过程，适合调研使用。
+The compressed package (chunjun-dist.tar) provided by Chunjun contains four parts: bin (including task submission script), flinkx-dist (chunjun task plugin package), flinkx-example (chunjun task script template), lib (task submission client), users can submit tasks directly through the submission script in the bin and use the compiled plugin jar package without worrying about the plugin compilation process, which is suitable for research and use.
 
-## 源码编译
+## Source code compilation
 
-### 1.安装依赖
+### 1.Install dependencies
 
-纯均主要使用Java语言编写，通过maven打包编译。从仓库中通过git下载源码之后，首先进入bin目录，根据系统执行不同的install_jars脚本，linux/mac 系统使用 install_jars.sh，windows
-系统使用install_jars.bat，把纯均项目中部分依赖安装到本地仓库中，避免编译源码过程中，出现依赖找不到问题。
+ChunJun is mainly written in Java language, packaged and compiled by maven. After downloading the source code from the warehouse through git, first enter the bin directory, and execute different install_jars scripts according to the system. The linux/mac system uses install_jars.sh, and the windows
+The system uses install_jars.bat to install some of the dependencies in the ChunJun project into the local warehouse to avoid the problem of not finding dependencies during the source code compilation process.
 
-### 2.编译源码
+### 2.Compile the source code
 
-在纯均项目根目录下，执行mvn 编译命令 ``` mvn clean package -Dmaven.test.skip```，在根目录下生成目录 **flinkx-dist**（插件包路径）
+In the root directory of the pure average project, execute the mvn compilation command ``` mvn clean package -Dmaven.test.skip``` to generate the directory **flinkx-dist** (plug-in package path) in the root directory
 
-### 3.可能出现的问题
+### 3.Problems that may arise
 
-* 编译过程中出现依赖不存在问题
+* Dependency does not exist during compilation
 
-​ 先执行bin目录下install_jars脚本，如果还存在依赖问题，检查配置的maven环境是否可用，是否修改了项目pom文件。
+​ First execute the install_jars script in the bin directory. If there is still a dependency problem, check whether the configured maven environment is available and whether the project pom file has been modified.
 
-* 编译过程中出现 Failed to execute goal com.diffplug.spotless:spotless-maven-plugin:2.4.2:check (spotless-check) 报错
+* Failed to execute goal com.diffplug.spotless:spotless-maven-plugin:2.4.2:check (spotless-check) error occurred during compilation
 
-​ 在编译路径下，执行``` mvn spotless:apply```，对项目代码进行格式化。
+​ In the compilation path, execute ``` mvn spotless:apply``` to format the project code.
 
-# 任务提交
+# Task submission
 
-纯均支持多种模式提交任务，在生产环境中，常用的模式有yarn-session和 yarn-pre-job 模式。
+ChunJun all supports multiple modes of submitting tasks. In the production environment, the commonly used modes are yarn-session and yarn-pre-job modes.
 
-## 参数说明
+## Parameter Description
 
-mode：任务提交的类型，非必填项，类型有：local（默认值），standalone，yarn-session，yarn-per-job，kubernetes-session，kubernetes-application，对应源码中枚举类 **
-ClusterMode**；
+mode:The type of task submission, not required, the types are: local (default value), standalone, yarn-session, yarn-per-job, kubernetes-session, kubernetes-application, corresponding to the enumeration class **ClusterMode** in the source code;
 
-jobType：纯均任务类型，必填项，同步任务为：sync，SQL计算任务为：sql；
+jobType:ChunJun task type, required, the synchronization task is: sync, and the SQL calculation task is: sql;
 
-job：纯均任务脚本地址，必填项；
+job:Pure average task script address, required;
 
-flinkxDistDir：纯均插件包地址；
+flinkxDistDir:ChunJun plugin package address;
 
-confProp：纯均任务配置参数，Flink相关配置也是在这里配置；
+confProp:ChunJun task configuration parameters, Flink related configuration is also configured here;
 
-flinkConfDir：flink-conf.yaml 地址，在非local模式时，需要配置；
+flinkConfDir:flink-conf.yaml address,In non-local mode, you need to configure;
 
 ## Local
 
-Local 模式不依赖Flink环境和Hadoop环境，在本地环境启动一个JVM进程执行纯均任务。
+The mode does not depend on the Flink environment and the Hadoop environment, and starts a JVM process in the local environment to perform pure tasks.
 
-### 提交步骤
+### Submission steps
 
-进入到chunjun-dist 目录，执行命令
+Go to the chunjun-dist directory and execute the command
 
 ``` sh ./bin/flinkx -mode local -jobType sync -job ./flinkx-examples/json/stream/stream.json -flinkxDistDir ./flinkx-dist```
 
-即可执行一个简单的 **stream -> stream** 同步任务，任务结果可以在日志文件**nohup.out**中查看；
+A simple **stream -> stream** synchronization task can be executed, and the task results can be viewed in the log file **nohup.out**;
 
 ## Standalone
 
-Standalone模式依赖Flink Standalone环境，不依赖Hadoop环境。
+Standalone mode depends on the Flink Standalone environment and does not depend on the Hadoop environment.
 
-### 提交步骤
+### Submission steps
 
-#### 1. 启动Flink Standalone环境
+#### 1. Start the Flink Standalone environment
 
-启动flink standalone 环境之前，需要将纯均的插件包部署到flink lib 目录下，启动flink standalone 集群，可以观察到flink standalone 集群加载的classpath 中含有纯均插件包。
+Before starting the flink standalone environment, you need to deploy the pure-play plugin package to the flink lib directory and start the flink standalone cluster. You can observe that the classpath loaded by the flink standalone cluster contains the pure-play plug-in package.
 
-#### 2. 提交任务
+#### 2. Submit a task
 
-进入到本地chunjun-dist目录，执行命令
+Go to the chunjun-dist directory and execute the command
 
 ```shell
 sh ./bin/flinkx -mode standalone -jobType sync -job $CHUNJUN_DIST/flinkx-examples/json/stream/stream.json -flinkxDistDir $CHUNJUN_DIST/flinkx-dist -flinkConfDir $FLINK_HOME/conf
 ```
 
-提交成功之后，可以在flink web ui 上观察任务情况；
+After the submission is successful, you can observe the task status on the flink web ui;
 
-### 存在问题
+### FAQ
 
-1. 提交相同任务报错：Caused by: java.lang.IllegalStateException: Trying to access closed classloader. Please check if you store
-   classloaders directly or indirectly in static fields. If the stacktrace suggests that the leak occurs in a third
-   party library and cannot be fixed immediately, you can disable this check with the configuration '
-   classloader.check-leaked-classloader'.
+Q1. Caused by: java.lang.IllegalStateException: Trying to access closed classloader. Please check if you store
+classloaders directly or indirectly in static fields. If the stacktrace suggests that the leak occurs in a third
+party library and cannot be fixed immediately, you can disable this check with the configuration '
+classloader.check-leaked-classloader'.
 
-详细报错信息如下：
+The detailed error message is as follows:
 
 ``` java
 Caused by: java.lang.IllegalStateException: Trying to access closed classloader. Please check if you store classloaders directly or indirectly in static fields. If the stacktrace suggests that the leak occurs in a third party library and cannot be fixed immediately, you can disable this check with the configuration 'classloader.check-leaked-classloader'.
@@ -121,14 +120,14 @@ Caused by: java.lang.IllegalStateException: Trying to access closed classloader.
 	... 14 more
 ```
 
-方案：这个问题我们内部已经修复了，但是现在还在走内部测试流程；临时解决方案是重启集群；
+A:We have fixed this problem internally, but we are still going through the internal testing process; the temporary solution is to restart the cluster;
 
-2. Flink standalone 集群加载flinkx-dist里jar包之后，集群无法启动，日志报错：Exception in thread "main" java.lang.NoSuchFieldError:
-   EMPTY_BYTE_ARRAY.
+Q2. After the Flink standalone cluster loads the jar package in flinkx-dist, the cluster cannot be started and the log reports an error:Exception in thread "main" java.lang.NoSuchFieldError:
+EMPTY_BYTE_ARRAY.
 
-详细报错信息如下：
+The detailed error message is as follows:
 
-```java
+```text
 Exception in thread"main"java.lang.NoSuchFieldError:EMPTY_BYTE_ARRAY
         at org.apache.logging.log4j.core.config.ConfigurationSource.<clinit>(ConfigurationSource.java:56)
         at org.apache.logging.log4j.core.config.NullConfiguration.<init>(NullConfiguration.java:32)
@@ -142,40 +141,40 @@ Exception in thread"main"java.lang.NoSuchFieldError:EMPTY_BYTE_ARRAY
         at org.apache.flink.runtime.entrypoint.ClusterEntrypoint.<clinit>(ClusterEntrypoint.java:107)
 ```
 
-这个报错是因为log4j 版本不统一导致的，因为flinkx-dist 中部分插件引用的还是旧版本的log4j依赖，导致集群启动过程中，出现了类冲突问题；
+This error is caused by inconsistent log4j versions, because some plug-ins in flinkx-dist still refer to the old version of log4j dependencies, resulting in class conflicts during cluster startup;
 
-方案：临时方案是将flink lib 中 log4j 相关的jar包名字前加上字符‘a‘，使得flink standalone jvm 优先加载。
+A:The temporary solution is to add the character 'a' to the name of the log4j-related jar package in the flink lib, so that the flink standalone jvm will be loaded first.
 
 ## Yarn Session
 
-YarnSession 模式依赖Flink 和 Hadoop 环境，需要在任务提交之前启动相应的yarn session；
+The YarnSession mode depends on the Flink and Hadoop environments, and the corresponding yarn session needs to be started before the task is submitted;
 
-### 提交步骤
+### Submission steps
 
-#### 1. 启动yarn session环境
+#### 1. Start the yarn session environment
 
-启动yarn session 之前，需要将chunjun-dist配置在HADOOP_CLASSPATH环境变量下，启动yarn session，可以观察到yarn session 中加载了纯均插件包。
+Before starting the yarn session, you need to configure the chunjun-dist under the HADOOP_CLASSPATH environment variable, start the yarn session, and you can observe that the Chunjun plug-in package is loaded in the yarn session.
 
-#### 2. 提交任务
+#### 2. Submit a task
 
-通过yarn web ui 查看session 对应的application $SESSION_APPLICATION_ID，进入到本地chunjun-dist目录，执行命令
+View the application $SESSION_APPLICATION_ID corresponding to the session through yarn web ui, enter the local chunjun-dist directory, and execute the command
 
 ```shell
 sh ./bin/flinkx -mode yarn -jobName chunjun_session -jobType sync -job $CHUNJUN_DIST/flinkx-examples/json/stream/stream.json -hadoopConfDir $HADOOP_CONF_DIR -flinkxDistDir $CHUNJUN_DIST/flinkx-dist -confProp {\"yarn.application.id\":\"$SESSION_APPLICATION_ID\"}
 ```
 
-yarn.application.id 也可以在 flink-conf.yaml 中设置；提交成功之后，可以通过 yarn web ui 上观察任务情况；
+yarn.application.id can also be set in flink-conf.yaml; after the submission is successful, the task status can be observed on the yarn web ui;
 
 ## Yarn Pre-Job
 
-Yarn Pre-Job 模式依赖Flink 和 Hadoop 环境，在任务提交前确认资源是否充足；
+Yarn Pre-Job mode relies on Flink and Hadoop environments, and confirms whether resources are sufficient before submitting tasks;
 
-### 提交步骤
+### Submission steps
 
-Yarn Pre-Job 提交任务配置正确即可提交。进入本地chunjun-dist目录，执行命令提交任务。
+The Yarn Pre-Job submission task can be submitted after the configuration is correct. Enter the local chunjun-dist directory and execute the command to submit the task.
 
 ```shell
 sh ./bin/flinkx -mode yarn-per-job -jobType sync -job $CHUNJUN_DIST/flinkx-examples/json/stream/stream.json -flinkxDistDir $CHUNJUN_DIST/flinkx-dist -flinkConfDir $FLINK_CONF_DIR -hadoopConfDir $HADOOP_CONF_DIR -flinkLibDir $FLINK_HOME/lib -jobName chunjun-pre-job
 ```
 
-提交成功之后，可以通过 yarn web ui 上观察任务情况；
+After the submission is successful, you can observe the task status on the yarn web ui;

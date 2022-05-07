@@ -1,239 +1,245 @@
-# Kafka Source
-## 1. Introduce
+
+
+## 一、介绍
+
 Kafka Source
 
+## 二、支持版本
 
-## 2. Version Support
-Kafka mainstream version
+kafka主流版本
 
-
-## 3. Connector Name
-There are four versions of the kafka plugin, and the plugin names are slightly different depending on the kafka version. The specific corresponding relationship is shown in the following table
-
-|    Sync     | kafkasource、kafkareader |
-|:-----------:|:-----------------------:|
-|     SQL     |         kafka-x         |
-| SQL(upsert) |     upsert-kafka-x      |
+## 三、插件名称
+| Sync | kafkasource、kafkareader |
+| --- | --- |
+| SQL | kafka-x |
+| SQL(upsert) | upsert-kafka-x |
 
 
-## 4. Parameter description
-#### 4.1 Sync
-- **topic**
-    - description:Topics to consume,multiple topics are separated by ",".When mode is 'timestamp' and 'specific offsets', multiple topics are not supported.
-    - required:required
-    - type:String
-    - defaults:none
+## 四、参数说明
 
-- **mode**
-    - description:Kafka consumer startup mode.Currently, only the 'kafkareader' plugin is supported
-    - optional:
-    - group-offsets:Start consumption from the offset submitted by the consumption group specified in ZK / Kafka brokers
-    - earliest-offset:Start with the earliest offset (if possible)
-    - latest-offset:Start with the latest offset (if possible)
-    - timestamp:The timestamp of each partition starts at the specified time
-    - specific-offsets:Start with a specific offset specified for each partition
-    - required:optional
-    - type:String
-    - defaults:group-offsets
-- **timestamp**
-    - description:The specified Kafka timestamp collection starting point. At present, only the 'kafkareader' plugin is supported
-    - required:Required when 'mode' is' timestamp '
-    - type:Long
-    - defaults:none
-- **offset**
-    - description:The consumed partition and the corresponding specific offset. At present, only the 'kafkareader' plug-in is supported
-    - required:Required when 'mode' is' specific offsets'
-    - type:String
-    - format:partition:0,offset:42;partition:1,offset:300;partition:2,offset:300
-    - defaults:none
-- **groupId**
-    - description:Kafka consumer group id
-    - required:optional
-    - type:String
-    - defaults:default
-- **encoding**
-    - description:Character encoding
-    - required:optional
-    - type:String
-    - defaults:UTF-8
-- **codec**
-    - description:Codec type, supporting json and text
-    - text:
-      Store the message string obtained by Kafka into a map whose key is message. For example, the message in Kafka is: {"key": "key", "message": "value"},
-      Then the data format sent to the downstream is:
-      `
-      [
-      {
-      "message":"{\"key\": \"key\", \"value\": \"value\"}"
-      }
-      ]
-      `
+### 1、Sync
 
-- json:Parse the message string obtained by Kafka in json format
-    - If the string is in json format
-    - When it contains the message field, the data format sent to the downstream is:
-      `[
-      {
-      "key":"key",
-      "message":"value"
-      }
-      ]`
-    - When the message field is not included, add a key value pair whose key is message and value is the original message string. The data format sent to the downstream is:
+-  **topic**
+    - 描述：要消费的topic，多个以,分割，当`mode`为`timestamp`、`specific-offsets`时不支持多topic
+    - 必选：是
+    - 字段类型：String
+    - 默认值：无
+-  **mode**
+    - 描述：kafka消费端启动模式，目前仅支持`kafkareader`插件
+    - 可选值：
+        - group-offsets：     从ZK / Kafka brokers中指定的消费组已经提交的offset开始消费
+        - earliest-offset：    从最早的偏移量开始(如果可能)
+        - latest-offset：      从最新的偏移量开始(如果可能)
+        - timestamp：         从每个分区的指定的时间戳开始
+        - specific-offsets： 从每个分区的指定的特定偏移量开始
+    - 必选：否
+    - 字段类型：String
+    - 默认值：group-offsets
+-  **timestamp**
+    - 描述：指定的kafka时间戳采集起点，目前仅支持`kafkareader`插件
+    - 必选：当`mode`为`timestamp`时必选
+    - 字段类型：Long
+    - 默认值：无
+-  **offset**
+    - 描述：消费的分区及对应的特定偏移量，目前仅支持`kafkareader`插件
+    - 必选：当`mode`为`specific-offsets`时必选
+    - 字段类型：String
+    - 格式：partition:0,offset:42;partition:1,offset:300;partition:2,offset:300
+    - 默认值：无
+-  **groupId**
+    - 描述：kafka消费组Id
+    - 必选：否
+    - 字段类型：String
+    - 默认值：default
+-  **encoding**
+    - 描述：字符编码
+    - 必选：否
+    - 字段类型：String
+    - 默认值：UTF-8
+-  **codec**
+    - 描述：编码解码器类型，支持 json、text
+        - text：
+          将kafka获取到的消息字符串存储到一个key为message的map中，如：kafka中的消息为：{"key":"key","message":"value"}，
+          则发送至下游的数据格式为：
+```json
+[
+	{
+		"message":"{\"key\": \"key\", \"value\": \"value\"}"
+	}
+]
+```
 
-      `
-      [
-      {
-      "key":"key",
-      "value":"value",
-      "message":"{\"key\": \"key\", \"value\": \"value\"}"
-      }
-      ]
-      `
+- json：将kafka获取到的消息字符串按照json格式进行解析
+    - 若该字符串为json格式
+        - 当其中含有message字段时，发送至下游的数据格式为：
+```json
+[
+	{
+		"key":"key",
+		"message":"value"
+	}
+]
+```
 
-    - If the changed string is not in JSON format, it will be processed according to the text type
-- required:optional
-- type:String
-- defaults:text
+      - 当其中不包含message字段时，增加一个key为message，value为原始消息字符串的键值对，发送至下游的数据格式为： 
+```json
+[
+	{
+		"key":"key",
+		"value":"value",
+		"message":"{\"key\": \"key\", \"value\": \"value\"}"
+	}
+]
+```
 
-- **consumerSettings**
-    - description:Kafka connection configuration,supporting all configuration defined in `kafka.consumer.ConsumerConfig.ConsumerConfig`
-    - required:required
-    - type:Map
-    - defaults:none
-    - example:
-      `
-      {
-      "consumerSettings":{
-      "bootstrap.servers":"host1:9092,host2:9092,host3:9092"
-      }
-      }
-      `
+      - 若改字符串不为json格式，则按照text类型进行处理
+- 必选：否
+- 字段类型：String
+- 默认值：text
+-  **consumerSettings**
+    - 描述：kafka连接配置，支持所有`kafka.consumer.ConsumerConfig.ConsumerConfig`中定义的配置
+    - 必选：是
+    - 字段类型：Map
+    - 默认值：无
+    - 如：
+```json
+{
+    "consumerSettings":{
+        "bootstrap.servers":"host1:9092,host2:9092,host3:9092"
+    }
+}
+```
 
 -  **column**
-    - description:When Kafka writes data to MySQL, it corresponds to the field name in the MySQL table
-    - required:optional
-    - type:List
-    - defaults:none
-    - Note: the specific information and attribute description of the field need to be specified:
-    - name:name of column
-    - type:type of column.It can be different from the type in the database. The program will make a type conversion
-    - format:If the field is a time string, you can specify the format of the time and convert the type to the date format to return
-    - example:
-      `
-      "column": [{
-      "name": "col",
-      "type": "datetime",
-      "format": "yyyy-MM-dd hh:mm:ss"
-      }]
-      `
-### 4.2、SQL
+    - 描述：kafka向MySQL写数据时，对应MySQL表中的字段名
+    - 必选：否
+    - 字段类型：List
+    - 默认值：无
+    - 注意：需指定字段的具体信息，属性说明：
+        - name：字段名称
+        - type：字段类型，可以和数据库里的字段类型不一样，程序会做一次类型转换
+        - format：如果字段是时间字符串，可以指定时间的格式，将字段类型转为日期格式返回
+        - 如：
+```json
+{
+   "column": [
+      {
+         "name": "col",
+         "type": "datetime",
+         "format": "yyyy-MM-dd hh:mm:ss"
+      }
+   ]
+}
+```
 
-For details,please refer to:[kafka-connector](https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/kafka.html)
+
+### 2、SQL
+
+具体可以参考：[kafka-connector](https://ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/kafka.html)
 
 -  **connector**
-    - description:kafka-x
-    - required:required
-    - type:String
-    - defaults:none
+    - 描述：kafka-x
+    - 必选：是
+    - 字段类型：String
+    - 默认值：无
 -  **topic**
-    - description:The name of the topic from which to read data when the table is used as a source. It also supports the topic list of the source by separating topics with semicolons, such as' topic-1; topic-2'. Note that only one of "topic pattern" and "topic" can be specified for the source. When a table is used as a receiver, the subject name is the subject to write data to. The receiver does not support attention topic lists.
-    - required:required
-    - type:String
-    - defaults:none
+    - 描述：当表用作源时要从中读取数据的主题名称。它还通过用分号分隔主题来支持源的主题列表，如'topic-1;topic-2'. 请注意，只能为源指定“topic-pattern”和“topic”之一。当表用作接收器时，主题名称是要写入数据的主题。接收器不支持注意主题列表。
+    - 必选：是
+    - 字段类型：String
+    - 默认值：无
 -  **topic-pattern**
-    - description:The regular expression of the topic name pattern to read from. When the job starts running, the consumer will subscribe to all topics whose names match the specified regular expression. Note that only one of "topic pattern" and "topic" can be specified for the source.
-    - required:optional
-    - type:String
-    - defaults:none
+    - 描述：要从中读取的主题名称模式的正则表达式。当作业开始运行时，消费者将订阅名称与指定正则表达式匹配的所有主题。请注意，只能为源指定“topic-pattern”和“topic”之一。
+    - 必选：否
+    - 字段类型：String
+    - 默认值：无
 -  **properties.bootstrap.servers**
-    - description:Comma separated list of Kafka agents.
-    - required:required
-    - type:String
-    - defaults:none
+    - 描述：逗号分隔的 Kafka 代理列表。
+    - 必选：是
+    - 字段类型：String
+    - 默认值：无
 -  **properties.group.id**
-    - description:The consumption group id of Kafka source. Kafka sink is optional.
-    - required:required by source
-    - type:String
-    - defaults:none
+    - 描述：Kafka source的消费组id，Kafka sink可选。
+    - 必选：required by source
+    - 字段类型：String
+    - 默认值：无
 -  **properties.***
-    - description:This allows you to set and pass any Kafka configuration. Suffix name must be the same as [in Kafka configuration document]( https://kafka.apache.org/documentation/#configuration ) the defined configuration keys match. Flink will delete the properties. Key prefix and pass the converted key and value to the underlying kafkaclient. For example, you can create 'properties. Properties' by disabling automatic themes allow. auto. create. topics' = 'false'。 However, some configurations do not support settings because Flink will overwrite them.
-    - required:optional
-    - type:String
-    - defaults:none
+    - 描述：这可以设置和传递任意 Kafka 配置。后缀名称必须与[Kafka 配置文档中](https://kafka.apache.org/documentation/#configuration)定义的配置键匹配。Flink 将删除“属性”。键前缀并将转换后的键和值传递给底层 KafkaClient。例如，您可以通过 禁用自动主题创建'properties.allow.auto.create.topics' = 'false'。但是有一些配置是不支持设置的，因为 Flink 会覆盖它们。
+    - 必选：否
+    - 字段类型：String
+    - 默认值：无
 -  **format**
-    - description:The format of the value part used to deserialize and serialize Kafka messages. For more details and [format]( https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/ ) options, see the format page. Note: this option is either 'value' The 'format' option is required.
-    - required:required
-    - type:String
-    - defaults:none
+    - 描述：用于反序列化和序列化 Kafka 消息的值部分的格式。有关更多详细信息和更多[格式](https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/)选项，请参阅格式页面。注意：此选项或'value.format'选项都是必需的。
+    - 必选：是
+    - 字段类型：String
+    - 默认值：无
 -  **key.format**
-    - description:The format used to deserialize and serialize key parts of Kafka messages. For more details and [format]( https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/ ) options, see the format page. If the key format is defined, note: 'if the key format is defined The 'fields' option is also required. Otherwise, the Kafka record will have an empty key.
-    - required:optional
-    - type:String
-    - defaults:none
+    - 描述：用用于反序列化和序列化 Kafka 消息关键部分的格式。有关更多详细信息和更多[格式](https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/)选项，请参阅格式页面。注意：如果定义了密钥格式，则该'key.fields' 选项也是必需的。否则 Kafka 记录将有一个空键。
+    - 必选：否
+    - 字段类型：String
+    - 默认值：无
 -  **key.fields**
-    - description:Defines an explicit list of physical columns in the table schema, which is used to configure the data type of key format. By default, this list is empty, so no keys are defined. The list should look like 'field1; field2'。
-    - required:optional
-    - type:List
-    - defaults:none
+    - 描述：定义表架构中物理列的显式列表，用于配置键格式的数据类型。默认情况下，此列表为空，因此未定义键。该列表应如下所示'field1;field2'。
+    - 必选：否
+    - 字段类型：List
+    - 默认值：无
 -  **key.fields-prefix**
-    - description:Define custom prefixes for all fields in key format to avoid name conflicts with fields in value format. By default, the prefix is empty. If a custom prefix is defined, the table schema and "key.fields" will use the prefix name. When constructing the data type of the key format, the prefix is removed and the non prefix name is used in the key format.Please note that this option requires that "value.fields-include" must be set to "EXCEPT_KEY".
-    - required:optional
-    - type:String
-    - defaults:none
+    - 描述：为键格式的所有字段定义自定义前缀，以避免与值格式的字段发生名称冲突。默认情况下，前缀为空。如果定义了自定义前缀，则表架构 和'key.fields'都将使用前缀名称。在构造密钥格式的数据类型时，将删除前缀，并在密钥格式中使用非前缀名称。请注意，此选项要求'value.fields-include' 必须设置为'EXCEPT_KEY'。
+    - 必选：否
+    - 字段类型：String
+    - 默认值：无
 -  **value.format**
-    - description:The format of the value part used to deserialize and serialize Kafka messages. For more details and more formatting options, see the formatting page. Note: this option or 'format' [option](https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/) are required.
-    - required:required
-    - type:String
-    - defaults:none
+    - 描述：用于反序列化和序列化 Kafka 消息的值部分的格式。有关更多详细信息和更多格式选项，请参阅格式页面。注意：此选项或'format'[选项](https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/)都是必需的。
+    - 必选：是
+    - 字段类型：String
+    - 默认值：无
 -  **value.fields-include**
-    - description:Defines policies for how to handle key columns in data types in value format. By default, the physical columns of the 'all' table schema will be included in the value format, which means that the key columns appear in the data types of the key and value formats
-    - required:optional
-    - type:enumeration
-        - optional:[ALL, EXCEPT_KEY]
-    - defaults:ALL
+    - 描述：定义如何处理值格式的数据类型中的键列的策略。默认情况下，'ALL'表模式的物理列将包含在值格式中，这意味着键列出现在键和值格式的数据类型中
+    - 必选：否
+    - 字段类型：枚举
+        - 可选的值：[ALL, EXCEPT_KEY]
+    - 默认值：ALL
 -  **scan.startup.mode**
-    - description:The starting mode of Kafka consumption. The valid values are 'early-offset', 'latest-offset', 'group-offsets',' timestamp 'and' specific-offsets'. For more details, see [start reading location](https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html#start-reading-position). In the upsert mode, this parameter does not take effect, and the dead write is consumed from the early offset.
-    - required:optional
-    - type:String
-    - defaults:group-offsets
+    - 描述：kafka消费的启动模式，有效值为'earliest-offset'，'latest-offset'，'group-offsets'，'timestamp'和'specific-offsets'。有关更多详细信息，请参阅以下[开始阅读位置](https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html#start-reading-position)。upsert模式此参数不生效，写死从earliest-offset处消费
+    - 必选：否
+    - 字段类型：String
+    - 默认值：group-offsets
 -  **scan.startup.specific-offsets**
-    - description:Specify an offset for each partition in 'specific-offsets' startup mode, for example 'partition:0,offset:42;partition:1,offset:300'.
-    - required:optional
-    - type:String
-    - defaults:none
+    - 描述：在'specific-offsets'启动模式下为每个分区指定偏移量，例如'partition:0,offset:42;partition:1,offset:300'.
+    - 必选：否
+    - 字段类型：String
+    - 默认值：无
 -  **scan.startup.timestamp-millis**
-    - description:Starts with the specified era timestamp (in milliseconds) used in 'timestamp' startup mode.
-    - required:optional
-    - type:Long
-    - defaults:none
+    - 描述：从'timestamp'启动模式下使用的指定纪元时间戳（毫秒）开始。
+    - 必选：否
+    - 字段类型：Long
+    - 默认值：无
 -  **scan.topic-partition-discovery.interval**
-    - description:Consumers regularly discover the time interval of dynamically created Kafka themes and partitions.
-    - required:optional
-    - type:Duration
-    - defaults:none
+    - 描述：消费者定期发现动态创建的 Kafka 主题和分区的时间间隔。
+    - 必选：否
+    - 字段类型：Duration
+    - 默认值：无
 -  **sink.partitioner**
-    - description:Output partition from Flink partition to Kafka partition.
-    - default:Use Kafka default partition to partition records.
-    - fixed:Each Flink partition eventually contains at most one Kafka partition.
-    - round-robin:A Flink partition is distributed to the Kafka partition sticky loop. It is only valid if the key of the record is not specified.
-    - custom FlinkKafkaPartitioner child class:for example 'org.mycompany.MyPartitioner'.
-    - For more details, see [receiver zoning](https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html#sink-partitioning).
-    - required:optional
-    - type:String
-    - defaults:default
+    - 描述： 从 Flink 的分区到 Kafka 的分区的输出分区。有效值为
+    - default: 使用 kafka 默认分区器对记录进行分区。
+    - fixed：每个 Flink 分区最终最多包含一个 Kafka 分区。
+    - round-robin：一个 Flink 分区被分发到 Kafka 分区粘性循环。它仅在未指定记录的键时有效。
+    - 自定义FlinkKafkaPartitioner子类：例如'org.mycompany.MyPartitioner'.
+    - 有关更多详细信息，请参阅以下[接收器分区](https://ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html#sink-partitioning)。
+    - 必选：否
+    - 字段类型：String
+    - 默认值：default
 -  **scan.parallelism**
-    - description:Defines the parallelism of the Kafka sink operator. By default, the parallelism is determined by the framework using the same parallelism as the upstream chained operator.
-    - required:optional
-    - type:Integer
-    - defaults:none
+    - 描述：定义 Kafka sink 操作符的并行性。默认情况下，并行度由框架使用与上游链式运算符相同的并行度确定。
+    - 必选：否
+    - 字段类型：Integer
+    - 默认值：无
 
-## 5、Data type
+## 五、数据类型
+| 支持 | BOOLEAN、TINYINT、SMALLINT、INT、BIGINT、FLOAT、DOUBLE、DECIMAL、STRING、VARCHAR、CHAR、TIMESTAMP、DATE、BINARY、ARRAY、MAP、STRUCT、LIST、ROW |
+| --- | --- |
+| 暂不支持 | 其他 |
 
-|   support   | BOOLEAN、TINYINT、SMALLINT、INT、BIGINT、FLOAT、DOUBLE、DECIMAL、STRING、VARCHAR、CHAR、TIMESTAMP、DATE、BINARY、ARRAY、MAP、STRUCT、LIST、ROW |
-|:-----------:|:----------------------------------------------------------------------------------------------------------------------------:|
-| not support |                                                            others                                                            |
 
+## 六、脚本示例
 
-## 6. Example
-
-The details are in flinkx-examples dir.
+见项目内`flinkx-examples`文件夹。

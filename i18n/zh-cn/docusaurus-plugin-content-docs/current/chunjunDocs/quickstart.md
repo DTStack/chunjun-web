@@ -128,7 +128,7 @@ Caused by: java.lang.IllegalStateException: Trying to access closed classloader.
 
 详细报错信息如下：
 
-```java
+```text
 Exception in thread"main"java.lang.NoSuchFieldError:EMPTY_BYTE_ARRAY
         at org.apache.logging.log4j.core.config.ConfigurationSource.<clinit>(ConfigurationSource.java:56)
         at org.apache.logging.log4j.core.config.NullConfiguration.<init>(NullConfiguration.java:32)
