@@ -10,87 +10,142 @@ hbase1.4
 ## 3. Connector Name
 | Sync | hbasesource、hbasereader |
 | --- |-------------------------|
-| SQL | hbase-x                 |
+| SQL | hbase14-x               |
 
 
 
 ## 4. Parameter description
-#### 4.1 Sync
-
-- **url**
-    - Description：URL of MongoDB connection，search [MongoDB Documents](https://docs.mongodb.com/manual/reference/connection-string/) for detail information.
-    - Required：optional
-    - Type：String
-    - Default：(none)
+### 1、SYNC
 
 
-
-- **hostPorts**
-    - Description：host and port of database, formatted like IP1:port. if using Multiple addresses, separated it by comma.
-    - Required：optional
-    - Type：String
-    - Default：(none)
-
+- **table**
+  - 描述：表名
+  - 必选：是
+  - 类型：String
+  - 默认值：无
 
 
-- **username**
-    - Description：user of database
-    - Required：optional
-    - Type：String
-    - Default：(none)
+- **startRowkey**
+  - 描述：rowKey起始点
+  - 必选：否
+  - 类型：String
+  - 默认值：无
 
 
 
-- **password**
-    - Description：password of database 
-    - Required：optional
-    - Type：String
-    - Default：(none)
+- **endRowkey**
+  - 描述：rowKey结束点
+  - 必选：否
+  - 类型：String
+  - 默认值：无
 
 
 
-- **database**
-    - Description：name of database
-    - Required：required
-    - Type：String
-    - Default：(none)
+- **isBinaryRowkey**
+  - 描述：rowkey是否是BytesBinary
+  - 必选：否
+  - 类型：Boolean
+  - 默认值：false
+
+
+- **scanCacheSize**
+  - 描述：客户端rpc每次fetch最大行数
+  - 必选：否
+  - 类型：Long
+  - 默认值：1000
 
 
 
-- **collectionName**
-    - Description：collection name of database
-    - Required：required
-    - Type：String
-    - Default：(none)
-  
-  
-
-- **fetchSize**
-    - Description：The number of data pieces read each time. Adjust this parameter to optimize the reading rate. Default 0 to let MongoDB Server choose the value itself.
-    - Required：optional
-    - Type：int
-    - Default：0
+- **encoding**
+  - 描述：编码
+  - 必选：否
+  - 类型：string
+  - 默认值：utf-8
 
 
 
-- **filter**
-    - Description：URL of MongoDB connection，search [MongoDB Documents](https://docs.mongodb.com/manual/reference/connection-string/) for detail information.
-    - Required：optional
-    - Type：String
-    - Default：(none)
+- **hbaseConfig**
+  - 描述：hbase-site里的相关配置 以及 kerberos相关配置
+  - 必选：是
+  - 类型：Map
+  - 默认值：无
 
 
 
 - **column**
-    - Description：columns that should be extract
-    - Notes:
-        - name：column name 
-        - type：column type, It can be different from the field type in the database.
-    - Required：required
-    - Type：List
-    - Default：(none)
-#### 4.2 SQL
-do not support right now.
+  - 描述：需要读取的列族。
+  - 属性说明:
+    - name：字段名称
+    - type：字段类型，可以和数据库里的字段类型不一样，程序会做一次类型转换
+  - 必选：是
+  - 字段类型：List
+  - 默认值：无
+
+### 2、SQL
+
+- **connector**
+  - 描述：hbase14-x
+  - 必选：是
+  - 参数类型：String
+  - 默认值：无
+    <br />
+
+
+- **table-name**
+  - 描述：表名
+  - 必选：是
+  - 参数类型：String
+  - 默认值：无：
+    <br />
+
+
+- **zookeeper.znode.parent**
+  - 描述：hbase在zk的路径
+  - 必选：否
+  - 参数类型：string
+  - 默认值：/hbase
+    <br />
+
+
+- **zookeeper.quorum**
+  - 描述：zk地址
+  - 必选：是
+  - 参数类型：String
+  - 默认值：无
+    <br />
+
+
+- **null-string-literal**
+  - 描述：空值字符串代替
+  - 必选：否
+  - 默认值："null"
+    <br />
+
+
+
+- **security.kerberos.principal**
+  - 描述：kerberos的principal
+  - 必选：否
+  - 参数类型：String
+  - 默认值：无
+    <br />
+
+
+- **security.kerberos.keytab**
+  - 描述：kerberos的keytab文件路径
+  - 必选：否
+  - 参数类型：String
+  - 默认值：无
+    <br />
+
+
+
+- **security.kerberos.krb5conf**
+  - 描述：kdc的krb5conf配置文件
+  - 必选：否
+  - 参数类型：String
+  - 默认值：无
+    <br />
 
 
 ## 5. Data Type

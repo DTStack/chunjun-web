@@ -5,7 +5,7 @@ Hbase Lookup查询数据。
 hbase1.4
 
 ## 三、插件名称
-| SQL | hbase-x |
+| SQL | hbase14-x |
 | --- |---------|
 
 
@@ -13,7 +13,7 @@ hbase1.4
 ## 四、参数说明
 
 - **connector**
-    - 描述：hbase-x
+    - 描述：hbase14-x
     - 必选：是
     - 默认值：无
     

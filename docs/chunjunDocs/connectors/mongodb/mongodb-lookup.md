@@ -94,18 +94,10 @@ MongoDB 3.4 and above
     
     
 ## 5. Data Type
-| support | int |
+| SUPPORTED | DATA TYPE |
 | --- | --- |
-|  | long |
-|  | double |
-|  | decimal |
-|  | objectId |
-|  | string |
-|  | bindata |
-|  | date |
-|  | timestamp |
-|  | bool |
-| no support | array |
+| YES | long double decimal objectId string bindata date timestamp bool |
+| NO | array |
 
 ## 6. Example
 The details are in flinkx-examples dir.

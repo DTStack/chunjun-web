@@ -28,6 +28,13 @@ Oracle 9 and above
   - Default:none
     <br />
 
+- **schema**
+  - Description:Database schema
+  - Required:optional
+  - Type:string
+  - Default:oracle user name
+    <br />
+
 - **table-name**
   - Description:table name
   - Required:required
@@ -93,10 +100,10 @@ Oracle 9 and above
 
 ## 5、Supported data type
 
-|      Whether to support       |                           类型名称                           |
-|:-----------:| :----------------------------------------------------------: |
-|   support   | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
-| unsupported |        BFILE、XMLTYPE、Collections、BLOB、CLOB、NCLOB        |
+| supported |                                                                                                        data type                                                                                                         |
+|:---------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|    yes    | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
+|    no     |                                                                                        BFILE、XMLTYPE、Collections、BLOB、CLOB、NCLOB                                                                                         |
 
 Attention:Oracle numeric data may lose precision during conversion due to the limit of  flink DecimalType's PRECISION(1~38) and  SCALE(0~PRECISION)
 

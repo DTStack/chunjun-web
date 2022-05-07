@@ -10,5 +10,9 @@
   "sidebar.tutorialSidebar.category.MongoDB Connector": {
     "message": "MongoDB Connector",
     "description": "The label for category MongoDB Connector in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Binlog Connector": {
+    "message": "MongoDB Connector",
+    "description": "The label for category Binlog Connector in sidebar tutorialSidebar"
   }
 }

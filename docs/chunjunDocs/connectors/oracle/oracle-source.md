@@ -112,24 +112,27 @@ Oracle 9 and above
 
 - **column**
   - Description:Fields to read.
-  - Format:Three formats are supported
-    <br />1.Read all fields. If there are many fields, you can use the following writing method:
-    ```bash
-    "column":["*"]
-    ```
-    2.Specify only field names:
-    ```
-    "column":["id","name"]
-    ```
-    3.Specify specific information:
-    ```json
-    "column": [{
-        "name": "col",
-        "type": "datetime",
-        "format": "yyyy-MM-dd hh:mm:ss",
-        "value": "value"
-    }]
-    ```
+   - format: Support 3 formats 1.Read all fields, if there are a lot of fields, you can use the following wording:
+    
+          ```bash
+          "column":["*"]
+          ```
+          2.Specify only the field name:
+    
+          ```
+          "column":["id","name"]
+          ```
+          3.Specify specific information:
+    
+          ```json
+          "column": [{
+              "name": "col",
+              "type": "datetime",
+              "format": "yyyy-MM-dd hh:mm:ss",
+              "value": "value"
+          }]
+          ```
+          
   - Attribute description:
     - name:Field name
     - type:Field type,It can be different from the field type in the database. The program will make a type conversion
@@ -194,6 +197,13 @@ Oracle 9 and above
   - Required:required
   - Type:String
   - Default:none
+    <br />
+
+- **schema**
+  - Description:Database schema
+  - Required:optional
+  - Type:string
+  - Default:oracle user name
     <br />
 
 - **table-name**
@@ -296,11 +306,14 @@ Oracle 9 and above
 
 ## 5、Supported data type
 
-|   Whether to support   |                           类型名称                           |
-| :--------------------: | :----------------------------------------------------------: |
-|        support         | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
-|      unsupported       |                 BFILE、XMLTYPE、Collections                  |
-| Supported only in Sync |                      BLOB、CLOB、NCLOB                       |
+|       supported        |                                                                                                        data type                                                                                                         |
+|:----------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|          yes           | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
+|           no           |                                                                                                BFILE、XMLTYPE、Collections                                                                                                 |
+| Supported only in Sync |                                                                                                     BLOB、CLOB、NCLOB                                                                                                      |
 
 
 Attention:Oracle numeric data may lose precision during conversion due to the limit of  flink DecimalType's PRECISION(1~38) and  SCALE(0~PRECISION)
+
+## 6、Demo
+see details in `flinkx-examples` dir of project flinkx.
