@@ -15,8 +15,7 @@
 select *
 from v$version;
 ```
-
-![image](./static/img/LogMiner/LogMiner1.png)
+![image](../../../../static/img/LogMiner/LogMiner1.png)
 
 本章Oracle的版本如上图所示。
 
@@ -28,7 +27,7 @@ archive
 log list;
 ```
 
-![image](./static/img/LogMiner/LogMiner2.png)
+![image](../../../../static/img/LogMiner/LogMiner2.png)
 
 图中显示`No Archive Mode`表示未开启日志归档。
 
@@ -52,7 +51,7 @@ ls -l
 chown -R 下图中的用户名:下图中的组名 /data/oracle/
 ```
 
-![image](./static/img/LogMiner/LogMiner3.png)
+![image](../../../../static/img/LogMiner/LogMiner3.png)
 
 ```sql
 --配置归档日志保存的路径
@@ -93,7 +92,7 @@ database open;
 ```
 
 再次查询数据库归档模式，`Archive Mode`表示已开启归档模式，`Archive destination`表示归档日志储存路径。
-![image](./static/img/LogMiner/LogMiner4.png)
+![image](../../../../static/img/LogMiner/LogMiner4.png)
 
 
 ### 4、配置日志组
@@ -104,7 +103,7 @@ database open;
 SELECT *
 FROM v$log;
 ```
-![image](./static/img/LogMiner/LogMiner5.png)
+![image](../../../../static/img/LogMiner/LogMiner5.png)
 
 
 如上图所示，日志组的默认数量为2组，大小为4194304/1024/1024 = 4MB，这意味着日志大小每达到4MB就会进行日志组的切换，切换太过频繁会导致查询出错，因此需要增加日志组数量及大小。
@@ -115,7 +114,7 @@ FROM v$log;
 SELECT *
 FROM v$logfile;
 ```
-![image](./static/img/LogMiner/LogMiner6.png)
+![image](../../../../static/img/LogMiner/LogMiner6.png)
 
 如上图所示，默认路径为`/usr/lib/oracle/xe/app/oracle/flash_recovery_area/XE/onlinelog/`。
 
@@ -158,10 +157,9 @@ SELECT *
 FROM v$logfile;
 ```
 
-![image](./static/img/LogMiner/LogMiner7.png)
+![image](../../../../static/img/LogMiner/LogMiner7.png)
 
-![image](./static/img/LogMiner/LogMiner8.png)
-
+![image](../../../../static/img/LogMiner/LogMiner8.png)
 ### 5、检查是否安装LogMiner工具
 
 Oracle10g默认已安装LogMiner工具包，通过以下命令查询：
@@ -219,14 +217,14 @@ user roma_logminer quota unlimited on users;
  SELECT *
  FROM USER_ROLE_PRIVS;
 ```
-![image](./static/img/LogMiner/LogMiner9.png)
+![image](../../../../static/img/LogMiner/LogMiner9.png)
 
 ```sql
 SELECT *
 FROM SESSION_PRIVS;
 ```
 
-![image](./static/img/LogMiner/LogMiner10.png)
+![image](../../../../static/img/LogMiner/LogMiner10.png)
 
 至此，Oracle 10g数据库LogMiner实时采集配置完毕。
 
@@ -240,7 +238,7 @@ select *
 from v$version;
 ```
 
-![image](./static/img/LogMiner/LogMiner11.png)
+![image](../../../../static/img/LogMiner/LogMiner11.png)
 
 本章Oracle的版本如上图所示。
 
@@ -252,7 +250,7 @@ archive
 log list;
 ```
 
-![image](./static/img/LogMiner/LogMiner12.png)
+![image](../../../../static/img/LogMiner/LogMiner12.png)
 
 图中显示`No Archive Mode`表示未开启日志归档。
 
@@ -301,7 +299,7 @@ database open;
 
 再次查询数据库归档模式，`Archive Mode`表示已开启归档模式，`Archive destination`表示归档日志储存路径。
 
-![image](./static/img/LogMiner/LogMiner13.png)
+![image](../../../../static/img/LogMiner/LogMiner13.png)
 
 
 ### 4、检查是否安装LogMiner工具
@@ -362,14 +360,14 @@ user roma_logminer quota unlimited on users;
  FROM USER_ROLE_PRIVS;
 ```
 
-![image](./static/img/LogMiner/LogMiner14.png)
+![image](../../../../static/img/LogMiner/LogMiner14.png)
 
 ```sql
 SELECT *
 FROM SESSION_PRIVS;
 ```
 
-![image](./static/img/LogMiner/LogMiner15.png)
+![image](../../../../static/img/LogMiner/LogMiner15.png)
 
 
 至此，Oracle 11g数据库LogMiner实时采集配置完毕。
@@ -384,7 +382,7 @@ select BANNER
 from v$version;
 ```
 
-![image](./static/img/LogMiner/LogMiner16.png)
+![image](../../../../static/img/LogMiner/LogMiner16.png)
 
 本章Oracle的版本如上图所示。
 
@@ -395,7 +393,7 @@ from v$version;
 archive
 log list;
 ```
-![image](./static/img/LogMiner/LogMiner17.png)
+![image](../../../../static/img/LogMiner/LogMiner17.png)
 
 图中显示`No Archive Mode`表示未开启日志归档。
 
@@ -443,7 +441,7 @@ database open;
 ```
 
 再次查询数据库归档模式，`Archive Mode`表示已开启归档模式，`Archive destination`表示归档日志储存路径。
-![image](./static/img/LogMiner/LogMiner18.png)
+![image](../../../../static/img/LogMiner/LogMiner18.png)
 
 
 ### 4、创建LogMiner角色并赋权
@@ -485,7 +483,7 @@ user roma_logminer quota unlimited on users;
  FROM USER_ROLE_PRIVS;
 ```
 
-![image](./static/img/LogMiner/LogMiner19.png)
+![image](../../../../static/img/LogMiner/LogMiner19.png)
 
 
 ```sql
@@ -493,7 +491,7 @@ SELECT *
 FROM SESSION_PRIVS;
 ```
 
-![image](./static/img/LogMiner/LogMiner20.png)
+![image](../../../../static/img/LogMiner/LogMiner20.png)
 
 
 至此，Oracle 12c数据库LogMiner实时采集配置完毕。
