@@ -24,9 +24,15 @@ upstream    https://github.com/DTStack/chunjun.git (fetch)
 upstream    https://github.com/DTStack/chunjun.git (push)
 ```
 ## Step 4: Submit the code
+Any commit should be based on latest branch.
 **switch branch**
 ```shell
+# Fetch branches from upstream.
+$ git remote update upstream -p
+# Checkout a new branch.
 $ git checkout -b branch_name
+# Pull latest code into your own branch.
+$ git pull upstream master:branch_name
 ```
 **After modifying the code locally, submit a commit**
 - commit_message format：
