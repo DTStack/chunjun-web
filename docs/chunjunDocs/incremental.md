@@ -129,4 +129,4 @@ Query the endLocation indicator value in Prometheus using the JobId correspondin
 flink_taskmanager_job_task_operator_flinkx_endlocation{job_id="xxx"}
 ```
 
-![image-20220508231718458](/Users/guchengang66/Library/Application Support/typora-user-images/image-20220508231718458.png)
+![image-20220508231718458](../../static/img/incremental/prometheus-search.png)

@@ -24,9 +24,15 @@ upstream    https://github.com/DTStack/chunjun.git (fetch)
 upstream    https://github.com/DTStack/chunjun.git (push)
 ```
 ## 第四步：提交代码
+任何一个提交都要基于最新的分支
 **切换分支**
 ```shell
+# Fetch branches from upstream.
+$ git remote update upstream -p
+# Checkout a new branch.
 $ git checkout -b branch_name
+# Pull latest code into your own branch.
+$ git pull upstream master:branch_name
 ```
 **本地修改代码后，提交commit**
 - commit_message格式：
