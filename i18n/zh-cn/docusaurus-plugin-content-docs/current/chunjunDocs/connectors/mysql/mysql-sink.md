@@ -240,9 +240,9 @@ mysql5.x
 ## 五、数据类型
 
 | 是否支持 |                                                    类型名称                                                     |
-| :------: | :-------------------------------------------------------------------------------------------------------------: |
-|   支持   | BOOLEAN、TINYINT、SMALLINT、INT、BIGINT、FLOAT、DOUBLE、DECIMAL、STRING、VARCHAR、CHAR、TIMESTAMP、DATE、BINARY |
-|  不支持  |                                            ARRAY、MAP、STRUCT、UNION                                            |
+|:----:| :-------------------------------------------------------------------------------------------------------------: |
+|  支持  |BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY  |
+| 不支持  |                                            ARRAY、MAP、STRUCT、UNION                                            |
 
 ## 六、脚本示例
 
