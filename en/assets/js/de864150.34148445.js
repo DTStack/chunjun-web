@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkchunjun_web=self.webpackChunkchunjun_web||[]).push([[6658],{2755:function(e){e.exports=JSON.parse('{"permalink":"/chunjun-web/en/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":2,"previousPage":null,"nextPage":null,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);
