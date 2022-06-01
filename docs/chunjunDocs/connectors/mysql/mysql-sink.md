@@ -117,6 +117,15 @@ MySQL 5.x
     - Type: String
     - Default: insert
 
+- **allReplace**
+
+  - Definition: When writeMode is set to upsert, whether the null value overwrites the original value
+    - true：ON DUPLICATE KEY UPDATE column=VALUES(column)
+    - false：ON DUPLICATE KEY UPDATE column=IFNULL(VALUES(column),column)
+  - Required：false
+  - Type：String
+  - Default：true
+    <br />
 
 - **batchSize**
     - Definition: The size of the number of records submitted in batches at one time. This value can greatly reduce the
@@ -238,11 +247,11 @@ MySQL 5.x
         - eg."semantic": "exactly-once"
     - Default: at-least-once
 
-## 5. Type
-| SUPPORTED | DATA TYPE                                                    |
-| --------- | ------------------------------------------------------------ |
-| YES       | BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
-| NO        | ARRAY、MAP、STRUCT、UNION                                    |
+## 5. Data Type
+| Whether to support | Data Type                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Supported          | BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、DOUBLE PRECISION(USE DOUBLE)、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
+| Unsupported        | ARRAY、MAP、STRUCT、UNION etc.                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 ## 6. Example
 

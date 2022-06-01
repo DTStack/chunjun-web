@@ -108,6 +108,16 @@ PostgreSql 9.4 and above
   - Default:1024
       <br />
 
+- **allReplace**
+
+  - Definition: When writeMode is set to upsert, whether the null value overwrites the original value
+    - true：ON DUPLICATE KEY UPDATE column=VALUES(column)
+    - false：ON DUPLICATE KEY UPDATE column=IFNULL(VALUES(column),column)
+  - Required：false
+  - Type：String
+  - Default：true
+    <br />
+
 - **updateKey**
   - Description:When the write mode is update, you need to specify the value of this parameter as the unique index field
   - attention:
@@ -211,14 +221,16 @@ PostgreSql 9.4 and above
     - for example:"semantic": "exactly-once"
   - Default:at-least-once
 <br />
-      
+
 
 
 ## 5. Data Type
-| Whether to support | Data Type |
-|--------------------| --- |
-| Supported          | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL |
-| Unsupported        | ARRAY etc. |
+
+| Whether to support | Data Type                                                                                                                                                                                                                                                                             |
+|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Supported          | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL、_INT4、_INT8、_TEXT、_FLOAT4 |
+| Unsupported        | ARRAY、Geometric Types、Network Address Type、Bit String Types、JSON Types etc.                                                                                                                                                                                                           |
+
 
 ## 6. Example
 The details are in flinkx-examples dir.

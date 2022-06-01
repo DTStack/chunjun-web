@@ -104,13 +104,22 @@ mysql5.x
   - 默认值：无
     <br />
 
-- **mode**
+- **writeMode**
 
   - 描述：控制写入数据到目标表采用 insert into 或者 replace into 或者 ON DUPLICATE KEY UPDATE 语句
   - 必选：是
   - 所有选项：insert/replace/update
   - 参数类型：String
   - 默认值：insert
+    <br />
+
+- **allReplace**
+  - 描述: writeMode=upsert时，为null的值是否覆盖原有值
+    - true：ON DUPLICATE KEY UPDATE column=VALUES(column)
+    - false：ON DUPLICATE KEY UPDATE column=IFNULL(VALUES(column),column)
+  - 必选：否
+  - 参数类型：String
+  - 默认值：true
     <br />
 
 - **batchSize**
@@ -239,10 +248,10 @@ mysql5.x
 
 ## 五、数据类型
 
-| 是否支持 |                                                    类型名称                                                     |
-|:----:| :-------------------------------------------------------------------------------------------------------------: |
-|  支持  |BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY  |
-| 不支持  |                                            ARRAY、MAP、STRUCT、UNION                                            |
+| 是否支持 |                                                                                                                                                                                                                     类型名称                                                                                                                                                                                                                     |
+|:----:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  支持  | BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、DOUBLE PRECISION(使用DOUBLE即可)、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
+| 不支持  |                                                                                                                                                                                                           ARRAY、MAP、STRUCT、UNION 等                                                                                                                                                                                                           |
 
 ## 六、脚本示例
 

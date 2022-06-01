@@ -99,6 +99,7 @@ db2维表，支持全量和异步方式<br />
 <br />
 
 ## 五、数据类型
+
 | 是否支持 | 类型名称|
 | --- | --- |
 | 支持 | INT,BIGINT,SMALLINT,DOUBLE,DECFLOAT,DECIMAL,VARCHAR,CHAR,CLOB,DECIMAL,TIMESTAMP,DATETIME,DATE,TIME,BYTES|

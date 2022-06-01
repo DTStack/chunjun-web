@@ -1,5 +1,5 @@
-# MySQL Source
-
+`# MySQL Source
+`
 ## 1. Introduce
 
 MySQL Source
@@ -101,9 +101,34 @@ MySQL 5.x
         - Currently splitPk only supports integer data segmentation, and does not support other types such as floating
           point, string, and date. If the user specifies other non-supported types, FlinkX will report an error；
         - If the channel is greater than 1 but this parameter is not configured, the task will be set as failed.
+        - Only numerical values are supported
     - Required: false
     - Type: String
     - Default: null
+
+- **splitStrategy**
+    - Definition：Way to split，this parameter takes effect only when the channel in the speed configuration is greater than 1
+    - Options：
+        - range
+            - Get the difference between the maximum value and the minimum value of splitPk in the table,distribute as evenly as possible among the shards
+                - splitPk=id，maxValue=1，minValue=7，channel=3
+                    - channel-0：id >= 1 and id < 3
+                    - channel-1: id >= 3 and id < 5
+                    - channel-2: id >= 5
+        - mod
+            - Mod splitPk based on the number of fragments
+                - splitPk=id,chaeenl=3
+                    - channel-0：id mod 3 = 0
+                    - channel-1: id mod 3 = 1
+                    - channel-2: id mod 3 = 2
+    - Attention:
+        - Currently, only mods are supported in incremental mode
+    - Required：false
+    - Type：String
+    - Default：
+      - incremental mode:  mod
+      - other:             range
+    <br />
 
 
 - **queryTimeOut**
@@ -187,6 +212,14 @@ MySQL 5.x
     - Required: false
     - Type: String or int
     - Default: null
+
+- **orderByColumn**
+    -Definition：Sort field,used to concatenate the ORDER BY statement in the SQL statement
+    - Required：false
+    - Type：String
+    - Attention: Does not take effect in incremental mode,Always use increColumn for ORDER BY in incremental mode
+    - Default：null
+      <br />
 
 
 - **startLocation**
@@ -308,7 +341,13 @@ MySQL 5.x
     - Required: false
     - Type: String
     - Default: null
-
+    
+- **scan.order-by.column**
+  -Definition：Sort field,used to concatenate the ORDER BY statement in the SQL statement
+  - Required：false
+  - Type：String
+  - Attention: Does not take effect in incremental mode,Always use increColumn for ORDER BY in incremental mode
+  - Default：null
 
 - **scan.start-location**
     - Definition: The start position of the increment field, if not specified, all will be synchronized first, and then
@@ -333,12 +372,12 @@ MySQL 5.x
     - Type: String
     - Default: null
 
-## 5. Type
+## 5. Data Type
 
-| SUPPORTED | DATA TYPE |
-| --- | --- |
-| YES |BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY  |
-| NO        | ARRAY、MAP、STRUCT、UNION                                    |
+| Whether to support | Data Type                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Supported          | BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、DOUBLE PRECISION(USE DOUBLE)、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
+| Unsupported        | ARRAY、MAP、STRUCT、UNION etc.                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 ## 6. Example
 

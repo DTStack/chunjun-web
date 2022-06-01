@@ -105,10 +105,37 @@ Oracle 9 及以上
         - 推荐splitPk使用表主键，因为表主键通常情况下比较均匀，因此切分出来的分片也不容易出现数据热点。
         - 目前splitPk仅支持整形数据切分，不支持浮点、字符串、日期等其他类型。如果用户指定其他非支持类型，FlinkX将报错。
         - 如果channel大于1但是没有配置此参数，任务将置为失败。
+        - 仅支持数值型
     - 必选：否
     - 参数类型：String
     - 默认值：无
       <br />
+
+
+- **splitStrategy**
+
+    - 描述：分片策略，当speed 配置中的 channel 大于 1 时此参数才生效
+    - 所有选项：
+        - range
+            - 分片时获取splitPk在表中的最大值和最小值之差，尽可能均匀地分配给各个分片
+                - splitPk=id，最大值=1，最小值=7，channel=3
+                    - channel-0：id >= 1 and id < 3
+                    - channel-1: id >= 3 and id < 5
+                    - channel-2: id >= 5
+        - mod
+            - 分片时根据分片数量对splitPk做mod操作
+                - splitPk=id,chaeenl=3
+                    - channel-0：id mod 3 = 0
+                    - channel-1: id mod 3 = 1
+                    - channel-2: id mod 3 = 2
+    - 注意:
+        - 目前增量模式下仅支持mod
+    - 必选：否
+    - 参数类型：String
+    - 默认值：
+        - 增量模式：mode
+        - 其他：   range
+          <br />
 
 - **queryTimeOut**
 
@@ -193,6 +220,15 @@ Oracle 9 及以上
     - 描述：增量字段，可以是对应的增量字段名，也可以是纯数字，表示增量字段在column中的顺序位置（从0开始）
     - 必选：否
     - 参数类型：String或int
+    - 默认值：无
+      <br />
+
+- **orderByColumn**
+
+    - 描述：排序字段，用于拼接sql语句中的order by语句
+    - 必选：否
+    - 参数类型：String
+    - 注意：在增量模式中不生效，增量模式始终使用increColumn做order by
     - 默认值：无
       <br />
 
@@ -320,6 +356,15 @@ Oracle 9 及以上
     - 默认值：无
       <br />
 
+
+- **scan.order-by.column**
+    - 描述：排序字段，用于拼接sql语句中的order by语句
+    - 必选：否
+    - 参数类型：String
+    - 注意：在增量模式中不生效，增量模式始终使用increColumn做order by
+    - 默认值：无
+      <br />
+
 - **scan.start-location**
     - 描述：增量字段开始位置,如果不指定则先同步所有，然后在增量
     - 必选：否
@@ -343,11 +388,11 @@ Oracle 9 及以上
 
 ## 五、数据类型
 
-|     是否支持      |                           类型名称                           |
-|:-------------:| :----------------------------------------------------------: |
-|      支持       | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
-|      不支持      |                 BFILE、XMLTYPE、Collections                  |
-|  仅在 Sync 中支持  |                      BLOB、CLOB、NCLOB                       |
+|     是否支持     |                                                                                                             类型名称                                                                                                              |
+| :--------------: |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       支持       | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、LONG、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
+|      不支持      |                                                                                                   BFILE、XMLTYPE、Collections                                                                                                   |
+| 仅在 Sync 中支持 |                                                                                                       BLOB、CLOB、NCLOB 等                                                                                                       |
 
 
 注意：由于 flink DecimalType 的 PRECISION(1~38) 与 SCALE(0~PRECISION) 限制，oracle 的数值类型的数据在转换时可能会丢失精度

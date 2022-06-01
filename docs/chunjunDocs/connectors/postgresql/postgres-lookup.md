@@ -1,32 +1,37 @@
 # PostgreSQL Lookup
 
 ## 1、Introduce
+
 PostgreSQL lookup,support all and lru cache<br />
-all cache:All data would be loaded into memory since the program start ,which is not recommended to use in scenarios with large amount of data .<br />
-lru cache:Query data asynchronously and  add data to lru cache,which is recommended to use in scenarios with large amount of data.
+all cache:All data would be loaded into memory since the program start ,which is not recommended to use in scenarios
+with large amount of data .<br />
+lru cache:Query data asynchronously and add data to lru cache,which is recommended to use in scenarios with large amount
+of data.
 
 ## 2、Version Support
+
 PostgreSql 9.4 and above
 
-
 ## 3、Connector name
+
 | SQL | postgresql-x |
 | --- | --- |
 
 ## 4、Parameter description
+
 - **connector**
     - Description：postgresql-x
     - Required:optional
     - Type:String
     - Default:none
-        <br />
+      <br />
 
 - **url**
     - Description：jdbc:postgresql://localhost:5432/test
     - Required:required
     - Type:String
     - Default:none
-        <br />
+      <br />
 
 - **schema**
     - Description:Database schema
@@ -63,6 +68,13 @@ PostgreSql 9.4 and above
     - Default:LRU
       <br />
 
+- **vertx.worker-pool-size**
+    - Description：max thread poll size of LRU mode
+    - Required：否
+    - Type：Integer
+    - Default：5
+      <br />
+
 - **lookup.cache-period**
     - Description:Interval for loading data when the cache type is all,default value is 3600000ms
     - Required:optional
@@ -77,6 +89,13 @@ PostgreSql 9.4 and above
     - Default:10000
       <br />
 
+- **lookup.max-retries**
+    - Description：Maximum number of retries when database lookup fails
+    - Required：false
+    - Type：Integer
+    - Default：3
+      <br />
+
 - **lookup.cache.ttl**
     - Description:Interval for loading data when the cache type is lru,default value is 60000ms
     - Required:optional
@@ -86,9 +105,9 @@ PostgreSql 9.4 and above
 
 - **lookup.fetch-size**
     - Description：The number of records that ALL Lookup table loads from the database each time, the default is 1000
-  - Required:optional
-  - Type:string
-  - Default:1000
+    - Required:optional
+    - Type:string
+    - Default:1000
       <br />
 
 - **lookup.parallelism**
@@ -98,12 +117,12 @@ PostgreSql 9.4 and above
     - DEfault:none
       <br />
 
-## 5、Supported data type
-| Whether to support | Data Type |
-|--------------------| --- |
-| Supported          | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL |
-| Unsupported        | ARRAY etc. |
+## 5、Data type
 
+| Whether to support | Data Type                                                                                                                                                                                                                                                                             |
+|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Supported          | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL、_INT4、_INT8、_TEXT、_FLOAT4 |
+| Unsupported        | ARRAY、Geometric Types、Network Address Type、Bit String Types、JSON Types etc.                                                                                                                                                                                                           |
 
 ## 6. Example
 

@@ -153,6 +153,15 @@ Microsoft SQL Server 2012及以上
   - 默认值：at-least-once
 <br />
 
+- **allReplace**
+  - 描述: writeMode=upsert时，为null的值是否覆盖原有值
+    - true：ON DUPLICATE KEY UPDATE column=VALUES(column)
+    - false：ON DUPLICATE KEY UPDATE column=IFNULL(VALUES(column),column)
+  - 必选：否
+  - 参数类型：String
+  - 默认值：true
+    <br />
+
 - **batchSize**
    - 描述：一次性批量提交的记录数大小，该值可以极大减少FlinkX与数据库的网络交互次数，并提升整体吞吐量。但是该值设置过大可能会造成FlinkX运行进程OOM情况
    - 必选：否
@@ -262,9 +271,9 @@ Microsoft SQL Server 2012及以上
 
 
 ## 五、数据类型
-|是否支持 | 类型名称 |
-| ---| ---|
+|是否支持 | 类型名称                                                                                                                                                                                                                                                                       |
+| ---|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |支持 | BIT、INT、SMALLINT、TINYINT、BIGINT、INT IDENTITY、REAL、FLOAT、DECIMAL、NUMERIC、CHAR、VARCHAR、VARCHAR(MAX)、TEXT、XML、NCHAR、NVARCHAR、NVARCHAR(MAX)、NTEXT、TIME、DATE、DATETIME、DATETIME2、SMALLDATETIME、DATETIMEOFFSET、TIMESTAMP、BINARY、VARBINARY、IMAGE、MONEY、SMALLMONEY、UNIQUEIDENTIFIER |
-| 不支持 | CURSOR、ROWVERSION、HIERARCHYID、SQL_VARIANT、SPATIAL GEOMETRY TYPE、SPATIAL GEOGRAPHY TYPE、TABLE |
+| 不支持 | CURSOR、ROWVERSION、HIERARCHYID、SQL_VARIANT、SPATIAL GEOMETRY TYPE、SPATIAL GEOGRAPHY TYPE、TABLE 等                                                                                                                                                                             |
 ## 六、脚本示例
 见项目内`flinkx-examples`文件夹。

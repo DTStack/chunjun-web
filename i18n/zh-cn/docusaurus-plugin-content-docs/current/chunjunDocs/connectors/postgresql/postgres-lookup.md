@@ -63,6 +63,13 @@ PostgreSql 9.4及以上
     - 默认值：LRU
       <br />
 
+- **vertx.worker-pool-size**
+    - 描述：LRU缓存的线程池大小
+    - 必选：否
+    - 参数类型：Integer
+    - 默认值：5
+      <br />
+
 - **lookup.cache-period**
     - 描述：ALL维表每隔多久加载一次数据，默认3600000毫秒(一个小时)
     - 必选：否
@@ -75,6 +82,13 @@ PostgreSql 9.4及以上
     - 必选：否
     - 参数类型：string
     - 默认值：10000
+      <br />
+
+- **lookup.max-retries**
+    - 描述：查找数据库失败时的最大重试次数
+    - 必选：否
+    - 参数类型：Integer
+    - 默认值：3
       <br />
 
 - **lookup.cache.ttl**
@@ -99,10 +113,11 @@ PostgreSql 9.4及以上
       <br />
 
 ## 五、数据类型
-| 是否支持 | 数据类型 |
-| --- | ---|
-| 支持 | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL |
-| 不支持 | ARRAY等 |
+
+| 是否支持 | 数据类型                                                                                                                                                                                                                                                                                  |
+| -------- |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 支持     | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL、_INT4、_INT8、_TEXT、_FLOAT4 |
+| 不支持   | ARRAY、Geometric Types、Network Address Type、Bit String Types、JSON Types 等                                                                                                                                                                                                              |
 
 
 ## 六、脚本示例

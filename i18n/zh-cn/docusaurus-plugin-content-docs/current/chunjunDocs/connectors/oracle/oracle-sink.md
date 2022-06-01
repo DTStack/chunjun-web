@@ -8,13 +8,11 @@ oracle sink
 
 Oracle 9 及以上
 
-
 ## 三、插件名称
 
 | Sync | oraclesink、oraclewriter |
 | ---- | ------------------------ |
 | SQL  | oracle-x                 |
-
 
 ## 四、参数说明
 
@@ -42,7 +40,8 @@ Oracle 9 及以上
 
 - **jdbcUrl**
 
-    - 描述：针对关系型数据库的jdbc连接字符串,jdbcUrl参考文档：[Oracle官方文档](http://www.oracle.com/technetwork/database/enterprise-edition/documentation/index.html)
+    -
+    描述：针对关系型数据库的jdbc连接字符串,jdbcUrl参考文档：[Oracle官方文档](http://www.oracle.com/technetwork/database/enterprise-edition/documentation/index.html)
     - 必选：是
     - 参数类型：string
     - 默认值：无
@@ -121,6 +120,16 @@ Oracle 9 及以上
     - 默认值：insert
       <br />
 
+- **allReplace**
+    - 描述: writeMode=upsert时，为null的值是否覆盖原有值
+        - true：ON DUPLICATE KEY UPDATE column=VALUES(column)
+        - false：ON DUPLICATE KEY UPDATE column=IFNULL(VALUES(column),column)
+    - 必选：否
+    - 参数类型：String
+    - 默认值：true
+      <br />
+
+
 - **batchSize**
 
     - 描述：一次性批量提交的记录数大小，该值可以极大减少FlinkX与数据库的网络交互次数，并提升整体吞吐量。但是该值设置过大可能会造成FlinkX运行进程OOM情况
@@ -168,7 +177,7 @@ Oracle 9 及以上
     - 参数类型：String
     - 默认值：无
       <br />
-  
+
 - **schema**
     - 描述：数据库schema名
     - 必选：否
@@ -238,17 +247,14 @@ Oracle 9 及以上
 
 ## 五、数据类型
 
-
-|     是否支持      |                           类型名称                           |
-|:-------------:| :----------------------------------------------------------: |
-|      支持       | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
-|      不支持      |                 BFILE、XMLTYPE、Collections                  |
-|  仅在 Sync 中支持  |                      BLOB、CLOB、NCLOB                       |
-
+|     是否支持     |                                                                                                             类型名称                                                                                                              |
+| :--------------: |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       支持       | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、LONG、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
+|      不支持      |                                                                                                   BFILE、XMLTYPE、Collections                                                                                                   |
+| 仅在 Sync 中支持 |                                                                                                       BLOB、CLOB、NCLOB 等                                                                                                       |
 
 注意：由于 flink DecimalType 的 PRECISION(1~38) 与 SCALE(0~PRECISION) 限制，oracle 的数值类型的数据在转换时可能会丢失精度
 
 ## 六、脚本示例
 
 见项目内`flinkx-examples`文件夹。
-

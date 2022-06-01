@@ -1,43 +1,51 @@
 # PostgreSQL Sink
 
 ## 一、介绍
+
 Postgres sink
 
 ## 二、支持版本
+
 PostgreSql 9.4及以上
 
-
 ## 三、插件名称
-| Sync | postgresqlsink、postgresqlwriter |
-| --- | --- |
-| SQL | postgresql-x |
 
+| Sync | postgresqlsink、postgresqlwriter |
+| ---- | -------------------------------- |
+| SQL  | postgresql-x                     |
 
 ## 四、参数说明
+
 ### 1、Sync
+
 - **connection**
+
     - 描述：数据库连接参数，包含jdbcUrl、schema、table等参数
     - 必选：是
     - 参数类型：List
     - 默认值：无
 
-    ```json
-      "connection": [{
-       "jdbcUrl": ["jdbc:postgresql://0.0.0.1:5432/database?useSSL=false"],
-       "table": ["table"],
-       "schema":"public"
-      }]
-    ```
- <br />
+  ```json
+    "connection": [{
+     "jdbcUrl": ["jdbc:postgresql://0.0.0.1:5432/database?useSSL=false"],
+     "table": ["table"],
+     "schema":"public"
+    }]
+  ```
+
+   <br />
 
 - **jdbcUrl**
-    - 描述：针对关系型数据库的jdbc连接字符串,jdbcUrl参考: [Postgresql官方文档](https://jdbc.postgresql.org/documentation/head/connect.html#connection-parameters)
+
+    -
+    描述：针对关系型数据库的jdbc连接字符串,jdbcUrl参考: [Postgresql官方文档](https://jdbc.postgresql.org/documentation/head/connect.html#connection-parameters)
     - 必选：是
     - 参数类型：string
     - 默认值：无
       <br />
 
 - **schema**
+
     - 描述：数据库schema名
     - 必选：否
     - 参数类型：string
@@ -45,6 +53,7 @@ PostgreSql 9.4及以上
       <br />
 
 - **table**
+
     - 描述：目的表的表名称。目前只支持配置单个表，后续会支持多表
     - 必选：是
     - 参数类型：List
@@ -52,6 +61,7 @@ PostgreSql 9.4及以上
       <br />
 
 - **username**
+
     - 描述：数据源的用户名
     - 必选：是
     - 参数类型：String
@@ -59,6 +69,7 @@ PostgreSql 9.4及以上
       <br />
 
 - **password**
+
     - 描述：数据源指定用户名的密码
     - 必选：是
     - 参数类型：String
@@ -66,6 +77,7 @@ PostgreSql 9.4及以上
       <br />
 
 - **column**
+
     - 描述：目的表需要写入数据的字段,字段之间用英文逗号分隔。例如: "column": ["id","name","age"]
     - 必选：是
     - 参数类型：List
@@ -73,6 +85,7 @@ PostgreSql 9.4及以上
       <br />
 
 - **fullcolumn**
+
     - 描述：目的表中的所有字段，字段之间用英文逗号分隔。例如: "column": ["id","name","age","hobby"]，如果不配置，将在系统表中获取
     - 必选：否
     - 参数类型：List
@@ -80,6 +93,7 @@ PostgreSql 9.4及以上
       <br />
 
 - **preSql**
+
     - 描述：写入数据到目的表前，会先执行这里的一组标准语句
     - 必选：否
     - 参数类型：List
@@ -87,6 +101,7 @@ PostgreSql 9.4及以上
       <br />
 
 - **postSql**
+
     - 描述：写入数据到目的表后，会执行这里的一组标准语句
     - 必选：否
     - 参数类型：List
@@ -94,6 +109,7 @@ PostgreSql 9.4及以上
       <br />
 
 - **writeMode**
+
     - 描述：控制写入数据到目标表采用 insert into 或者 replace into 或者 ON DUPLICATE KEY UPDATE 语句
     - 必选：是
     - 所有选项：insert/replace/update
@@ -101,7 +117,17 @@ PostgreSql 9.4及以上
     - 默认值：insert
       <br />
 
+- **allReplace**
+    - 描述: writeMode=upsert时，为null的值是否覆盖原有值
+        - true：ON DUPLICATE KEY UPDATE column=VALUES(column)
+        - false：ON DUPLICATE KEY UPDATE column=IFNULL(VALUES(column),column)
+    - 必选：否
+    - 参数类型：String
+    - 默认值：true
+      <br />
+
 - **batchSize**
+
     - 描述：一次性批量提交的记录数大小，该值可以极大减少FlinkX与数据库的网络交互次数，并提升整体吞吐量。但是该值设置过大可能会造成FlinkX运行进程OOM情况
     - 必选：否
     - 参数类型：int
@@ -109,6 +135,7 @@ PostgreSql 9.4及以上
       <br />
 
 - **updateKey**
+
     - 描述：当写入模式为update和replace时，需要指定此参数的值为唯一索引字段
     - 注意：
         - 如果此参数为空，并且写入模式为update和replace时，应用会自动获取数据库中的唯一索引；
@@ -118,19 +145,21 @@ PostgreSql 9.4及以上
         - 示例："updateKey": {"key": ["id"]}
     - 默认值：无
       <br />
-      
+
 - **semantic**
-  - 描述：sink端是否支持二阶段提交
-  - 注意：
-    - 如果此参数为空，默认不开启二阶段提交，即sink端不支持exactly_once语义；
-    - 当前只支持exactly-once 和at-least-once 
-  - 必选：否
-  - 参数类型：String
-    - 示例："semantic": "exactly-once"
-  - 默认值：at-least-once
-<br />
+
+    - 描述：sink端是否支持二阶段提交
+    - 注意：
+        - 如果此参数为空，默认不开启二阶段提交，即sink端不支持exactly_once语义；
+        - 当前只支持exactly-once 和at-least-once
+    - 必选：否
+    - 参数类型：String
+        - 示例："semantic": "exactly-once"
+    - 默认值：at-least-once
+      <br />
 
 ### 2、SQL
+
 - **connector**
     - 描述：postgresql-x
     - 必选：是
@@ -146,11 +175,11 @@ PostgreSql 9.4及以上
       <br />
 
 - **schema**
-  - 描述：数据库schema名
-  - 必选：否
-  - 参数类型：string
-  - 默认值：无
-    <br />
+    - 描述：数据库schema名
+    - 必选：否
+    - 参数类型：string
+    - 默认值：无
+      <br />
 
 - **table-name**
     - 描述：表名
@@ -200,25 +229,25 @@ PostgreSql 9.4及以上
     - 参数类型：String
     - 默认值：无
       <br />
-      
-- **sink.semantic**
-  - 描述：sink端是否支持二阶段提交
-  - 注意：
-    - 如果此参数为空，默认不开启二阶段提交，即sink端不支持exactly_once语义；
-    - 当前只支持exactly-once 和at-least-once 
-  - 必选：否
-  - 参数类型：String
-    - 示例："semantic": "exactly-once"
-  - 默认值：at-least-once
-<br />
-      
 
+- **sink.semantic**
+    - 描述：sink端是否支持二阶段提交
+    - 注意：
+        - 如果此参数为空，默认不开启二阶段提交，即sink端不支持exactly_once语义；
+        - 当前只支持exactly-once 和at-least-once
+    - 必选：否
+    - 参数类型：String
+        - 示例："semantic": "exactly-once"
+    - 默认值：at-least-once
+      <br />
 
 ## 五、数据类型
-| 是否支持 | 数据类型 |
-| --- | ---|
-| 支持 | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL |
-| 不支持 | ARRAY等 |
+
+| 是否支持 | 数据类型                                                     |
+| -------- | ------------------------------------------------------------ |
+| 支持     | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL、_INT4、_INT8、_TEXT、_FLOAT4 |
+| 不支持   | ARRAY、Geometric Types、Network Address Type、Bit String Types、JSON Types等 |
 
 ## 六、脚本示例
+
 见项目内`flinkx-examples`文件夹。

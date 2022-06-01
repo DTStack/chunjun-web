@@ -63,6 +63,13 @@ mysql5.x
   - 默认值：LRU
 <br />
 
+- **vertx.worker-pool-size**
+  - 描述：LRU缓存的线程池大小
+  - 必选：否
+  - 参数类型：Integer
+  - 默认值：5
+    <br />
+
 - **lookup.cache-period**
   - 描述：ALL维表每隔多久加载一次数据，默认3600000毫秒(一个小时)
   - 必选：否
@@ -76,6 +83,13 @@ mysql5.x
   - 参数类型：string
   - 默认值：10000
 <br />
+
+- **lookup.max-retries**
+  - 描述：查找数据库失败时的最大重试次数
+  - 必选：否
+  - 参数类型：Integer
+  - 默认值：3
+    <br />
 
 - **lookup.cache.ttl**
   - 描述：lru维表缓存数据的时间，默认60000毫秒(一分钟)
@@ -99,9 +113,9 @@ mysql5.x
 <br />
 
 ## 五、数据类型
-|  支持  |BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY  |
-| --- | --- |
-| 暂不支持 | ARRAY、MAP、STRUCT、UNION |
+|  支持  | BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、DOUBLE PRECISION(使用DOUBLE即可)、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
+| --- |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 暂不支持 | ARRAY、MAP、STRUCT、UNION 等                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 
 ## 六、脚本示例

@@ -98,9 +98,35 @@ mysql5.x
     - 推荐 splitPk 使用表主键，因为表主键通常情况下比较均匀，因此切分出来的分片也不容易出现数据热点。
     - 目前 splitPk 仅支持整形数据切分，不支持浮点、字符串、日期等其他类型。如果用户指定其他非支持类型，FlinkX 将报错。
     - 如果 channel 大于 1 但是没有配置此参数，任务将置为失败。
+    - 仅支持数值型
   - 必选：否
   - 参数类型：String
   - 默认值：无
+    <br />
+
+- **splitStrategy**
+
+  - 描述：分片策略，当speed 配置中的 channel 大于 1 时此参数才生效
+  - 所有选项：
+    - range
+      - 分片时获取splitPk在表中的最大值和最小值之差，尽可能均匀地分配给各个分片
+        - splitPk=id，最大值=1，最小值=7，channel=3
+          - channel-0：id >= 1 and id < 3
+          - channel-1: id >= 3 and id < 5
+          - channel-2: id >= 5
+    - mod
+      - 分片时根据分片数量对splitPk做mod操作
+        - splitPk=id,chaeenl=3
+          - channel-0：id mod 3 = 0
+          - channel-1: id mod 3 = 1
+          - channel-2: id mod 3 = 2
+  - 注意:
+    - 目前增量模式下仅支持mod
+  - 必选：否
+  - 参数类型：String
+  - 默认值：
+    - 增量模式：mode
+    - 其他：   range
     <br />
 
 - **queryTimeOut**
@@ -181,6 +207,15 @@ mysql5.x
   - 默认值：无
     <br />
 
+- **orderByColumn**
+
+  - 描述：排序字段，用于拼接sql语句中的order by语句
+  - 必选：否
+  - 参数类型：String
+  - 注意：在增量模式中不生效，增量模式始终使用increColumn做order by
+  - 默认值：无
+    <br />
+  
 - **startLocation**
 
   - 描述：增量查询起始位置
@@ -316,6 +351,15 @@ mysql5.x
   - 参数类型：String
   - 默认值：无
     <br />
+
+- **scan.order-by.column**
+  - 描述：排序字段，用于拼接sql语句中的order by语句
+  - 必选：否
+  - 参数类型：String
+  - 注意：在增量模式中不生效，增量模式始终使用increColumn做order by
+  - 默认值：无
+    <br />
+
 - **scan.start-location**
 
   - 描述：增量字段开始位置,如果不指定则先同步所有，然后在增量
@@ -341,10 +385,10 @@ mysql5.x
 
 ## 五、数据类型
 
-| 是否支持 |                                                    类型名称                                                     |
-| :------: | :-------------------------------------------------------------------------------------------------------------: |
-|  支持  |BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY  |
-|  不支持  |                                            ARRAY、MAP、STRUCT、UNION                                            |
+| 是否支持 |                                                                                                                                                                                                                     类型名称                                                                                                                                                                                                                     |
+| :------: |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  支持  | BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、DOUBLE PRECISION(使用DOUBLE即可)、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
+|  不支持  |                                                                                                                                                                                                           ARRAY、MAP、STRUCT、UNION 等                                                                                                                                                                                                           |
 
 ## 六、脚本示例
 

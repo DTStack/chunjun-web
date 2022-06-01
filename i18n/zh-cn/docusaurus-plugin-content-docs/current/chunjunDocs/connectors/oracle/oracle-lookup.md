@@ -67,6 +67,13 @@ Oracle 9 及以上
     - 默认值：LRU
       <br />
 
+- **vertx.worker-pool-size**
+    - 描述：LRU缓存的线程池大小
+    - 必选：否
+    - 参数类型：Integer
+    - 默认值：5
+      <br />
+
 - **lookup.cache-period**
     - 描述：ALL维表每隔多久加载一次数据，默认3600000毫秒(一个小时)
     - 必选：否
@@ -81,20 +88,25 @@ Oracle 9 及以上
     - 默认值：10000
       <br />
 
+- **lookup.max-retries**
+    - 描述：查找数据库失败时的最大重试次数
+    - 必选：否
+    - 参数类型：Integer
+    - 默认值：3
+      <br />
+
 - **lookup.cache.ttl**
     - 描述：lru维表缓存数据的时间，默认60000毫秒(一分钟)
     - 必选：否
     - 参数类型：string
     - 默认值：60000
       <br />
-
 - **lookup.fetch-size**
     - 描述：ALL维表每次从数据库加载的条数，默认1000条
     - 必选：否
     - 参数类型：string
     - 默认值：1000
       <br />
-
 - **lookup.parallelism**
     - 描述：维表并行度
     - 必选：否
@@ -104,10 +116,10 @@ Oracle 9 及以上
 
 ## 五、数据类型
 
-| 是否支持  |                           类型名称                           |
-|:-----:| :----------------------------------------------------------: |
-|  支持   | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
-|  不支持  |        BFILE、XMLTYPE、Collections、BLOB、CLOB、NCLOB        |
+| 是否支持 |                                                                                                             类型名称                                                                                                              |
+| :------: |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|   支持   | SMALLINT、BINARY_DOUBLE、CHAR、VARCHAR、VARCHAR2、NCHAR、NVARCHAR2、LONG、INT、INTEGER、NUMBER、DECIMAL、FLOAT、DATE、RAW、LONG RAW、BINARY_FLOAT、TIMESTAMP、TIMESTAMP WITH LOCAL TIME ZONE、TIMESTAMP WITH TIME ZON、INTERVAL YEAR、INTERVAL DAY |
+|  不支持  |                                                                                          BFILE、XMLTYPE、Collections、BLOB、CLOB、NCLOB 等                                                                                          |
 
 
 

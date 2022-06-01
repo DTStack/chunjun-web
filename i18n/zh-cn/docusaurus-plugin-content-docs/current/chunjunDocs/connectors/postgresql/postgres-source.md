@@ -1,25 +1,29 @@
 # PostgreSQL Source
 
 ## 一、介绍
+
 支持从Postgres离线读取，支持Postgres实时间隔轮询读取
 
 ## 二、支持版本
+
 PostgreSql 9.4及以上
 
 ## 三、插件名称
+
 | Sync | postgresqlsource、postgresqlreader |
 | --- | --- |
 | SQL | postgresql-x |
 
-
 ## 四、参数说明
+
 ### 1、Sync
+
 - **connection**
     - 描述：数据库连接参数，包含jdbcUrl、schema、table等参数
     - 必选：是
     - 参数类型：List
     - 默认值：无
-  
+
     ```json
       "connection": [{
        "jdbcUrl": ["jdbc:postgresql://0.0.0.1:5432/database?useSSL=false"],
@@ -27,10 +31,12 @@ PostgreSql 9.4及以上
        "schema":"public"
       }]
     ```
+
  <br />
 
 - **jdbcUrl**
-    - 描述：针对关系型数据库的jdbc连接字符串,jdbcUrl参考: [Postgresql官方文档](https://jdbc.postgresql.org/documentation/head/connect.html#connection-parameters)
+  -
+  描述：针对关系型数据库的jdbc连接字符串,jdbcUrl参考: [Postgresql官方文档](https://jdbc.postgresql.org/documentation/head/connect.html#connection-parameters)
     - 必选：是
     - 参数类型：string
     - 默认值：无
@@ -65,7 +71,8 @@ PostgreSql 9.4及以上
       <br />
 
 - **fetchSize**
-    - 描述：一次性从数据库中读取多少条数据，默认一次将所有结果都读取到内存中，在数据量很大时可能会造成OOM，设置这个参数可以控制每次读取fetchSize条数据，而不是默认的把所有数据一次读取出来；开启fetchSize需要满足：数据库版本要高于5.0.2，连接参数useCursorFetch=true。 
+  -
+  描述：一次性从数据库中读取多少条数据，默认一次将所有结果都读取到内存中，在数据量很大时可能会造成OOM，设置这个参数可以控制每次读取fetchSize条数据，而不是默认的把所有数据一次读取出来；开启fetchSize需要满足：数据库版本要高于5.0.2，连接参数useCursorFetch=true。
     - 注意：此参数的值不可设置过大，否则会读取超时，导致任务失败。
     - 必选：否
     - 参数类型：int
@@ -73,7 +80,8 @@ PostgreSql 9.4及以上
       <br />
 
 - **where**
-    - 描述：筛选条件，reader插件根据指定的column、table、where条件拼接SQL，并根据这个SQL进行数据抽取。在实际业务场景中，往往会选择当天的数据进行同步，可以将where条件指定为gmt_create > time。
+    - 描述：筛选条件，reader插件根据指定的column、table、where条件拼接SQL，并根据这个SQL进行数据抽取。在实际业务场景中，往往会选择当天的数据进行同步，可以将where条件指定为gmt_create >
+      time。
     - 注意：不可以将where条件指定为limit 10，limit不是SQL的合法where子句。
     - 必选：否
     - 参数类型：String
@@ -86,10 +94,36 @@ PostgreSql 9.4及以上
         - 推荐splitPk使用表主键，因为表主键通常情况下比较均匀，因此切分出来的分片也不容易出现数据热点。
         - 目前splitPk仅支持整形数据切分，不支持浮点、字符串、日期等其他类型。如果用户指定其他非支持类型，FlinkX将报错。
         - 如果channel大于1但是没有配置此参数，任务将置为失败。
+        - 仅支持数值型
     - 必选：否
     - 参数类型：String
     - 默认值：无
       <br />
+
+- **splitStrategy**
+
+    - 描述：分片策略，当speed 配置中的 channel 大于 1 时此参数才生效
+    - 所有选项：
+        - range
+            - 分片时获取splitPk在表中的最大值和最小值之差，尽可能均匀地分配给各个分片
+                - splitPk=id，最大值=1，最小值=7，channel=3
+                    - channel-0：id >= 1 and id < 3
+                    - channel-1: id >= 3 and id < 5
+                    - channel-2: id >= 5
+        - mod
+            - 分片时根据分片数量对splitPk做mod操作
+                - splitPk=id,chaeenl=3
+                    - channel-0：id mod 3 = 0
+                    - channel-1: id mod 3 = 1
+                    - channel-2: id mod 3 = 2
+    - 注意:
+        - 目前增量模式下仅支持mod
+    - 必选：否
+    - 参数类型：String
+    - 默认值：
+        - 增量模式：mode
+        - 其他： range
+          <br />
 
 - **queryTimeOut**
     - 描述：查询超时时间，单位秒。
@@ -115,17 +149,17 @@ PostgreSql 9.4及以上
     - 描述：需要读取的字段。
     - 格式：支持3种格式
       <br />1.读取全部字段，如果字段数量很多，可以使用下面的写法：
-  
+
       ```json
       "column":["*"]
       ```
       2.只指定字段名称：
-  
+
       ```json
       "column":["id","name"]
       ```
       3.指定具体信息：
-    
+
       ```json
       "column": [{
           "name": "col",
@@ -144,7 +178,8 @@ PostgreSql 9.4及以上
       <br />
 
 - **polling**
-    - 描述：是否开启间隔轮询，开启后会根据pollingInterval轮询间隔时间周期性的从数据库拉取数据。开启间隔轮询还需配置参数pollingInterval，increColumn，可以选择配置参数startLocation。若不配置参数startLocation，任务启动时将会从数据库中查询增量字段最大值作为轮询的起始位置。
+  -
+  描述：是否开启间隔轮询，开启后会根据pollingInterval轮询间隔时间周期性的从数据库拉取数据。开启间隔轮询还需配置参数pollingInterval，increColumn，可以选择配置参数startLocation。若不配置参数startLocation，任务启动时将会从数据库中查询增量字段最大值作为轮询的起始位置。
     - 必选：否
     - 参数类型：Boolean
     - 默认值：false
@@ -161,6 +196,14 @@ PostgreSql 9.4及以上
     - 描述：增量字段，可以是对应的增量字段名，也可以是纯数字，表示增量字段在column中的顺序位置（从0开始）
     - 必选：否
     - 参数类型：String或int
+    - 默认值：无
+      <br />
+
+- **orderByColumn**
+    - 描述：排序字段，用于拼接sql语句中的order by语句
+    - 必选：否
+    - 参数类型：String
+    - 注意：在增量模式中不生效，增量模式始终使用increColumn做order by
     - 默认值：无
       <br />
 
@@ -186,6 +229,7 @@ PostgreSql 9.4及以上
       <br />
 
 ### 2、SQL
+
 - **connector**
     - 描述：postgresql-x
     - 必选：是
@@ -284,6 +328,14 @@ PostgreSql 9.4及以上
     - 默认值：无
       <br />
 
+- **scan.order-by.column**
+    - 描述：排序字段，用于拼接sql语句中的order by语句
+    - 必选：否
+    - 参数类型：String
+    - 注意：在增量模式中不生效，增量模式始终使用increColumn做order by
+    - 默认值：无
+      <br />
+
 - **scan.start-location**
     - 描述：增量字段开始位置,如果不指定则先同步所有，然后在增量
     - 必选：否
@@ -306,11 +358,12 @@ PostgreSql 9.4及以上
       <br />
 
 ## 五、数据类型
-| 是否支持 | 数据类型 |
-| --- | ---|
-| 支持 | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL |
-| 不支持 | ARRAY等 |
 
+| 是否支持 | 数据类型                                                     |
+| -------- | ------------------------------------------------------------ |
+| 支持     | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL、_INT4、_INT8、_TEXT、_FLOAT4 |
+| 不支持   | ARRAY、Geometric Types、Network Address Type、Bit String Types、JSON Types等 |
 
 ## 六、脚本示例
+
 见项目内`flinkx-examples`文件夹。

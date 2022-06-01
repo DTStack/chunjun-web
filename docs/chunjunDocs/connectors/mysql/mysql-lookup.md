@@ -31,10 +31,10 @@ MySQL 5.x
     - Default：(none)
 
 - **schema**
-  - Description: database schema name
-  - Required: Optional
-  - Type: String
-  - Default: (none)
+    - Description: database schema name
+    - Required: Optional
+    - Type: String
+    - Default: (none)
 
 
 - **table-name**
@@ -64,6 +64,13 @@ MySQL 5.x
     - Type: String
     - Default：LRU
 
+- **vertx.worker-pool-size**
+    - Description：max thread poll size of LRU mode
+    - Required：否
+    - Type：Integer
+    - Default：5
+      <br />
+
 
 - **lookup.cache-period**
     - Description：time of interval ALL lookup table load data, Unit: ms.
@@ -78,6 +85,12 @@ MySQL 5.x
     - Type: String
     - Default：10000
 
+- **lookup.max-retries**
+    - Description：Maximum number of retries when database lookup fails
+    - Required：false
+    - Type：Integer
+    - Default：3
+      <br />
 
 - **lookup.cache.ttl**
     - Description：time of data that lru lookup table cache.
@@ -100,11 +113,10 @@ MySQL 5.x
     - Default：(none)
 
 ## 5. Data Type
-
-| SUPPORTED | DATA TYPE |
-| --- | --- |
-| YES |BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY  |
-| NO        | ARRAY、MAP、STRUCT、UNION                                    |
+| Whether to support | Data Type                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Supported          | BOOLEAN、BIT、TINYINT、TINYINT UNSIGNED、SMALLINT、SMALLINT UNSIGNED、MEDIUMINT、MEDIUMINT UNSIGNED、 INT、INT UNSIGNED、INTEGER、INT UNSIGNED、BIGINT、BIGINT UNSIGNED、REAL、FLOAT、FLOAT UNSIGNED、DECIMAL、DECIMAL UNSIGNED、NUMERIC、DOUBLE、DOUBLE UNSIGNED、DOUBLE PRECISION(USE DOUBLE)、STRING、VARCHAR、CHAR、TIMESTAMP 、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
+| Unsupported        | ARRAY、MAP、STRUCT、UNION etc.                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 ## 6. Example
 
