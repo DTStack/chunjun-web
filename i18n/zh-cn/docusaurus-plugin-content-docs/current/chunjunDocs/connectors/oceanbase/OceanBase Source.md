@@ -1,18 +1,18 @@
-# GBase Source
+# OceanBase Source
 
 ## 一、介绍
 
-支持从 GBase 离线读取，支持 GBase 实时间隔轮询读取
+支持从 OceanBase 离线读取，支持 OceanBase 实时间隔轮询读取
 
 ## 二、支持版本
 
-GBase8a(8.6.2.43)
+OceanBase3.1.x
 
 ## 三、插件名称
 
-| Sync | gbasesource、gbasereader |
-| ---- | ------------------------ |
-| SQL  | gbase-x                  |
+| Sync | oceanbasesource、oceanbasereader |
+| ---- |---------------------------------|
+| SQL  | oceanbase-x                     |
 
 ## 四、参数说明
 
@@ -26,9 +26,8 @@ GBase8a(8.6.2.43)
   - 默认值：无
     ```text
     "connection": [{
-     "jdbcUrl": ["jdbc:gbase://0.0.0.1:9042/database?useSSL=false"],
+     "jdbcUrl": ["jdbc:oceanbase://hostname:port/test"],
      "table": ["table"],
-     "schema":"public"
     }]
     ```
     <br />
@@ -59,7 +58,8 @@ GBase8a(8.6.2.43)
 
 - **username**
 
-  - 描述：数据源的用户名
+  - 描述：数据源的用户名，指定租户连接可在用户名后加上租户名称，例如"root@test"。目前只支持Mysql租户
+- 必选：是
   - 必选：是
   - 参数类型：String
   - 默认值：无
@@ -75,7 +75,7 @@ GBase8a(8.6.2.43)
 
 - **fetchSize**
 
-  - 描述：一次性从数据库中读取多少条数据，gbase 默认一次将所有结果都读取到内存中，在数据量很大时可能会造成 OOM，设置这个参数可以控制每次读取 fetchSize 条数据，而不是默认的把所有数据一次读取出来；开启 fetchSize 需要满足：数据库版本要高于 5.0.2、连接参数 useCursorFetch=true。
+  - 描述：一次性从数据库中读取多少条数据，OceanBase 默认一次将所有结果都读取到内存中，在数据量很大时可能会造成 OOM，设置这个参数可以控制每次读取 fetchSize 条数据，而不是默认的把所有数据一次读取出来；开启 fetchSize 需要满足：数据库版本要高于 5.0.2、连接参数 useCursorFetch=true。
     注意：此参数的值不可设置过大，否则会读取超时，导致任务失败。
   - 必选：否
   - 参数类型：int
@@ -243,7 +243,7 @@ GBase8a(8.6.2.43)
 
 - **connector**
 
-  - 描述：gbase-x
+  - 描述：oceanbase-x
   - 必选：是
   - 参数类型：String
   - 默认值：无
@@ -251,19 +251,12 @@ GBase8a(8.6.2.43)
 
 - **url**
 
-  - 描述：jdbc:gbase://localhost:9042/test
+  - 描述：jdbc:oceanbase://hostname:port/database
   - 必选：是
   - 参数类型：String
   - 默认值：无
     <br />
-
-- **schema**
-
-  - 描述：数据库 schema 名
-  - 必选：否
-  - 参数类型：string
-  - 默认值：无
-    <br />
+  
 
 - **table-name**
 
@@ -275,7 +268,8 @@ GBase8a(8.6.2.43)
 
 - **username**
 
-  - 描述：username
+  - 描述：数据源的用户名，指定租户连接可在用户名后加上租户名称，例如"root@test"。目前只支持Mysql租户
+- 必选：是
   - 必选：是
   - 参数类型：String
   - 默认值：无
@@ -385,10 +379,21 @@ GBase8a(8.6.2.43)
 
 ## 五、数据类型
 
-| 是否支持 |                                                                                                                                                                                                                     类型名称                                                                                                                                                                                                                     |
-| :------: |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-|  支持  | BIT、TINYINT、SMALLINT、MEDIUMINT、INT、INTEGER、INT24、SERIAL、BIGINT、INT8、BIGSERIAL、SERIAL8、REAL、FLOAT、SMALLFLOAT、DECIMAL、NUMERIC、DOUBLE、DEC、MONEY、DOUBLE、PRECISION 、STRING、VARCHAR、CHAR、CHARACTER、VARYING、NCHAR、TIMESTAMP、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
-|  不支持  |                                                                                                                                                                                                           ARRAY、MAP、STRUCT、UNION 等                                                                                                                                                                                                           |
+| OceanBase Data Type                                          | Flink Data Type | Description                                                  |
+| ------------------------------------------------------------ | --------------- | ------------------------------------------------------------ |
+| BOOLEAN                                                      | BOOLEAN         |                                                              |
+| TINYINT                                                      | TINYINT         |                                                              |
+| SMALLINT                                                     | SMALLINT        |                                                              |
+| MEDIUMINT<br>INT<br>INTEGER                                  | INT             |                                                              |
+| BIGINT                                                       | BIGINT          |                                                              |
+| FLOAT                                                        | FLOAT           |                                                              |
+| DOUBLE                                                       | DOUBLE          |                                                              |
+| DECIMAL(p,s)<br>NUMERIC(p,s)                                 | DECIMAL(p,s)    | support maximum precision DECIMAL(38,18)                     |
+| TIME                                                         | TIME            |                                                              |
+| DATE                                                         | DATE            |                                                              |
+| TIMESTAMP<br>DATETIME                                        | TIMESTAMP       |                                                              |
+| BIT<br>BINARY<br>VARBINARY<br>TINYBLOB<br>BLOB<br>MEDIUMBLOB<br>LONGBLOB | BYTES           | SQL job type currently does not support bit type length of 1, because the database will be converted to Boolean, it is recommended to directly set the database field to boolean |
+| CHAR<br/>VARCHAR<br/>TINYTEXT<br/>MEDIUMTEXT<br/>LONGTEXT<br/>ENUM<br/>SET | STRING          |                                                              |
 
 ## 六、脚本示例
 

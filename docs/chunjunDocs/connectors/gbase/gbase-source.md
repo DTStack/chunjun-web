@@ -1,129 +1,171 @@
 # GBase Source
 
 ## 1. Introduce
+
 Support offline reading from GBase, support GBase real-time interval polling reading
 
 ## 2. Version Support
+
 GBase8a(8.6.2.43)
 
 ## 3. Connector Name
-| Sync | gbasesource、gbasereader |
-| --- | --- |
-| SQL | gbase-x |
 
+| Sync | gbasesource、gbasereader |
+| --- |-------------------------|
+| SQL | gbase-x                 |
 
 ## 4. Parameter description
-### 4.1 Sync
+
+#### 4.1 Sync
+
 - **connection**
-    - Description:param for Database connection,including jdbcUrl、schema、table and so on
-    - Required:required
-    - Type:List
-    - Default:none
+    - Definition: Database connection parameters, including jdbcUrl, schema, table, and so on
+    - Required: true
+    - Type: List
+    - Default: null
       ```json
       "connection": [{
-       "jdbcUrl": ["jdbc:gbase://0.0.0.1:9042/database?useSSL=false"],
-       "table": ["table"],
-       "schema":"public"
+        "jdbcUrl": ["jdbc:gbase://0.0.0.1:9042/database?useSSL=false"],
+        "table": ["table"],
+        "schema":"public"
       }]
       ```
- <br />
+
 
 - **jdbcUrl**
-    - Description：jdbc connection string for relational database
-  - Required: required
-  - Type: string
-  - Default: none
-      <br />
+    - Definition: jdbc connection string for relational database
+    - Required: true
+    - Type: string
+    - Default: null
+
 
 - **schema**
-    - Description:Database schema
-    - Required:optional
-    - Type:string
-    - Default:none
-      <br />
+    - Description: database schema name
+    - Required: Optional
+    - Type: String
+    - Default: (none)
+
 
 - **table**
-    - Description：the table name of the target table. Currently only single table is supported, and multiple tables will be supported in the future
-    - Required:required
-    - Type:List
-    - Default:none
-    <br />
+    - Definition: The name of the table of the destination table.Currently, only a single table is supported, and
+      multiple tables are supported later.
+    - Required: true
+    - Type: List
+    - Default: null
+
 
 - **username**
-    - Description:user name
-    - Required:required
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: username of database
+    - Required: true
+    - Type: String
+    - Default: null
+
 
 - **password**
-    - Description:password
-    - Required:required
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: password of database
+    - Required: true
+    - Type: String
+    - Default: null
+
 
 - **fetchSize**
-    - Description：how many pieces of data are read from the database at one time. By default, all results are read into memory at one time, which may cause OOM when the amount of data is large. Setting this parameter can control the fetchSize pieces of data read each time, instead of the default to read all the data at one time; enabling fetchSize needs to meet: the database version must be higher than 5.0 and the connection parameter useCursorFetch=true.<br/>
-    Attention:The value of this parameter cannot be set too large, otherwise it will read timeout and cause the task to fail.
-    - Required:optional
-    - Type:int
-    - Default:1024
-      <br />
+    - Definition: Read the data size from the database at one time. GBase will read all the results into the memory once
+      by Default. When the amount of data is large, it may cause OOM. Setting this parameter can control the fetchSize
+      data read each time, instead of the Default Read all the data at once; enable fetchSize to meet the following
+      requirements: the database version must be higher than 5.0.2, and the connection parameter useCursorFetch=true.
+      Attention: The value of this parameter cannot be set too large, otherwise the reading will time out and the task
+      will fail.
+    - Required: false
+    - Type: int
+    - Default: 1024
+
 
 - **where**
-    - Description:query condition,readerThe plugin splices SQL according to the specified column, table and where conditions,In the actual business scenario, the data of the current day is often selected for synchronization, and the where condition can be specified as GMT_ create > time.
-    - Attention:The where condition cannot be specified as limit . Limit is not a legal where clause of SQL.
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: Filter conditions, the reader plug-in splices SQL according to the specified column, table, and where
+      conditions, and performs data extraction based on this SQL. In actual business scenarios, the data of the day is
+      often selected for synchronization, and the where condition can be specified as gmt_create> time.
+    - Attention: The where condition cannot be specified as limit 10. Limit is not a legal where clause of SQL.
+    - Required: false
+    - Type: String
+    - Default: null
+
 
 - **splitPk**
-    - Description:When the channel in the speed configuration is greater than 1, this parameter is specified. The reader plug-in splices SQL according to the number of concurrencies and the fields specified by this parameter, so that each concurrency can read different data and improve the reading rate.
+    - Definition: Specifying this parameter when channel in the speed configuration is greater than 1, the Reader
+      plug-in stitches the sql based on the number of concurring and the fields specified by this parameter, allowing
+      each concurrent to read different data and increasing the read rate.
     - Attention:
-        - It is recommended that splitpk use the table primary key, because the table primary key is usually uniform, so the segmented fragments are not prone to data hot spots.
-        - At present, splitpk only supports integer data segmentation and does not support other types such as floating point, string and date. If the user specifies other unsupported types, flinkx will report an error.
-        - If the channel is greater than 1 but this parameter is not configured, the task will be set as failed
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+        - SplitPk is recommended to use the table primary key, because the table primary key is usually more uniform, so
+          the sliced out is not easy to appear data hot spots；
+        - Currently splitPk only supports integer data segmentation, and does not support other types such as floating
+          point, string, and date. If the user specifies other non-supported types, FlinkX will report an error；
+        - If the channel is greater than 1 but this parameter is not configured, the task will be set as failed.
+        - Only numerical values are supported
+    - Required: false
+    - Type: String
+    - Default: null
+
+- **splitStrategy**
+    - Definition：Way to split，this parameter takes effect only when the channel in the speed configuration is greater than 1
+    - Options：
+        - range
+            - Get the difference between the maximum value and the minimum value of splitPk in the table,distribute as evenly as possible among the shards
+                - splitPk=id，maxValue=1，minValue=7，channel=3
+                    - channel-0：id >= 1 and id < 3
+                    - channel-1: id >= 3 and id < 5
+                    - channel-2: id >= 5
+        - mod
+            - Mod splitPk based on the number of fragments
+                - splitPk=id,chaeenl=3
+                    - channel-0：id mod 3 = 0
+                    - channel-1: id mod 3 = 1
+                    - channel-2: id mod 3 = 2
+    - Attention:
+        - Currently, only mods are supported in incremental mode
+    - Required：false
+    - Type：String
+    - Default：
+        - incremental mode:  mod
+        - other:             range
+          <br />
+
 
 - **queryTimeOut**
-    - Description:Query timeout, unit seconds
-    - Attention:When there is a large amount of data, or query from the view, or custom SQL query, you can specify the timeout through this parameter.
-    - Required:optional
-    - Type:int
-    - Default:1000
-      <br />
+    - Definition: Query timeout，Unit: second。
+    - Attention: When the amount of data is large, or when querying from a view, or a custom sql query, you can specify
+      the timeout period through this parameter.
+    - Required: false
+    - Type: int
+    - Default: 1000
+
 
 - **customSql**
-    - Description:For user-defined query statements, if only specified fields cannot meet the requirements, you can specify the SQL of the query through this parameter, which can be any complex query statement.
+    - Definition: For custom query statements, if only the specified fields cannot meet the requirements, you can
+      specify the query sql through this parameter, which can be arbitrarily complex query statements.
     - Attention:
-        - Only query statements can be used, otherwise the task will fail;
+        - It can only be a query statement, otherwise it will cause the task to fail;
         - The fields returned by the query statement need to correspond to the fields in the column list;
-        - When specifying this parameter, column must specify specific field information and cannot be replaced by * sign;
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+        - When this parameter is specified, the table specified in the connection is invalid;
+        - When specifying this parameter, column must specify specific field information, and cannot be replaced by *;
+    - Required: false
+    - Type: String
+    - Default: null
+
 
 - **column**
-    - Description:Fields to read.
-    - Format:Three formats are supported
-      <br />1.Read all fields. If there are many fields, you can use the following writing method:
-  
+    - Definition: Need to read the field.
+    - format: Support 3 formats 1.Read all fields, if there are a lot of fields, you can use the following wording:
+
       ```json
       "column":["*"]
       ```
-      2.Specify only field names:
-  
+      2.Specify only the field name:
+
       ```json
       "column":["id","name"]
       ```
       3.Specify specific information:
-  
+
       ```json
       "column": [{
           "name": "col",
@@ -132,182 +174,209 @@ GBase8a(8.6.2.43)
           "value": "value"
       }]
       ```
-    - Attribute description:
-    - name:Field name
-    - type:Field type,It can be different from the field type in the database. The program will make a type conversion
-    - format:If the field is a time string, you can specify the format of time and convert the field type to date format
-    - value:If the specified field does not exist in the database, the value will be returned as a constant column. If the specified field exists, when the value of the specified field is null, the value will be returned as default
-    - Required:required
-    - Default:none
-        <br />
+    - Property description:
+        - name: the name of the field
+        - type: The field type can be different from the field type in the database, the program will do a type
+          conversion
+        - format: If the field is a time string, you can specify the time format and convert the field type to date
+          format to return
+        - value: If the specified field does not exist in the database, the value of value will be returned as a
+          constant column. If the specified field exists, when the value of the specified field is null, the value will
+          be returned as Default.
+    - Required: true
+    - Default: null
+
 
 - **polling**
-    - Description:Whether to enable interval polling. After it is enabled, data will be periodically pulled from the database according to the pollinginterval polling interval. To enable interval polling, you also need to configure the parameters pollinginterval and increcolumn. You can select the configuration parameter startlocation. If the parameter startlocation is not configured, the maximum value of the increment field will be queried from the database as the starting position of polling when the task is started.
-    - Required:optional
-    - Type:Boolean
-    - Default:false
-      <br />
+    - Definition: Whether to enable interval polling, after enabling it, data will be periodically pulled from the
+      database according to the pollingInterval polling interval. To enable interval polling, you need to configure the
+      parameters pollingInterval and increColumn, and you can choose the configuration parameter startLocation. If the
+      parameter startLocation is not configured, the maximum value of the incremental field will be queried from the
+      database as the starting position of the poll when the task starts.
+    - Required: false
+    - Type: Boolean
+    - Default: false
+
 
 - **pollingInterval**
-    - Description:Polling interval: the interval between pulling data from the database. The default is 5000 milliseconds.
-    - Required:optional
-    - Type:long
-    - Default:5000
-      <br />
+    - Definition: Polling interval, the interval of pulling data from the database, the Default is 5000 milliseconds.
+    - Required: false
+    - Type: long
+    - Default: 5000
+
 
 - **increColumn**
-    - Description:The incremental field can be the corresponding incremental field name or a pure number, indicating the sequential position of the incremental field in the column (starting from 0)
-    - Required:optional
-    - Type:String or int
-    - Default:none
+    - Definition: Incremental field, which can be the corresponding incremental field name, or a pure number, indicating
+      the sequential position of the incremental field in the column (starting from 0)
+    - Required: false
+    - Type: String or int
+    - Default: null
+
+- **orderByColumn**
+  -Definition：Sort field,used to concatenate the ORDER BY statement in the SQL statement
+    - Required：false
+    - Type：String
+    - Attention: Does not take effect in incremental mode,Always use increColumn for ORDER BY in incremental mode
+    - Default：null
       <br />
+
 
 - **startLocation**
-    - Description:Start position of incremental query
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: Incremental query start position
+    - Required: false
+    - Type: String
+    - Default: null
+
 
 - **useMaxFunc**
-    - Description:Used to mark whether to save one or more pieces of data at endlocation. True: do not save, false (default): save. In some cases, the last few pieces of data may be repeatedly recorded. You can configure this parameter to true
-    - Required:optional
-    - Type:Boolean
-    - Default:false
-      <br />
+    - Definition: It is used to mark whether to save one or more pieces of data of the endLocation location, true: do
+      not save, false (Default): save, in some cases the last few data may be recorded repeatedly, this parameter can be
+      configured as true.
+    - Required: false
+    - Type: Boolean
+    - Default: false
+
 
 - **requestAccumulatorInterval**
-    - Description:The interval between sending query accumulator requests
-    - Required:optional
-    - Type:int
-    - Default:2
-      <br />
+    - Definition: The interval between sending the query accumulator request.
+    - Required: false
+    - Type: int
+    - Default: 2
 
-### 2、SQL
+#### 4.2 SQL
+
 - **connector**
-    - Description:gbase-x
-    - Required:required
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: gbase-x
+    - Required: true
+    - Type: String
+    - Default: null
+
 
 - **url**
-    - Description：jdbc:gbase://localhost:9042/test
-    - Required:required
-    - Type:String
-    - Default:none
-        <br />
+    - Definition: jdbc:gbase://localhost:9042/test
+    - Required: true
+    - Type: String
+    - Default: null
 
 - **schema**
-    - Description:Database schema
-    - Required:optional
-    - Type:string
-    - Default:none
-      <br />
+    - Description: database schema name
+    - Required: Optional
+    - Type: String
+    - Default: (none)
+
 
 - **table-name**
-    - Description:table name
-    - Required:required
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: table-name
+    - Required: true
+    - Type: String
+    - Default: null:
+
 
 - **username**
-    - Description:username
-    - Required:required
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: username
+    - Required: true
+    - Type: String
+    - Default: null
+
 
 - **password**
-    - Description:password
-    - Required:required
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: password
+    - Required: true
+    - Type: String
+    - Default: null
+
 
 - **scan.polling-interval**
-    - Description:Interval rotation training time. It is not required (it is not filled in as an offline task).
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: Interval training time.Optional(Leave blank as patch task)，Default value is null.
+    - Required: false
+    - Type: String
+    - Default: null
+
 
 - **scan.parallelism**
-    - Description:parallelism,Interval polling does not currently support multiple degrees of parallelism
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: Parallelism
+    - Required: false
+    - Type: String
+    - Default: null
+
 
 - **scan.fetch-size**
-    - Description:Size of each fetch from the database.Unit : piece.
-    - Required:optional
-    - Type:String
-    - Default:1024
-      <br />
+    - Definition: Each fetch size from the database.Unit: Piece
+    - Required: false
+    - Type: String
+    - Default: 1024
+
 
 - **scan.query-timeout**
-    - Description: Database connection timeout, unit: seconds.
-    - Required:optional
-    - Type:String
-    - Default:1
-      <br />
+    - Definition: Database connection timeout time, unit: second.
+    - Required: false
+    - Type: String
+    - Default: 1
+
 
 - **scan.partition.column**
-    - Description: The segmentation field read with multiple parallelisms must be set under multiple parallelisms. Interval polling does not support multiple parallelisms.
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: The segmentation field used when multiple parallelism is enabled to read data
+    - Required: false
+    - Type: String
+    - Default: null
+
 
 - **scan.partition.strategy**
-    - Description:Data fragmentation strategy
-    - Required:optional
-    - Type:String
-    - Default:range
-      <br />
+    - Definition: Data fragmentation strategy
+    - Required: false
+    - Type: String
+    - Default: range
+
 
 - **scan.increment.column**
-    - Description:Incremental field name,if this field is configured, the current parallelism can only be 1. Not required, no default.
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: Increment field name
+    - Required: false
+    - Type: String
+    - Default: null
+
 
 - **scan.increment.column-type**
-    - Description:Incremental field type,not required, no default.
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: Incremental field type
+    - Required: false
+    - Type: String
+    - Default: null
+
+- **scan.order-by.column**
+  -Definition：Sort field,used to concatenate the ORDER BY statement in the SQL statement
+    - Required：false
+    - Type：String
+    - Attention: Does not take effect in incremental mode,Always use increColumn for ORDER BY in incremental mode
+    - Default：null
 
 - **scan.start-location**
-    - Description:The start position of the increment field. If it is not specified, all are synchronized first, and then in the increment field.Not required, no default.
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: The start position of the increment field, if not specified, all will be synchronized first, and then
+      in the increment
+    - Required: false
+    - Type: String
+    - Default: null
+
 
 - **scan.restore.columnname**
-    - Description:When CP is enabled, the task starts from the SP / CP continuation field name. If you continue, the start position of scan.start-location will be overwritten, starting from the continuation point.Not required, no default.
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: When check-point is turned on, the task continues with the field name of save-point/check-point. If
+      you continue to run, it will overwrite the start position of scan.start-location, starting from the point where
+      you continue to run.
+    - Required: false
+    - Type: String
+    - Default: null
+
 
 - **scan.restore.columntype**
-    - Description:When CP is enabled,Task continuation field type from SP / CP
-    - Required:optional
-    - Type:String
-    - Default:none
-      <br />
+    - Definition: When check-point is turned on, the task continues from save-point/check-point field type
+    - Required: false
+    - Type: String
+    - Default: null
 
-## 5、Supported data type
-| Whether to support | Data Type |
-|--------------------| --- |
-| Supported | BOOLEAN、TINYINT、SMALLINT、INT、BIGINT、FLOAT、DOUBLE、DECIMAL、STRING、VARCHAR、CHAR、TIMESTAMP、DATE、BINARY |
-| Unsupported | ARRAY、MAP、STRUCT、UNION |
+## 5. Data Type
+
+| Whether to support | Data Type                                                                                                                                                                                                                                                                                                                                                |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Supported          | BIT、TINYINT、SMALLINT、MEDIUMINT、INT、INTEGER、INT24、SERIAL、BIGINT、INT8、BIGSERIAL、SERIAL8、REAL、FLOAT、SMALLFLOAT、DECIMAL、NUMERIC、DOUBLE、DEC、MONEY、DOUBLE、PRECISION 、STRING、VARCHAR、CHAR、CHARACTER、VARYING、NCHAR、TIMESTAMP、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
+| Unsupported        | ARRAY、MAP、STRUCT、UNION etc.                                                                                                                                                                                                                                                                                                                              |
 
 ## 6. Example
 

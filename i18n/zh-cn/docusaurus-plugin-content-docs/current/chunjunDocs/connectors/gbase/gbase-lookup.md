@@ -2,7 +2,7 @@
 
 ## 一、介绍
 GBase维表，支持全量和异步方式<br />
-全量缓存:将维表数据全部加载到内存中，建议数据量不大，且数据不经常变动的场景使用。<br />
+全量缓存:将维表数据全部加载到内存中，建议数据量大不使用。<br />
 异步缓存:使用异步方式查询数据，并将查询到的数据使用lru缓存到内存中，建议数据量大使用。
 
 ## 二、支持版本
@@ -11,28 +11,28 @@ GBase8a(8.6.2.43)
 
 ## 三、插件名称
 | SQL | gbase-x |
-| --- | --- |
+| --- |---------|
 
 ## 四、参数说明
 - **connector**
-  - 描述：gbase-x
+  - 描述：GBase-x
   - 必选：是
   - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **url**
-  - 描述：jdbc:gbase://localhost:9042/test
+  - 描述：jdbc:gbase://0.0.0.1:9042/database?useSSL=false
   - 必选：是
   - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **schema**
-  - 描述：GBase 数据库
+  - 描述：数据库schema名
   - 必选：否
-  - 参数类型：String
-  - 默认值：
+  - 参数类型：string
+  - 默认值：无
     <br />
 
 - **table-name**
@@ -40,69 +40,83 @@ GBase8a(8.6.2.43)
   - 必选：是
   - 参数类型：String
   - 默认值：无：
-<br />
+    <br />
 
 - **username**
   - 描述：username
   - 必选：是
   - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **password**
   - 描述：password
   - 必选：是
   - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **lookup.cache-type**
   - 描述：维表缓存类型(NONE、LRU、ALL)，默认LRU
   - 必选：否
   - 参数类型：string
   - 默认值：LRU
-<br />
+    <br />
+
+- **vertx.worker-pool-size**
+  - 描述：LRU缓存的线程池大小
+  - 必选：否
+  - 参数类型：Integer
+  - 默认值：5
+    <br />
 
 - **lookup.cache-period**
   - 描述：ALL维表每隔多久加载一次数据，默认3600000毫秒(一个小时)
   - 必选：否
   - 参数类型：string
   - 默认值：3600000
-<br />
+    <br />
 
 - **lookup.cache.max-rows**
   - 描述：lru维表缓存数据的条数，默认10000条
   - 必选：否
   - 参数类型：string
   - 默认值：10000
-<br />
+    <br />
+
+- **lookup.max-retries**
+  - 描述：查找数据库失败时的最大重试次数
+  - 必选：否
+  - 参数类型：Integer
+  - 默认值：3
+    <br />
 
 - **lookup.cache.ttl**
   - 描述：lru维表缓存数据的时间，默认60000毫秒(一分钟)
   - 必选：否
   - 参数类型：string
   - 默认值：60000
-<br />
+    <br />
 
 - **lookup.fetch-size**
   - 描述：ALL维表每次从数据库加载的条数，默认1000条
   - 必选：否
   - 参数类型：string
   - 默认值：1000
-<br />
+    <br />
 
 - **lookup.parallelism**
   - 描述：维表并行度
   - 必选：否
   - 参数类型：string
   - 默认值：无
-<br />
+    <br />
 
 ## 五、数据类型
-| 是否支持 | 数据类型 |
-| --- | --- |
-| 支持 | BOOLEAN、TINYINT、SMALLINT、INT、BIGINT、FLOAT、DOUBLE、DECIMAL、STRING、VARCHAR、CHAR、TIMESTAMP、DATE、BINARY |
-| 暂不支持 | ARRAY、MAP、STRUCT、UNION |
+| 是否支持 |                                                                                                                                                                                                                     类型名称                                                                                                                                                                                                                     |
+| :------: |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  支持  | BIT、TINYINT、SMALLINT、MEDIUMINT、INT、INTEGER、INT24、SERIAL、BIGINT、INT8、BIGSERIAL、SERIAL8、REAL、FLOAT、SMALLFLOAT、DECIMAL、NUMERIC、DOUBLE、DEC、MONEY、DOUBLE、PRECISION 、STRING、VARCHAR、CHAR、CHARACTER、VARYING、NCHAR、TIMESTAMP、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
+|  不支持  |                                                                                                                                                                                                           ARRAY、MAP、STRUCT、UNION 等                                                                                                                                                                                                           |
 
 
 ## 六、脚本示例

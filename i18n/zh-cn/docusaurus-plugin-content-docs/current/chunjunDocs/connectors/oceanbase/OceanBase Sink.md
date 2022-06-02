@@ -1,18 +1,18 @@
-# KingBase Sink
+# OceanBase Sink
 
 ## 一、介绍
 
-KingBase sink
+OceanBase sink
 
 ## 二、支持版本
 
-KingBase v8
+OceanBase3.1.x
 
 ## 三、插件名称
 
-| Sync | kingbasesink、kingbasewriter |
-| ---- |-----------------------------|
-| SQL  | kingbase-x                  |
+| Sync | oceanbasesink、oceanbasewriter |
+| ---- |-------------------------------|
+| SQL  | oceanbase-x                   |
 
 ## 四、参数说明
 
@@ -25,9 +25,8 @@ KingBase v8
   - 默认值：无
     ```text
     "connection": [{
-     "jdbcUrl": ["jdbc:kingbase8://localhost:54321/MOWEN"],
-     "table": ["table"],
-     "schema":"public"
+     "jdbcUrl": ["jdbc:oceanbase://hostname:port/test"],
+     "table": ["table"]
     }]
     ```
     <br />
@@ -39,14 +38,7 @@ KingBase v8
   - 参数类型：string
   - 默认值：无
     <br />
-
-- **schema**
-
-  - 描述：数据库 schema 名
-  - 必选：否
-  - 参数类型：string
-  - 默认值：无
-    <br />
+  
 
 - **table**
 
@@ -58,7 +50,7 @@ KingBase v8
 
 - **username**
 
-  - 描述：数据源的用户名
+  - 描述：数据源的用户名，指定租户连接可在用户名后加上租户名称，例如"root@test"。目前只支持Mysql租户
   - 必选：是
   - 参数类型：String
   - 默认值：无
@@ -157,7 +149,7 @@ KingBase v8
 
 - **connector**
 
-  - 描述：kingbase-x
+  - 描述：oceanbase-x
   - 必选：是
   - 参数类型：String
   - 默认值：无
@@ -165,19 +157,12 @@ KingBase v8
 
 - **url**
 
-  - 描述：jdbc:kingbase8://localhost:54321/MOWEN
+  - 描述：jdbc:oceanbase://hostname:port/database
   - 必选：是
   - 参数类型：String
   - 默认值：无
     <br />
-
-- **schema**
-
-  - 描述：数据库 schema 名
-  - 必选：否
-  - 参数类型：string
-  - 默认值：无
-    <br />
+  
 
 - **table-name**
 
@@ -189,7 +174,7 @@ KingBase v8
 
 - **username**
 
-  - 描述：username
+  - 描述：数据源的用户名，指定租户连接可在用户名后加上租户名称，例如"root@test"。目前只支持Mysql租户
   - 必选：是
   - 参数类型：String
   - 默认值：无
@@ -248,10 +233,21 @@ KingBase v8
 
 ## 五、数据类型
 
-| 是否支持 |                                                                                                                                                                                                                     类型名称                                                                                                                                                                                                                     |
-| :------: |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-|  支持  | BBIT、TINYINT、SMALLINT、INT、INT2、INT4、INTEGER、INT8、BIGINT、FLOAT4、REAL、DECIMAL、NUMERIC、DOUBLE、DOUBLE PRECISION、FLOAT8、BPCHAR、CHAR、VARCHAR、DATE、TIME、TIMESTAMP、BLOB、JSONB、TEXT、JSON |
-|  不支持  |                                                                                                                                                                                                           ARRAY、MAP、STRUCT、UNION 等                                                                                                                                                                                                           |
+| OceanBase Data Type                                          | Flink Data Type | Description                                                  |
+| ------------------------------------------------------------ | --------------- | ------------------------------------------------------------ |
+| BOOLEAN                                                      | BOOLEAN         |                                                              |
+| TINYINT                                                      | TINYINT         |                                                              |
+| SMALLINT                                                     | SMALLINT        |                                                              |
+| MEDIUMINT<br>INT<br>INTEGER                                  | INT             |                                                              |
+| BIGINT                                                       | BIGINT          |                                                              |
+| FLOAT                                                        | FLOAT           |                                                              |
+| DOUBLE                                                       | DOUBLE          |                                                              |
+| DECIMAL(p,s)<br>NUMERIC(p,s)                                 | DECIMAL(p,s)    | support maximum precision DECIMAL(38,18)                     |
+| TIME                                                         | TIME            |                                                              |
+| DATE                                                         | DATE            |                                                              |
+| TIMESTAMP<br>DATETIME                                        | TIMESTAMP       |                                                              |
+| BIT<br>BINARY<br>VARBINARY<br>TINYBLOB<br>BLOB<br>MEDIUMBLOB<br>LONGBLOB | BYTES           | SQL job type currently does not support bit type length of 1, because the database will be converted to Boolean, it is recommended to directly set the database field to boolean |
+| CHAR<br/>VARCHAR<br/>TINYTEXT<br/>MEDIUMTEXT<br/>LONGTEXT<br/>ENUM<br/>SET | STRING          |                                                              |
 
 ## 六、脚本示例
 

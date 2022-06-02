@@ -1,224 +1,256 @@
 # KingBase Sink
 
-## 1、Introduce
+## 1. Introduce
+
 KingBase Sink supports writing data to the database specified by Kingbase.
 
-## 2、Version Support
+## 2. Version Support
+
 KingBase v8
 
+## 3. Connector Name
 
-## 3、Connector name
-| Type | Name |
-| --- | --- |
-| Sync | gbasesink、gbasewriter |
-| SQL | gbase-x |
+| Sync | kingbasesink, kingbasewriter |
+| --- |------------------------------|
+| SQL | kingbase-x                   |
 
+## 4. Parameter description
 
-## 4、Parameter description
-### 1、Sync
+#### 4.1 Sync
+
 - **connection**
-  - Description:param for Database connection,including jdbcUrl、schema、table and so on
-  - Required:required
-  - Type:List
-  - Default:none
-    ```json
-       "connection": [{
-          "jdbcUrl":["jdbc:kingbase8://localhost:54321/MOWEN"],
-          "table": ["table"],
-          "schema":"public"
+  - Description:Database connection parameters, including JDBC URL, schema, table and other parameters connection
+  - Required: Optional
+  - Type: List
+  - Default: (none)
+  - Example:
+  ```json
+      "connection": [{
+      "jdbcUrl": ["jdbc:kingbase8://localhost:54321/MOWEN"],
+      "table": ["table"],
+      "schema":"public"
       }]
     ```
- <br />
+
 
 - **jdbcUrl**
-  - Description：jdbc connection string for relational database,jdbcUrl reference：[Kingbase](https://help.kingbase.com.cn/login#id0)
-  - Required: required
-  - Type: string
-  - Default: none
-      <br />
+  - Description: JDBC connection string for relational database.
+  - Required: Optional
+  - Type: String
+  - Default: (none)
+
 
 - **schema**
-  - Description:Database schema
-  - Required:optional
-  - Type:string
-  - Default:none
-      <br />
+  - Description: database schema name
+  - Required: Optional
+  - Type: String
+  - Default: (none)
+
 
 - **table**
-  - Description：The table name of the target table. Currently only single table is supported, and multiple tables will be supported in the future
-  - Required:required
-  - Type:List
-  - Default:none
-    <br />
+  - Description: the table name of the destination table. Currently, only supports the configuration of a single
+    table, and will support multiple tables in the future.
+  - Required: Optional
+  - Type: List
+  - Default: (none)
+
 
 - **username**
-  - Description:user name
-  - Required:required
-  - Type:String
-  - Default:none
-    <br />
+  - Description: the username of the data source
+  - Required: Optional
+  - Type: String
+  - Default: (none)
+
 
 - **password**
-  - Description:password
-  - Required:required
-  - Type:String
-  - Default:none
-      <br />
+  - Description: The password for the specified username of the data source
+  - Required: Optional
+  - Type: String
+  - Default: (none)
+
 
 - **column**
-    - Description：The fields that the destination table needs to write data into, and the fields are separated by commas.for example: "column": ["id","name","age"]
-  - Required:required
-  - Type:List
-  - Default:none
-      <br />
+  - Description: The fields in the destination table that need to write data are separated by commas.
+  - Required: Optional
+  - Type: String
+  - Default: (none)
+  - Example:
+      ```json 
+      "column": ["id","name","age"]
+      ```
 
-- **fullcolumn**
-    - Description:All fields in the destination table ,which is separated by English commas.for example: "column": ["id","name","age","hobby"],if not configured, it will be obtained in the system table
-    - Required:optional
-    - Type:List
-    - Default:none
-      <br />
+- **fullColumn**
+  - Definition: All fields in the destination table are separated by commas，if not configured, it will be obtained in
+    the system table
+  - Required: Optional
+  - Type: List
+  - Default: (none)
+  - Example:
+      ```json 
+      "column": ["id","name","age"]
+      ```
+
 
 - **preSql**
-  - Description:the sql executed  before writing data into the destination table
-  - Required:optional
-  - Type:List
-  - Default:none
-      <br />
+  - Definition: Before writing data to the destination table, a set of standard statements here will be executed
+    first.
+  - Required: Optional
+  - Type: List
+  - Default: (none)
+
 
 - **postSql**
-  - Description:the sql executed  after writing data into the destination table
-  - Required:optional
-  - Type:List
-  - Default:none
-      <br />
+  - Definition: After writing data to the destination table, a set of standard statements here will be executed.
+  - Required: Optional
+  - Type: List
+  - Default: (none)
+
 
 - **writeMode**
-    - Description：Controls writing data to the target table using insert into or replace into or ON DUPLICATE KEY UPDATE 
-  - Required:required
-  - All options:insert/replace/update
-  - Type:String
-  - Default:insert
-      <br />
+  - Definition: Use insert into or replace into or ON DUPLICATE KEY UPDATE statement to control writing data to the
+    target table.
+  - Required: Required
+  - options: insert/replace/update
+  - Type: String
+  - Default: insert
 
-- **batchSize**
-  - Description:The number of records submitted in batch at one time. This value can greatly reduce the number of network interactions between flinkx and the database and improve the overall throughput,Setting this value too large may cause the flinkx process to run oom
-  - Required:optional
-  - Type:int
-  - Default:1024
-      <br />
+- **allReplace**
 
-- **updateKey**
-  - Description:When the write mode is update, you need to specify the value of this parameter as the unique index field
-  - attention:
-    - If this parameter is empty and the write mode is update, the application will automatically obtain the unique index in the database;
-    - If the data table does not have a unique index, but the required write mode is configured as update and, the application will write data in the way of insert;
-  - Required:optional
-  - Type:Map<String,List>
-    - for example:"updateKey": {"key": ["id"]}
-  - Default:none
-      <br />
-      
-- **semantic**
-  - Description:sink operator support phase two commit
-  - attention:
-    -If this parameter is blank, phase two commit is not enabled by default,which means sink operators do not support exactly-once semantics
-    -Currently only supported exactly-once and at-least-once
-  - Required:optional
-  - Type:String
-    - for example:"semantic": "exactly-once"
-  - Default:at-least-once
-<br />
-
-### 2、SQL
-- **connector**
-  - Description:kingbase-x
-  - Required:required
-  - Type:String
-  - Default:none
-      <br />
-
-- **url**
-    - Description：jdbc:kingbase8://localhost:54321/MOWEN
-  - Required:required
-  - Type:String
-  - Default:none
-      <br />
-
-- **schema**
-  - Description:Database schema
-  - Required:optional
-  - Type:string
-  - Default:none
+  - Definition: When writeMode is set to upsert, whether the null value overwrites the original value
+    - true：ON DUPLICATE KEY UPDATE column=VALUES(column)
+    - false：ON DUPLICATE KEY UPDATE column=IFNULL(VALUES(column),column)
+  - Required：false
+  - Type：String
+  - Default：true
     <br />
 
+- **batchSize**
+  - Definition: The size of the number of records submitted in batches at one time. This value can greatly reduce the
+    number of network interactions between FlinkX and the database and improve the overall throughput. However,
+    setting this value too large may cause the OOM situation of FlinkX running process.
+  - Required: Optional
+  - Type: int
+  - Default: 1024
+
+
+- **updateKey**
+  - Definition: When the write mode is update and replace, you need to specify the value of this parameter as a unique
+    index field
+  - Attention:
+    - If this parameter is empty and the write mode is update and replace, the application will automatically obtain
+      the unique index in the database;
+    - If the data table does not have a unique index, but the write mode is configured as update and replace, the
+      application will write the data in insert;
+  - Required: Optional
+  - Type: Map<String, List>
+    - eg."updateKey": {"key": ["id"]}
+  - Default: (none)
+
+
+- **semantic**
+  - Definition: Whether to enable two-phase commit on the sink side
+  - Attention:
+    - If this parameter is empty, two-phase commit is not enabled by Default, that is, the sink side does not
+      support exactly_once semantics;
+    - Currently, only supports exactly-once and at-least-once
+  - Required: Optional
+  - Type: String
+  - Default: at-least-once
+  - Example:
+    ```json 
+    "semantic": "exactly-once"
+    ```
+
+### 2、SQL
+
+- **connector**
+  - Definition: kingbase-x
+  - Required: Required
+  - Type: String
+  - Default: (none)
+
+
+- **url**
+  - Definition: jdbc:kingbase8://localhost:54321/MOWEN
+  - Required: Required
+  - Type: String
+  - Default: (none)
+
+- **schema**
+  - Description: database schema name
+  - Required: Optional
+  - Type: String
+  - Default: (none)
+
+
 - **table-name**
-  - Description: table name
-  - Required:required
-  - Type:String
-  - Default:none
-      <br />
+  - Definition: the name of table
+  - Required: Required
+  - Type: String
+  - Default: (none):
+
 
 - **username**
-  - Description:username
-  - Required:required
-  - Type:String
-  - Default:none
-      <br />
+  - Definition: username
+  - Required: Required
+  - Type: String
+  - Default: (none)
+
 
 - **password**
-  - Description:password
-  - Required:required
-  - Type:String
-  - Default:none
-      <br />
+  - Definition: password
+  - Required: Required
+  - Type: String
+  - Default: (none)
+
 
 - **sink.buffer-flush.max-rows**
-  - Description:Number of data pieces written in batch,Unit:piece.
-  - Required:optional
-  - Type:String
-  - Default:1024
-      <br />
+  - Definition: Number of batch write data，Unit: Piece
+  - Required: Optional
+  - Type: String
+  - Default: 1024
+
 
 - **sink.buffer-flush.interval**
-  - Description:Batch write interval,Unit: ms
-  - Required:optional
-  - Type:String
-  - Default:10000
-      <br />
+  - Definition: Batch write interval，Unit: milliseconds
+  - Required: Optional
+  - Type: String
+  - Default: 10000
+
 
 - **sink.all-replace**
-    - Description：whether to replace all data in the database(If the original value in the database is not null, the new value is null, if it is true, it will be replaced with null)
-  - Required:optional
-  - Type:String
-  - Default:false
-      <br />
+  - Definition: Whether to replace all the data in the database (if the original value in the database is not null,
+    the new value is null, if it is Required, it will be replaced with null)
+  - Required: Optional
+  - Type: String
+  - Default: Optional
+
 
 - **sink.parallelism**
-  - Description:the parallelism of sink operator
-  - Required:optional
-  - Type:String
-  - Default:none
-      <br />
-      
+  - Definition: Parallelism of writing results
+  - Required: Optional
+  - Type: String
+  - Default: (none)
+
+
 - **sink.semantic**
-  - Description:sink operator support phase two commit
-  - attention:
-    -If this parameter is blank, phase two commit is not enabled by default,which means sink operators do not support exactly-once semantics;
-    -Currently only supported exactly-once and at-least-once
-  - Required:optional
-  - Type:String
-    - for example:"semantic": "exactly-once"
-  - Default:at-least-once
-<br />
-      
+  - Definition: Whether to enable two-phase commit on the sink side
+  - Attention:
+    - If this parameter is empty, two-phase commit is not enabled by Default, that is, the sink side does not
+      support exactly_once semantics；
+    - Currently, only supports exactly-once and at-least-once
+  - Required: Optional
+  - Type: String
+    - eg."semantic": "exactly-once"
+  - Default: at-least-once
 
-
-## 五、数据类型
-| Whether to support | Data Type                                                                                                                                                                                                                                                   |
-|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Supported          | SMALLINT、SMALLSERIAL、INT2、INT、INTEGER、SERIAL、INT4、BIGINT、BIGSERIAL、OID、INT8、REAL、FLOAT4、FLOAT、DOUBLE PRECISION、FLOAT8、DECIMAL、NUMERIC、 CHARACTER VARYING、VARCHAR、CHARACTER、CHAR、TEXT、NAME、BPCHAR、BYTEA、TIMESTAMP、TIMESTAMPTZ、DATE、TIME、TIMETZ、 BOOLEAN、BOOL |
-| Unsupported        | ARRAY etc.                                                                                                                                                                                                                                                  |
+## 5. Data Type
+| Whether to support | Data Type                                                                                                                                                                      |
+|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Supported          | BIT、TINYINT、SMALLINT、INT、INT2、INT4、INTEGER、INT8、BIGINT、FLOAT4、REAL、DECIMAL、NUMERIC、DOUBLE、DOUBLE PRECISION、FLOAT8、BPCHAR、CHAR、VARCHAR、DATE、TIME、TIMESTAMP、BLOB、JSONB、TEXT、JSON |
+| Unsupported        | ARRAY、MAP、STRUCT、UNION etc.                                                                                                                                                    |
 
 ## 6. Example
+
 The details are in flinkx-examples dir.
+

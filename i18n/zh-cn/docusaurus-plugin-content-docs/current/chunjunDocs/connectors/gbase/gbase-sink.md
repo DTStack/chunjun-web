@@ -1,222 +1,258 @@
 # GBase Sink
 
 ## 一、介绍
+
 GBase sink
 
 ## 二、支持版本
+
 GBase8a(8.6.2.43)
 
-
 ## 三、插件名称
-| Sync | gbasesink、gbasewriter |
-| --- | --- |
-| SQL | gbase-x |
 
+| Sync | gbasesink、gbasewriter |
+| ---- |-----------------------|
+| SQL  | gbase-x               |
 
 ## 四、参数说明
+
 ### 1、Sync
+
 - **connection**
-  - 描述：数据库连接参数，包含jdbcUrl、schema、table等参数
+  - 描述：数据库连接参数，包含 jdbcUrl、schema、table 等参数
   - 必选：是
   - 参数类型：List
   - 默认值：无
-    ```json
+    ```text
     "connection": [{
      "jdbcUrl": ["jdbc:gbase://0.0.0.1:9042/database?useSSL=false"],
      "table": ["table"],
-     "schema":"test"
+     "schema":"public"
     }]
     ```
- <br />
-    
+    <br />
+
 - **jdbcUrl**
-  - 描述：针对关系型数据库的jdbc连接字符串
+
+  - 描述：针对关系型数据库的 jdbc 连接字符串
   - 必选：是
   - 参数类型：string
   - 默认值：无
-<br />
+    <br />
 
 - **schema**
-  - 描述：GBase 数据库
+
+  - 描述：数据库 schema 名
   - 必选：否
-  - 参数类型：String
+  - 参数类型：string
   - 默认值：无
     <br />
 
 - **table**
+
   - 描述：目的表的表名称。目前只支持配置单个表，后续会支持多表
   - 必选：是
   - 参数类型：List
   - 默认值：无
-<br />
+    <br />
 
 - **username**
+
   - 描述：数据源的用户名
   - 必选：是
   - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **password**
+
   - 描述：数据源指定用户名的密码
   - 必选：是
   - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **column**
-  - 描述：目的表需要写入数据的字段,字段之间用英文逗号分隔。例如: "column": ["id","name","age"] 
+
+  - 描述：目的表需要写入数据的字段。例如: "column": [{"name":"id",type:"varchar"}]
   - 必选：是
   - 参数类型：List
   - 默认值：无
-<br />
+    <br />
 
-- **fullcolumn**
-  - 描述：目的表中的所有字段，字段之间用英文逗号分隔。例如: "column": ["id","name","age","hobby"]，如果不配置，将在系统表中获取 
+- **fullColumn**
+
+  - 描述：目的表中的所有字段，字段之间用英文逗号分隔。例如: "column": ["id","name","age","hobby"]，如果不配置，将在系统表中获取
   - 必选：否
   - 参数类型：List
   - 默认值：无
-<br />
+    <br />
 
 - **preSql**
-  - 描述：写入数据到目的表前，会先执行这里的一组标准语句 
+
+  - 描述：写入数据到目的表前，会先执行这里的一组标准语句
   - 必选：否
   - 参数类型：List
   - 默认值：无
-<br />
+    <br />
 
 - **postSql**
-  - 描述：写入数据到目的表后，会执行这里的一组标准语句 
+
+  - 描述：写入数据到目的表后，会执行这里的一组标准语句
   - 必选：否
   - 参数类型：List
   - 默认值：无
-<br />
+    <br />
 
 - **writeMode**
-  - 描述：控制写入数据到目标表采用 insert into 或者 replace into 或者 ON DUPLICATE KEY UPDATE 语句 
+
+  - 描述：控制写入数据到目标表采用 insert into 或者 replace into 或者 ON DUPLICATE KEY UPDATE 语句
   - 必选：是
   - 所有选项：insert/replace/update
   - 参数类型：String
   - 默认值：insert
-<br />
+    <br />
+
+- **allReplace**
+  - 描述: writeMode=upsert时，为null的值是否覆盖原有值
+    - true：ON DUPLICATE KEY UPDATE column=VALUES(column)
+    - false：ON DUPLICATE KEY UPDATE column=IFNULL(VALUES(column),column)
+  - 必选：否
+  - 参数类型：String
+  - 默认值：true
+    <br />
 
 - **batchSize**
-  - 描述：一次性批量提交的记录数大小，该值可以极大减少FlinkX与数据库的网络交互次数，并提升整体吞吐量。但是该值设置过大可能会造成FlinkX运行进程OOM情况
+
+  - 描述：一次性批量提交的记录数大小，该值可以极大减少 FlinkX 与数据库的网络交互次数，并提升整体吞吐量。但是该值设置过大可能会造成 FlinkX 运行进程 OOM 情况
   - 必选：否
   - 参数类型：int
-  - 默认值：1024
-<br />
+  - 默认值：1
+    <br />
 
 - **updateKey**
-  - 描述：当写入模式为update和replace时，需要指定此参数的值为唯一索引字段
+
+  - 描述：当写入模式为 update 和 replace 时，需要指定此参数的值为唯一索引字段
   - 注意：
-    - 如果此参数为空，并且写入模式为update和replace时，应用会自动获取数据库中的唯一索引；
-    - 如果数据表没有唯一索引，但是写入模式配置为update和replace，应用会以insert的方式写入数据； 
+    - 如果此参数为空，并且写入模式为 update 和 replace 时，应用会自动获取数据库中的唯一索引；
+    - 如果数据表没有唯一索引，但是写入模式配置为 update 和 replace，应用会以 insert 的方式写入数据；
   - 必选：否
-  - 参数类型：Map<String,List>
-    - 示例："updateKey": {"key": ["id"]}
+  - 参数类型：List< String >
+    - 示例："updateKey": ["id"]
   - 默认值：无
-<br />
+    <br />
 
 - **semantic**
-  - 描述：sink端是否支持二阶段提交
+  - 描述：sink 端是否支持二阶段提交
   - 注意：
-    - 如果此参数为空，默认不开启二阶段提交，即sink端不支持exactly_once语义；
-    - 当前只支持exactly-once 和at-least-once 
+    - 如果此参数为空，默认不开启二阶段提交，即 sink 端不支持 exactly_once 语义；
+    - 当前只支持 exactly-once 和 at-least-once
   - 必选：否
   - 参数类型：String
     - 示例："semantic": "exactly-once"
   - 默认值：at-least-once
-<br />
+    <br />
 
 ### 2、SQL
+
 - **connector**
-  - 描述：gbase-x
+
+  - 描述：GBase-x
   - 必选：是
-  - 参数类型：String 
+  - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **url**
-  - 描述：jdbc:gbase://localhost:9042/test
+
+  - 描述：jdbc:gbase://0.0.0.1:9042/database?useSSL=false
   - 必选：是
-  - 参数类型：String 
+  - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **schema**
-  - 描述：GBase 数据库
+
+  - 描述：数据库 schema 名
   - 必选：否
-  - 参数类型：String
-  - 默认值：
+  - 参数类型：string
+  - 默认值：无
     <br />
 
 - **table-name**
+
   - 描述：表名
   - 必选：是
-  - 参数类型：String 
+  - 参数类型：String
   - 默认值：无：
-<br />
+    <br />
 
 - **username**
+
   - 描述：username
   - 必选：是
-  - 参数类型：String 
+  - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **password**
+
   - 描述：password
   - 必选：是
-  - 参数类型：String 
+  - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **sink.buffer-flush.max-rows**
+
   - 描述：批量写数据条数，单位：条
   - 必选：否
   - 参数类型：String
   - 默认值：1024
-<br />
+    <br />
 
 - **sink.buffer-flush.interval**
+
   - 描述：批量写时间间隔，单位：毫秒
   - 必选：否
   - 参数类型：String
   - 默认值：10000
-<br />
+    <br />
 
 - **sink.all-replace**
-  - 描述：是否全部替换数据库中的数据(如果数据库中原值不为null,新值为null,如果为true则会替换为null) 
+
+  - 描述：是否全部替换数据库中的数据(如果数据库中原值不为 null,新值为 null,如果为 true 则会替换为 null)
   - 必选：否
   - 参数类型：String
   - 默认值：false
-<br />
+    <br />
 
 - **sink.parallelism**
-  - 描述：写入结果的并行度 
+
+  - 描述：写入结果的并行度
   - 必选：否
   - 参数类型：String
   - 默认值：无
-<br />
+    <br />
 
 - **sink.semantic**
-  - 描述：sink端是否支持二阶段提交
+  - 描述：sink 端是否支持二阶段提交
   - 注意：
-    - 如果此参数为空，默认不开启二阶段提交，即sink端不支持exactly_once语义；
-    - 当前只支持exactly-once 和at-least-once 
+    - 如果此参数为空，默认不开启二阶段提交，即 sink 端不支持 exactly_once 语义；
+    - 当前只支持 exactly-once 和 at-least-once
   - 必选：否
   - 参数类型：String
     - 示例："semantic": "exactly-once"
   - 默认值：at-least-once
-<br />
+    <br />
 
 ## 五、数据类型
-| 是否支持 | 数据类型 |
-| --- | --- |
-| 支持 | BOOLEAN、TINYINT、SMALLINT、INT、BIGINT、FLOAT、DOUBLE、DECIMAL、STRING、VARCHAR、CHAR、TIMESTAMP、DATE、BINARY |
-| 不支持 | ARRAY、MAP、STRUCT、UNION |
 
+| 是否支持 |                                                                                                                                                                                                                     类型名称                                                                                                                                                                                                                     |
+| :------: |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  支持  | BIT、TINYINT、SMALLINT、MEDIUMINT、INT、INTEGER、INT24、SERIAL、BIGINT、INT8、BIGSERIAL、SERIAL8、REAL、FLOAT、SMALLFLOAT、DECIMAL、NUMERIC、DOUBLE、DEC、MONEY、DOUBLE、PRECISION 、STRING、VARCHAR、CHAR、CHARACTER、VARYING、NCHAR、TIMESTAMP、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
+|  不支持  |                                                                                                                                                                                                           ARRAY、MAP、STRUCT、UNION 等                                                                                                                                                                                                           |
 
 ## 六、脚本示例
+
 见项目内`flinkx-examples`文件夹。

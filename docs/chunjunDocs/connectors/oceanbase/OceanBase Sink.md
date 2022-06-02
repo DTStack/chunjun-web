@@ -1,40 +1,40 @@
-# GBase Sink
+# OceanBase Sink
 
 ## 1. Introduce
 
-GBase Sink
+OceanBase Sink
 
 ## 2. Version Support
 
-GBase8a(8.6.2.43)
+oceanbase3.1.x
 
 ## 3. Connector Name
 
-| Sync | gbasesink, gbasewriter |
-| --- | --- |
-| SQL | gbase-x |
+| Sync | oceanbasesink, oceanbasewriter |
+| --- |--------------------------------|
+| SQL | oceanbase-x                    |
 
 ## 4. Parameter description
 
 #### 4.1 Sync
 
 - **connection**
-  - Description:Database connection parameters, including JDBC URL, schema, table and other parameters connection
+  - Description:Database connection parameters, including JDBC URL, schema, table and other parameters
+    connection.
   - Required: Optional
   - Type: List
   - Default: (none)
   - Example:
   ```json
       "connection": [{
-      "jdbcUrl": ["jdbc:gbase://0.0.0.1:9042/database?useSSL=false"],
-      "table": ["table"],
-      "schema":"public"
+      "jdbcUrl": ["jdbc:oceanbase://hostname:port/test"],
+      "table": ["table"]
       }]
     ```
 
 
 - **jdbcUrl**
-  - Description: JDBC connection string for relational database. 
+  - Description: JDBC connection string for relational database.
   - Required: Optional
   - Type: String
   - Default: (none)
@@ -56,7 +56,7 @@ GBase8a(8.6.2.43)
 
 
 - **username**
-  - Description: the username of the data source
+  - Description: The username of the data source. To specify a tenant connection, add the tenant name after the username, such as "root@test". Currently only supports Mysql tenants.
   - Required: Optional
   - Type: String
   - Default: (none)
@@ -164,21 +164,15 @@ GBase8a(8.6.2.43)
 ### 2、SQL
 
 - **connector**
-  - Definition: gbase-x
+  - Definition: oceanbase-x
   - Required: Required
   - Type: String
   - Default: (none)
 
 
 - **url**
-  - Definition: jdbc:gbase://localhost:9042/test
+  - Definition: jdbc:oceanbase://hostname:port/database
   - Required: Required
-  - Type: String
-  - Default: (none)
-
-- **schema**
-  - Description: database schema name
-  - Required: Optional
   - Type: String
   - Default: (none)
 
@@ -191,7 +185,7 @@ GBase8a(8.6.2.43)
 
 
 - **username**
-  - Definition: username
+  - Definition: The username of the data source. To specify a tenant connection, add the tenant name after the username, such as "root@test". Currently only supports Mysql tenants
   - Required: Required
   - Type: String
   - Default: (none)
@@ -245,10 +239,21 @@ GBase8a(8.6.2.43)
   - Default: at-least-once
 
 ## 5. Data Type
-| Whether to support | Data Type                                                                                                                                                                                                                                                                                                                                                |
-|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Supported          | BIT、TINYINT、SMALLINT、MEDIUMINT、INT、INTEGER、INT24、SERIAL、BIGINT、INT8、BIGSERIAL、SERIAL8、REAL、FLOAT、SMALLFLOAT、DECIMAL、NUMERIC、DOUBLE、DEC、MONEY、DOUBLE、PRECISION 、STRING、VARCHAR、CHAR、CHARACTER、VARYING、NCHAR、TIMESTAMP、DATETIME、DATE、TIME、YEAR、TINYBLOB、BLOB、MEDIUMBLOB、LONGBLOB、TINYTEXT、TEXT、MEDIUMTEXT、LONGTEXT、BINARY、VARBINARY、JSON、ENUM、SET、GEOMETRY |
-| Unsupported        | ARRAY、MAP、STRUCT、UNION etc.                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| OceanBase Data Type                                          | Flink Data Type | Description                                                  |
+| ------------------------------------------------------------ | --------------- | ------------------------------------------------------------ |
+| BOOLEAN                                                      | BOOLEAN         |                                                              |
+| TINYINT                                                      | TINYINT         |                                                              |
+| SMALLINT                                                     | SMALLINT        |                                                              |
+| MEDIUMINT<br>INT<br>INTEGER                                  | INT             |                                                              |
+| BIGINT                                                       | BIGINT          |                                                              |
+| FLOAT                                                        | FLOAT           |                                                              |
+| DOUBLE                                                       | DOUBLE          |                                                              |
+| DECIMAL(p,s)<br>NUMERIC(p,s)                                 | DECIMAL(p,s)    | support maximum precision DECIMAL(38,18)                     |
+| TIME                                                         | TIME            |                                                              |
+| DATE                                                         | DATE            |                                                              |
+| TIMESTAMP<br>DATETIME                                        | TIMESTAMP       |                                                              |
+| BIT<br>BINARY<br>VARBINARY<br>TINYBLOB<br>BLOB<br>MEDIUMBLOB<br>LONGBLOB | BYTES           | SQL job type currently does not support bit type length of 1, because the database will be converted to Boolean, it is recommended to directly set the database field to boolean |
+| CHAR<br/>VARCHAR<br/>TINYTEXT<br/>MEDIUMTEXT<br/>LONGTEXT<br/>ENUM<br/>SET | STRING          |                                                              |
 
 ## 6. Example
 
