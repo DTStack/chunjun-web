@@ -36,7 +36,15 @@ The system uses install_jars.bat to install some of the dependencies in the Chun
 
 ### 2.Compile the source code
 
-In the root directory of the pure average project, execute the mvn compilation command ``` mvn clean package -Dmaven.test.skip``` to generate the directory **flinkx-dist** (plug-in package path) in the root directory
+In the root directory of the pure average project, execute the mvn compilation command to generate the directory **flinkx-dist** (plug-in package path) in the root directory
+,Chunjun provides different profiles according to the plug-ins corresponding to different platforms, such as CDP. Therefore, different MVN commands are executed according to the required plug-in packages during packaging
+
+
+| 平台类型 |                                              | 含义                                                           |
+| --- |----------------------------------------------|--------------------------------------------------------------|
+| cdp | mvn clean package -DskipTests -P default,cdp | package the Inceptor plug-in and the default supported plugin |
+| default | mvn clean package -DskipTests -P default     | all plugins except inceptor                                  |
+
 
 ### 3.Problems that may arise
 

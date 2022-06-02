@@ -36,7 +36,14 @@ sidebar_position: 2
 
 ### 2.编译源码
 
-在纯均项目根目录下，执行mvn 编译命令 ``` mvn clean package -Dmaven.test.skip```，在根目录下生成目录 **flinkx-dist**（插件包路径）
+在纯均项目根目录下，执行mvn 编译命令 ，在根目录下生成目录 **flinkx-dist**（插件包路径）
+,chunjun根据cdp等不同平台对应的插件提供了不同的profile，所以在打包的时候根据所需要的插件包执行不同的mvn命令
+
+| 平台类型 |                                              | 含义                          |
+| --- |----------------------------------------------|-----------------------------|
+| cdp | mvn clean package -DskipTests -P default,cdp | 打包出inceptor插件以及default支持的插件 |
+| default | mvn clean package -DskipTests -P default     | 除了inceptor插件之外的所有插件         |
+
 
 ### 3.可能出现的问题
 
