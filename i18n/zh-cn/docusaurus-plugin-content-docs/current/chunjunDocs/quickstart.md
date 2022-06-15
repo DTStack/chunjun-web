@@ -1,6 +1,8 @@
 ---
 title: QuickStart
 sidebar_position: 2
+
+
 ---
 
 # 快速入门
@@ -13,9 +15,30 @@ sidebar_position: 2
 
 系统版本：无限制
 
-环境工具：JDK 1.8，Git，maven
+### 环境要求
 
-（环境默认已经配置JAVA_HOME，maven）
+#### java
+
+- JDK1.8
+- 配置好JAVA_HOME环境变量
+
+> jdk安装步骤这里不做介绍
+
+#### Flink
+
+- 推荐flink1.12.7
+- 官网下载压缩包直接解压即可
+   - 下载地址：https://dlcdn.apache.org/flink/flink-1.12.7/flink-1.12.7-bin-scala_2.12.tgz
+- 需要在提交机器上配置FLINK_HOME环境变量
+
+> local模式不需要安装Flink
+
+#### Hadoop
+
+- 推荐hadoop2.7.5
+- 需要在提交机器上配置HAOOP_HOME环境变量
+
+> local模式和standalone模式无需依赖Hadoop环境
 
 # 获取插件
 
@@ -25,7 +48,7 @@ sidebar_position: 2
 
 ## 压缩包
 
-纯均提供的压缩包（chunjun-dist.tar）里包含四部分内容：bin（包含任务提交脚本），flinkx-dist（纯均任务插件包），flinkx-example（纯均任务脚本模版），lib（任务提交客户端），用户可以通过bin里的提交脚本，使用已经编译好的插件jar包直接提交任务，无需关心插件编译过程，适合调研使用。
+纯均提供的压缩包（chunjun-dist.tar）里包含四部分内容：bin（包含任务提交脚本），chunjun-dist（纯均任务插件包），chunjun-example（纯均任务脚本模版），lib（任务提交客户端），用户可以通过bin里的提交脚本，使用已经编译好的插件jar包直接提交任务，无需关心插件编译过程，适合调研使用。
 
 ## 源码编译
 
@@ -36,24 +59,24 @@ sidebar_position: 2
 
 ### 2.编译源码
 
-在纯均项目根目录下，执行mvn 编译命令 ，在根目录下生成目录 **flinkx-dist**（插件包路径）
+在纯均项目根目录下，执行mvn 编译命令 ，在根目录下生成目录 **chunjun-dist**（插件包路径）
 ,chunjun根据cdp等不同平台对应的插件提供了不同的profile，所以在打包的时候根据所需要的插件包执行不同的mvn命令
 
-| 平台类型 |                                              | 含义                          |
-| --- |----------------------------------------------|-----------------------------|
-| cdp | mvn clean package -DskipTests -P default,cdp | 打包出inceptor插件以及default支持的插件 |
-| default | mvn clean package -DskipTests -P default     | 除了inceptor插件之外的所有插件         |
+| 平台类型 |                                              | 含义                                    |
+| -------- | -------------------------------------------- | --------------------------------------- |
+| tdh      | mvn clean package -DskipTests -P default,tdh | 打包出inceptor插件以及default支持的插件 |
+| default  | mvn clean package -DskipTests -P default     | 除了inceptor插件之外的所有插件          |
 
 
 ### 3.可能出现的问题
 
 * 编译过程中出现依赖不存在问题
 
-​ 先执行bin目录下install_jars脚本，如果还存在依赖问题，检查配置的maven环境是否可用，是否修改了项目pom文件。
+先执行bin目录下install_jars脚本，如果还存在依赖问题，检查配置的maven环境是否可用，是否修改了项目pom文件。
 
 * 编译过程中出现 Failed to execute goal com.diffplug.spotless:spotless-maven-plugin:2.4.2:check (spotless-check) 报错
 
-​ 在编译路径下，执行``` mvn spotless:apply```，对项目代码进行格式化。
+在编译路径下，执行``` mvn spotless:apply```，对项目代码进行格式化。
 
 # 任务提交
 
@@ -68,7 +91,7 @@ jobType：纯均任务类型，必填项，同步任务为：sync，SQL计算任
 
 job：纯均任务脚本地址，必填项；
 
-flinkxDistDir：纯均插件包地址；
+chunjunDistDir：纯均插件包地址；
 
 confProp：纯均任务配置参数，Flink相关配置也是在这里配置；
 
@@ -82,9 +105,11 @@ Local 模式不依赖Flink环境和Hadoop环境，在本地环境启动一个JVM
 
 进入到chunjun-dist 目录，执行命令
 
-``` sh ./bin/flinkx -mode local -jobType sync -job ./flinkx-examples/json/stream/stream.json -flinkxDistDir ./flinkx-dist```
+```shell
+sh bin/chunjun-local.sh  -job chunjun-examples/json/stream/stream.json
+```
 
-即可执行一个简单的 **stream -> stream** 同步任务，任务结果可以在日志文件**nohup.out**中查看；
+即可执行一个简单的 **stream -> stream** 同步任务
 
 ## Standalone
 
@@ -94,14 +119,16 @@ Standalone模式依赖Flink Standalone环境，不依赖Hadoop环境。
 
 #### 1. 启动Flink Standalone环境
 
-启动flink standalone 环境之前，需要将纯均的插件包部署到flink lib 目录下，启动flink standalone 集群，可以观察到flink standalone 集群加载的classpath 中含有纯均插件包。
+```shell
+sh $FLINK_HOME/bin/statrt-cluster.sh
+```
 
 #### 2. 提交任务
 
 进入到本地chunjun-dist目录，执行命令
 
 ```shell
-sh ./bin/flinkx -mode standalone -jobType sync -job $CHUNJUN_DIST/flinkx-examples/json/stream/stream.json -flinkxDistDir $CHUNJUN_DIST/flinkx-dist -flinkConfDir $FLINK_HOME/conf
+sh bin/chunjun-standalone.sh -job chunjun-examples/json/stream/stream.json
 ```
 
 提交成功之后，可以在flink web ui 上观察任务情况；
@@ -121,16 +148,16 @@ Caused by: java.lang.IllegalStateException: Trying to access closed classloader.
 	at org.apache.flink.runtime.execution.librarycache.FlinkUserCodeClassLoaders$SafetyNetWrapperClassLoader.loadClass(FlinkUserCodeClassLoaders.java:178)
 	at java.lang.ClassLoader.loadClass(ClassLoader.java:405)
 	at java.lang.ClassLoader.loadClass(ClassLoader.java:351)
-	at com.dtstack.flinkx.util.DataSyncFactoryUtil.lambda$discoverDirty$3(DataSyncFactoryUtil.java:125)
-	at com.dtstack.flinkx.classloader.ClassLoaderSupplierCallBack.callbackAndReset(ClassLoaderSupplierCallBack.java:33)
-	at com.dtstack.flinkx.classloader.ClassLoaderManager.newInstance(ClassLoaderManager.java:56)
-	at com.dtstack.flinkx.util.DataSyncFactoryUtil.discoverDirty(DataSyncFactoryUtil.java:122)
+	at com.dtstack.chunjun.util.DataSyncFactoryUtil.lambda$discoverDirty$3(DataSyncFactoryUtil.java:125)
+	at com.dtstack.chunjun.classloader.ClassLoaderSupplierCallBack.callbackAndReset(ClassLoaderSupplierCallBack.java:33)
+	at com.dtstack.chunjun.classloader.ClassLoaderManager.newInstance(ClassLoaderManager.java:56)
+	at com.dtstack.chunjun.util.DataSyncFactoryUtil.discoverDirty(DataSyncFactoryUtil.java:122)
 	... 14 more
 ```
 
 方案：这个问题我们内部已经修复了，但是现在还在走内部测试流程；临时解决方案是重启集群；
 
-2. Flink standalone 集群加载flinkx-dist里jar包之后，集群无法启动，日志报错：Exception in thread "main" java.lang.NoSuchFieldError:
+2. Flink standalone 集群加载chunjun-dist里jar包之后，集群无法启动，日志报错：Exception in thread "main" java.lang.NoSuchFieldError:
    EMPTY_BYTE_ARRAY.
 
 详细报错信息如下：
@@ -149,7 +176,7 @@ Exception in thread"main"java.lang.NoSuchFieldError:EMPTY_BYTE_ARRAY
         at org.apache.flink.runtime.entrypoint.ClusterEntrypoint.<clinit>(ClusterEntrypoint.java:107)
 ```
 
-这个报错是因为log4j 版本不统一导致的，因为flinkx-dist 中部分插件引用的还是旧版本的log4j依赖，导致集群启动过程中，出现了类冲突问题；
+这个报错是因为log4j 版本不统一导致的，因为chunjun-dist 中部分插件引用的还是旧版本的log4j依赖，导致集群启动过程中，出现了类冲突问题；
 
 方案：临时方案是将flink lib 中 log4j 相关的jar包名字前加上字符‘a‘，使得flink standalone jvm 优先加载。
 
@@ -161,28 +188,35 @@ YarnSession 模式依赖Flink 和 Hadoop 环境，需要在任务提交之前启
 
 #### 1. 启动yarn session环境
 
-启动yarn session 之前，需要将chunjun-dist配置在HADOOP_CLASSPATH环境变量下，启动yarn session，可以观察到yarn session 中加载了纯均插件包。
+Yarn Pre-Job 模式依赖Flink 和 Hadoop 环境，需要在提交机器中提前设置好$HADOOP_HOME和$FLINK_HOME
+
+我们需要使用yarn-session -t参数上传chunjun-dist
+
+```shell
+cd $FLINK_HOME/bin
+./yarn-session -t $CHUNJUN_HOME -d
+```
 
 #### 2. 提交任务
 
 通过yarn web ui 查看session 对应的application $SESSION_APPLICATION_ID，进入到本地chunjun-dist目录，执行命令
 
 ```shell
-sh ./bin/flinkx -mode yarn -jobName chunjun_session -jobType sync -job $CHUNJUN_DIST/flinkx-examples/json/stream/stream.json -hadoopConfDir $HADOOP_CONF_DIR -flinkxDistDir $CHUNJUN_DIST/flinkx-dist -confProp {\"yarn.application.id\":\"$SESSION_APPLICATION_ID\"}
+sh ./bin/chunjun-yarn-session.sh -job chunjun-examples/json/stream/stream.json -confProp {\"yarn.application.id\":\"SESSION_APPLICATION_ID\"}
 ```
 
-yarn.application.id 也可以在 flink-conf.yaml 中设置；提交成功之后，可以通过 yarn web ui 上观察任务情况；
+yarn.application.id 也可以在 flink-conf.yaml 中设置；提交成功之后，可以通过 yarn web ui 上观察任务情况。
 
 ## Yarn Pre-Job
 
-Yarn Pre-Job 模式依赖Flink 和 Hadoop 环境，在任务提交前确认资源是否充足；
+Yarn Pre-Job 模式依赖Flink 和 Hadoop 环境，需要在提交机器中提前设置好$HADOOP_HOME和$FLINK_HOME。
 
 ### 提交步骤
 
 Yarn Pre-Job 提交任务配置正确即可提交。进入本地chunjun-dist目录，执行命令提交任务。
 
 ```shell
-sh ./bin/flinkx -mode yarn-per-job -jobType sync -job $CHUNJUN_DIST/flinkx-examples/json/stream/stream.json -flinkxDistDir $CHUNJUN_DIST/flinkx-dist -flinkConfDir $FLINK_CONF_DIR -hadoopConfDir $HADOOP_CONF_DIR -flinkLibDir $FLINK_HOME/lib -jobName chunjun-pre-job
+sh ./bin/chunjun-yarn-perjob.sh -job chunjun-examples/json/stream/stream.json
 ```
 
 提交成功之后，可以通过 yarn web ui 上观察任务情况；
