@@ -185,7 +185,7 @@ KingBase v8
 
 - **polling**
 
-    - 描述：是否开启间隔轮询，开启后会根据 pollingInterval 轮询间隔时间周期性的从数据库拉取数据。开启间隔轮询还需配置参数 pollingInterval，increColumn，可以选择配置参数 startLocation。若不配置参数 startLocation，任务启动时将会从数据库中查询增量字段最大值作为轮询的起始位置。
+    - 描述：是否开启间隔轮询，开启后会根据 pollingInterval 轮询间隔时间周期性的从数据库拉取数据。开启间隔轮询还需配置参数 pollingInterval，increColumn，可以选择配置参数 startLocation。若不配置参数 startLocation，任务启动时将会从数据库中查询增量字段最小值作为轮询的开始位置。
     - 必选：否
     - 参数类型：Boolean
     - 默认值：false

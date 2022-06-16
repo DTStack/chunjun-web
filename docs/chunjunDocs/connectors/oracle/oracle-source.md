@@ -194,7 +194,7 @@ Oracle 9 and above
     - Description:Whether to enable interval polling. After it is enabled, data will be periodically pulled from the
       database according to the pollinginterval polling interval. To enable interval polling, you also need to configure
       the parameters pollinginterval and increcolumn. You can select the configuration parameter startlocation. If the
-      parameter startlocation is not configured, the maximum value of the increment field will be queried from the
+      parameter startlocation is not configured, the minimum value of the increment field will be queried from the
       database as the starting position of polling when the task is started.
     - Required:optional
     - Type:Boolean

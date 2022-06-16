@@ -191,7 +191,7 @@ KingBase v8
     - Definition: Whether to enable interval polling, after enabling it, data will be periodically pulled from the
       database according to the pollingInterval polling interval. To enable interval polling, you need to configure the
       parameters pollingInterval and increColumn, and you can choose the configuration parameter startLocation. If the
-      parameter startLocation is not configured, the maximum value of the incremental field will be queried from the
+      parameter startLocation is not configured, the minimum value of the incremental field will be queried from the
       database as the starting position of the poll when the task starts.
     - Required: false
     - Type: Boolean
